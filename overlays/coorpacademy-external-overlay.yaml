@@ -1,0 +1,48 @@
+overlay: 1.0.0
+info:
+  title: Coorpacademy External Resources API — API Evangelist corrections
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-17'
+  method: generated
+  source: openapi/coorpacademy-external-openapi.json
+  extends: openapi/coorpacademy-external-openapi.json
+actions:
+  - target: $.servers
+    description: >-
+      FIX A WRONG STAGING HOST. The published spec declares its staging server as
+      https://api-staging.coorpacademy.com/h5p — the H5P service's path, copy-pasted into the external
+      service's document. A client that selects the staging server sends external-upload requests to the
+      H5P endpoint. The production server (.../external) is correct.
+    update:
+      - url: https://api.coorpacademy.com/external
+        description: production
+      - url: https://api-staging.coorpacademy.com/external
+        description: staging (corrected — the published spec says /h5p here)
+    x-rationale: copy-paste-error-in-published-spec
+  - target: $.paths['/presignedUrl/{ext}'].post
+    description: >-
+      Record the undeclared authentication and the presigned-URL semantics. The document declares NO
+      securityScheme, but the api.coorpacademy.com edge is AWS API Gateway: an unauthenticated call to a
+      sibling path on the same host returned HTTP 403 {"message":"Missing Authentication Token"} on
+      2026-08-17. The operation is gated; the contract simply does not say how.
+    update:
+      description: >-
+        Mints a presigned S3 URL for uploading external content of the given file extension. Returns the
+        upload target; the caller then PUTs the bytes to S3 directly.
+      x-api-evangelist:
+        authentication:
+          declared: none
+          observed: >-
+            Gated at the AWS API Gateway edge — sibling paths on api.coorpacademy.com return 403
+            {"message":"Missing Authentication Token"} without credentials. The header name is not
+            published for this service. Ask Coorpacademy.
+        idempotency:
+          supported: false
+          note: >-
+            Each call mints a new upload target. Retries are cheap individually and unbounded in
+            aggregate, with no rate-limit signal to throttle against.
+        error_semantics: >-
+          The 400 response is described as "Undefined/ Internal errors", so a 400 from this service is
+          NOT reliably a client fault and must not be classified as permanently non-retryable.
+    x-rationale: verified-live-2026-08-17

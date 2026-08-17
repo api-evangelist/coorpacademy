@@ -1,0 +1,167 @@
+generated: '2026-08-17'
+method: derived
+source: openapi/coorpacademy-content-openapi.json, openapi/coorpacademy-content-scorm-openapi.json,
+  openapi/coorpacademy-h5p-openapi.json, openapi/coorpacademy-mail-openapi.json, openapi/coorpacademy-mobile-openapi.json,
+  openapi/coorpacademy-platform-openapi.json, openapi/coorpacademy-progression-aggregations-openapi.json,
+  openapi/coorpacademy-progression-openapi.json, openapi/coorpacademy-review-openapi.json, openapi/coorpacademy-scim-openapi.json,
+  openapi/coorpacademy-scorm-openapi.json
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: token
+  type: apiKey
+  in: header
+  parameter: authorization
+  sources:
+  - openapi/coorpacademy-content-openapi.json
+  - openapi/coorpacademy-review-openapi.json
+- name: Authorization
+  type: apiKey
+  in: header
+  parameter: Authorization
+  sources:
+  - openapi/coorpacademy-content-scorm-openapi.json
+  - openapi/coorpacademy-mail-openapi.json
+  - openapi/coorpacademy-scorm-openapi.json
+- name: token
+  type: apiKey
+  in: header
+  parameter: token
+  sources:
+  - openapi/coorpacademy-h5p-openapi.json
+  - openapi/coorpacademy-scim-openapi.json
+- name: Authorization
+  type: apiKey
+  in: header
+  parameter: Api-Secret
+  sources:
+  - openapi/coorpacademy-mobile-openapi.json
+- name: authentication
+  type: apiKey
+  in: header
+  parameter: authentication
+  sources:
+  - openapi/coorpacademy-platform-openapi.json
+  - openapi/coorpacademy-progression-aggregations-openapi.json
+  - openapi/coorpacademy-progression-openapi.json
+
+# --- API Evangelist enrichment 2026-08-17: docs search + live probes -------------------------------
+docs: https://api.coorpacademy.com/
+docs_note: >-
+  There is NO authentication documentation. The Swagger UI at https://api.coorpacademy.com/ renders the
+  securityScheme declarations and nothing else — no auth guide, no key-issuance page, no developer
+  portal. Searched coorpacademy.com (nav, footer, all five sitemaps), support.coorpacademy.com (a
+  learner-facing FAQ with no API content) and github.com/CoorpAcademy. Nothing explains how to obtain a
+  key. Method stays `derived` because there is no prose to upgrade it with.
+model:
+  types: [apiKey]
+  transport: header
+  oauth2: false
+  openid_connect: false
+  bearer: false
+  mutual_tls: false
+  basic: false
+  scopes: false
+  key_rotation_documented: false
+  key_issuance_documented: false
+header_name_inconsistency:
+  distinct_header_names: 5
+  finding: >-
+    The most important fact about authentication here: there is no single header. Five names are used
+    across fourteen services, two of which differ only by letter case, and one of which is non-standard.
+    An integrator must read the per-service specification.
+  map:
+  - header: authorization
+    services: [content, review]
+  - header: Authorization
+    services: [content-scorm, mail, scorm]
+  - header: token
+    services: [h5p, scim]
+  - header: authentication
+    services: [platform, progression, progression-aggregations]
+  - header: Api-Secret
+    services: [mobile]
+undeclared_services:
+  services: [external, media, pdf]
+  finding: >-
+    Three of the fourteen specs declare no securityScheme at all. They are NOT open: an unauthenticated
+    call to a sibling path on the same host returns HTTP 403 {"message":"Missing Authentication Token"}
+    — the AWS API Gateway body — so the edge gates them while the contract stays silent about how. This
+    is a documentation gap, not an unauthenticated API.
+observed:
+  method: probed
+  checked: '2026-08-17'
+  probes:
+  - url: https://content.coorpacademy.com/api/v2/notifications
+    http_status: 401
+    body: '{"message":"Invalid or missing authorization key"}'
+    server: Express (x-powered-by)
+  - url: https://progression.coorpacademy.com/api/v1/progressions
+    http_status: 401
+    body: >-
+      {"code":"server_error","status":401,"success":false,"message":"Unauthorized","errors":[{"message":"Unauthorized","code":"server_error","status":401,"statusCode":401,"expose":true}]}
+    server: Express (x-powered-by)
+  - url: https://platform.coorpacademy.com/api/v1/brands
+    http_status: 401
+    body: '{"code":"server_error","status":401,"success":false,"message":"Unauthorized","errors":[{"statusCode":401,"status":401,"code":"server_error"}]}'
+    server: Express (x-powered-by)
+  - url: https://api.coorpacademy.com/scim/coorp/Users
+    http_status: 400
+    body: >-
+      {"schemas":["urn:ietf:params:scim:api:messages:2.0:Error"],"detail":"JWTError: Expecting type:
+      string at key: authorization but instead got: undefined","status":400}
+    edge: CloudFront (x2) behind Cloudflare
+  - url: https://api.coorpacademy.com/mail/api/v1/welcome
+    http_status: 403
+    body: '{"message":"Missing Authentication Token"}'
+    edge: AWS API Gateway behind CloudFront (x2) behind Cloudflare
+contract_vs_behaviour_discrepancy:
+  service: scim
+  declared: apiKey in a `token` header
+  observed: >-
+    The 400 body reports "JWTError: Expecting type: string at key: authorization but instead got:
+    undefined", which indicates the implementation reads a JWT from an `authorization` header rather than
+    the `token` header the contract names. Two disagreements in one: the header name, and the credential
+    type (a signed JWT, not an opaque key).
+  action: >-
+    Confirm with Coorpacademy which header and credential type are authoritative for SCIM before
+    configuring an identity provider. Recorded in overlays/coorpacademy-scim-overlay.yaml.
+  severity: blocks-integration
+information_disclosure:
+  finding: >-
+    Two unauthenticated responses leak implementation detail. The SCIM 400 names an internal JWT library
+    and its parse failure; the three Express hosts return `x-powered-by: Express`. Neither is severe,
+    both are trivially removable, and both are the kind of thing a security review flags.
+key_issuance:
+  self_serve: false
+  documented: false
+  note: >-
+    No signup, no developer portal, no pricing page, no documented key request. API access is negotiated
+    inside a platform contract; commercial contact now routes to Go1
+    (https://www.go1.com/fr/speak-with-an-expert-old). There is a learner login and self-serve learner
+    signup at https://connect.coorpacademy.com/login (email/password plus Facebook, Google and LinkedIn
+    social sign-on), but that is the platform front door, not API access.
+well_known:
+  openid_configuration: 404
+  oauth_authorization_server: 404
+  oauth_protected_resource: 404
+  note: >-
+    Every /.well-known/ path 404s on every host. www and api 301 into an empty S3 bucket. See
+    well-known/coorpacademy-well-known.yml.
+sso_for_end_users:
+  note: >-
+    Distinct from API auth. Coorpacademy brokers enterprise SSO for LEARNERS through the Platform API —
+    SAML 2.0 (POST /brands/{id}/metadatas parses an IdP metadata.xml) and OIDC, with a claim-to-user
+    mapping (userMappingPayload) per brand. Coorpacademy is an OIDC relying party there, not a provider.
+    See openapi/coorpacademy-platform-openapi.json and skills/coorpacademy-configure-brand-sso.md.
+cross_links:
+  conventions: conventions/coorpacademy-conventions.yml
+  conformance: conformance/coorpacademy-conformance.yml
+  errors: errors/coorpacademy-problem-types.yml
+  scopes: null
+  scopes_note: >-
+    No scopes/ artifact is written and no OAuthScopes pointer is emitted. derive-oauth-scopes.py found
+    zero oauth2 securitySchemes across all fourteen specs; there is no scope surface to document.

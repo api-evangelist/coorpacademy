@@ -1,0 +1,353 @@
+generated: '2026-08-17'
+method: derived
+source: >-
+  Derived from $ref graphs and id-reference fields across openapi/coorpacademy-content-openapi.json
+  (63 schemas), openapi/coorpacademy-progression-openapi.json (23), openapi/coorpacademy-platform-openapi.json
+  (16), openapi/coorpacademy-content-scorm-openapi.json (23), openapi/coorpacademy-progression-aggregations-openapi.json
+  (7) and openapi/coorpacademy-scim-openapi.json (1). No object reference or ERD is published by the
+  provider; no id-prefix scheme exists.
+summary: >-
+  Coorpacademy's model has an unusual spine: nothing is joined by a global object id. Every content
+  entity is addressed by the composite key (repository, ref, version) — `repository` is the tenant
+  scope, `ref` is a human-authored string key, `version` is an integer generation — and the learner
+  side is joined by (userId, content.ref, content.version). Only two schemas in the whole estate expose
+  a database id (`Progression._id`, `slide._id`), and there is no id-prefix convention, no URN, no UUID
+  and no cross-service foreign key. An agent cannot follow a link between two Coorpacademy resources;
+  it must reconstruct the composite key itself.
+identifier_scheme:
+  style: composite-natural-key
+  content_key: [repository, ref, version]
+  learner_key: [userId, content.ref, content.version]
+  id_prefixes: none
+  urns: false
+  uuids: false
+  exposed_database_ids:
+  - schema: Progression
+    field: _id
+    service: progression
+  - schema: slide
+    field: _id
+    service: content-scorm
+  - schema: slide
+    field: chapter_id
+    service: content-scorm
+  note: >-
+    `ref` values are opaque author-chosen strings, not derivable. `version` is an integer publication
+    generation, and 409 Conflict on write means (repository, ref, version) already exists — see
+    errors/coorpacademy-problem-types.yml.
+tenancy:
+  root_entity: Brand
+  scoping_fields: [repository, brand, brandName]
+  note: >-
+    `Brand` (platform API) and `repository` (content API) are two names for the tenant boundary at
+    different layers — a brand has a host/alias and a content repository. SCIM scopes on `{brand}`.
+    Every read and write in the estate is tenant-scoped and there is no cross-tenant surface.
+entities:
+- name: Brand
+  service: platform
+  schema: Brand
+  key: [alias, host]
+  description: >-
+    The tenant. Carries alias, host and a BrandPayload (name, description, skin, moocName, teamName,
+    teamEmail, assistanceEmail, contentCategoryName, sector, baseUrl, defaultTimePerChapter, language)
+    plus the SSO configuration and a user-import payload.
+- name: SSOPayload
+  service: platform
+  schema: SSOPayload
+  description: >-
+    Per-brand SSO configuration — `enabled`, `connectEnabled`, `enableDefaultRoute`, `type`, and one of
+    `saml2` (SAMLPayload) or `oidc` (OIDCPayload). Both carry a userMappingPayload mapping IdP claims
+    onto uniqueLogin, emails, name, provider, language, providerInfos, roles and organizations.
+- name: ExternalCourse
+  service: content
+  key: [repository, ref]
+  description: A course sourced from outside the Coorpacademy catalogue.
+- name: ExternalContent
+  service: content
+  key: [repository, ref]
+  description: A content item belonging to an ExternalCourse.
+- name: BulkExternalContent
+  service: content
+  key: [repository, ref]
+  description: >-
+    A bulk-ingest job for external content. Carries a BulkExternalContentMeta and an array of
+    ExternalContentForBulk, each of which can carry ErrorResource {type, fileName} and
+    ErrorCSV {column, errorCode, description} rows — the per-row ingest failure record.
+- name: Skill
+  service: content
+  schema: SkillStructure / SkillResponse
+  key: [repository, ref]
+  description: A catalogue skill with locale-specific labels (SkillLocales) and a Meta block.
+- name: CustomSkill
+  service: content
+  schema: CustomSkillEdition / CustomSkillConsommation
+  key: [repository, ref]
+  description: >-
+    A tenant-authored skill. Exists in two parallel shapes — an EDITION (draft, editable) and a
+    CONSOMMATION (published, consumed by learners) — with an /undo operation to revert the edition to
+    the last published snapshot.
+- name: Certification
+  service: content
+  schema: CertificationSnapshot / CertificationEdition / CertificationDiff / CertificationConsommation
+  key: [repository, ref, version]
+  description: >-
+    The richest entity in the model, and the clearest example of the edition/snapshot/diff pattern:
+    CertificationEdition (draft) → CertificationDiff (pending change) → CertificationSnapshot
+    (published) → CertificationConsommation (learner-facing). Its structure carries
+    CertificationCondition (with CertificationConditionItemsDecoder referencing content refs) and
+    CertificationRewards, which fans out to DiplomaRewards, ResourceRewards and StarsRewards.
+- name: CustomPlaylist
+  service: content
+  schema: CustomPlaylistEdition / CustomPlaylistConsommation
+  key: [repository, ref]
+  description: >-
+    A tenant-curated playlist. Its structure is a CustomPlaylistItemMap of content refs; same
+    edition/consommation split and same /undo semantics as CustomSkill.
+- name: Script
+  service: content
+  schema: ScriptResponse / ScriptStructure
+  key: [repository, videoId, lang]
+  description: >-
+    Video transcript/subtitle script, keyed on videoId and language. ScriptLocales carries a
+    `jwTrackId`, a JW Player track identifier — an external-system reference with no documented
+    resolver.
+- name: Notification
+  service: content
+  key: [name]
+  description: >-
+    A platform notification typed `feature`, `maintenance` or `survey`. The only content entity keyed
+    on a bare `name` rather than (repository, ref).
+- name: Progression
+  service: progression
+  schema: Progression / UpdatedProgression
+  key: [_id]
+  description: >-
+    The central learner entity. Joins userId to a Content {ref, type, version} through an Engine
+    {ref, version} with EngineOptions {livesDisabled, shuffleChoices, lives}, a Meta {createdAt,
+    updatedAt, source} and a State.
+- name: State
+  service: progression
+  description: >-
+    The progression state machine's memory — content, nextContent, isCorrect, lives, livesDisabled,
+    slides, pendingSlides, step, stars, requestedClues, hasViewedAResourceAtThisStep, viewedResources,
+    variables, remainingLifeRequests. This is the same vocabulary the public
+    @coorpacademy/progression-engine npm package implements client-side.
+- name: Action
+  service: progression
+  description: >-
+    An append-only event on a progression, typed and carrying a payload. In content-scorm the payload
+    variants are enumerated: answerActionPayload, moveActionPayload, askCluePayload, extralifePayload,
+    contentResourceViewedPayload.
+- name: AnalyticsProgression
+  service: progression, progression-aggregations
+  key: [userId, content.ref, content.version]
+  description: >-
+    The read-model projection — engine, userId, content, current, lastProgressionId, success, stars,
+    lives, remainingLifeRequests, createdAt, firstCompletionDate, lastCompletionDate, updatedAt.
+    Backed by DynamoDB (the query cursor is exposed as from[partitionKey]/from[sortKey]/from[updatedAt]).
+- name: CurrentProgression
+  service: progression
+  key: [userId, content.ref]
+  description: Which progression a learner has in flight — carries currentProgressionId and inProgress.
+- name: ReviewCompletions
+  service: progression
+  key: [userId, content]
+  description: Review-mode completion state — stars, progressionId, isDone, nbSlide, updatedAt.
+- name: HeroRecommendation
+  service: progression
+  description: The next recommended content for a learner, with nbSlides and progressionId.
+- name: Slide
+  service: content-scorm
+  key: [_id]
+  description: >-
+    The atomic learning unit — question, clue, klf ("ce qu'il faut retenir"), lessons, tips, authors,
+    eligibleForReview, chapter_id. This is the only entity in the estate with a parent-id foreign key
+    (chapter_id).
+- name: ScormProgress
+  service: content-scorm
+  description: >-
+    SCORM-runtime projection — completionStatus, completionSuccess, score. This is where the internal
+    progression model is translated into SCORM's vocabulary for a host LMS.
+- name: SCIM User
+  service: scim
+  schema: IDPUserBodyRequest
+  key: [brand, userId]
+  description: The provisioned user record, created and maintained by the customer's identity provider.
+relationships:
+- from: Brand
+  to: SSOPayload
+  type: has_one
+  via: payload.sso
+- from: SSOPayload
+  to: SAMLPayload
+  type: has_one
+  via: saml2
+- from: SSOPayload
+  to: OIDCPayload
+  type: has_one
+  via: oidc
+- from: SAMLPayload
+  to: userMappingPayload
+  type: has_one
+  via: userMapping
+- from: OIDCPayload
+  to: userMappingPayload
+  type: has_one
+  via: userMapping
+- from: Brand
+  to: ExternalCourse
+  type: has_many
+  via: repository
+- from: ExternalCourse
+  to: ExternalContent
+  type: has_many
+  via: ref (path /external-courses/{ref}/external-contents)
+- from: BulkExternalContent
+  to: ExternalContentForBulk
+  type: has_many
+  via: contents[]
+- from: ExternalContentForBulk
+  to: ErrorCSV
+  type: has_many
+  via: errorsCSV[]
+- from: ExternalContentForBulk
+  to: ErrorResource
+  type: has_many
+  via: errorsResource[]
+- from: Certification
+  to: CertificationCondition
+  type: has_many
+  via: structure.conditions[]
+- from: CertificationCondition
+  to: Content
+  type: references
+  via: CertificationConditionItemsDecoder.ref
+- from: Certification
+  to: CertificationRewards
+  type: has_one
+  via: structure.rewards
+- from: CertificationRewards
+  to: DiplomaRewards
+  type: has_one
+- from: CertificationRewards
+  to: ResourceRewards
+  type: has_one
+- from: CertificationRewards
+  to: StarsRewards
+  type: has_one
+- from: CustomPlaylist
+  to: Content
+  type: has_many
+  via: structure.items[].ref (CustomPlaylistItemMap)
+- from: CustomSkill
+  to: Content
+  type: has_many
+  via: structure.items[].ref (CustomSkillItemMap)
+- from: CustomSkill
+  to: CustomSkillIcon
+  type: has_one
+  via: structure.icon
+- from: Script
+  to: Content
+  type: references
+  via: ScriptStructure.ref
+- from: Progression
+  to: Content
+  type: references
+  via: content.ref + content.version
+- from: Progression
+  to: Engine
+  type: has_one
+  via: engine
+- from: Progression
+  to: EngineOptions
+  type: has_one
+  via: engineOptions
+- from: Progression
+  to: State
+  type: has_one
+  via: state
+- from: Progression
+  to: Action
+  type: has_many
+  via: actions[] (GET /v1/progressions/{id}/actions)
+- from: Progression
+  to: SCIM User
+  type: belongs_to
+  via: userId
+  confidence: medium
+  note: >-
+    `userId` is the join, but no service publishes a users resource that resolves it — SCIM writes
+    users and never reads them back in a shape that carries the progression userId. The linkage is
+    real in the platform and absent from the contracts.
+- from: AnalyticsProgression
+  to: Progression
+  type: references
+  via: lastProgressionId
+- from: CurrentProgression
+  to: Progression
+  type: references
+  via: currentProgressionId
+- from: ReviewCompletions
+  to: Progression
+  type: references
+  via: progressionId
+- from: HeroRecommendation
+  to: Progression
+  type: references
+  via: progressionId
+- from: Slide
+  to: Chapter
+  type: belongs_to
+  via: chapter_id
+- from: Progression
+  to: Go1 Enrolment
+  type: references
+  via: meta.enrolmentId
+  note: >-
+    MetaBody carries `enrolmentId` and content-scorm exposes POST /getProgressionFromEnrolment plus a
+    `meta.enrolmentId` query parameter, i.e. a foreign key into the parent Go1 platform. The Go1 side
+    of this relationship is not documented on any Coorpacademy host.
+patterns:
+- name: edition / snapshot / consommation / diff
+  applies_to: [Certification, CustomSkill, CustomPlaylist]
+  description: >-
+    Authoring-heavy content entities exist in up to four parallel shapes: an EDITION (mutable draft), a
+    DIFF (pending change set), a SNAPSHOT (published immutable generation, keyed by version), and a
+    CONSOMMATION (the learner-facing projection, served from a separate /consommation/ path prefix with
+    its own upsert and count operations). Every one of the three exposes PUT .../{ref}/undo to revert
+    the edition to the last published snapshot.
+  agent_note: >-
+    This is the single most important thing to understand before writing to the content API. Writing to
+    the edition does NOT change what learners see; the snapshot upsert does. An agent that upserts an
+    edition and reports success has not published anything.
+- name: soft delete via state enum
+  applies_to: [Skill, Certification, CustomPlaylist, CustomSkill, ExternalCourse, Script, Notification]
+  description: >-
+    State enum `published` / `draft` / `archived` / `deleted` with an `includeDeleted` query flag,
+    rather than hard deletion.
+- name: composite natural key
+  applies_to: all content entities
+  description: (repository, ref, version) — no surrogate ids, no URNs.
+gaps:
+- >-
+  There is no Users, Learners, Groups, Organizations or Roles resource anywhere in the fourteen
+  services. `userId` appears as a path and body field across progression, review and analytics, and
+  nothing resolves it. SCIM can create a user and cannot list that user's progressions.
+- >-
+  There is no Course, Chapter, Level or Content resource in the CONTENT API. The content service
+  manages EXTERNAL courses, skills, certifications, playlists and scripts; the actual Coorpacademy
+  course/chapter/level/slide graph is only readable through the SCORM player API
+  (content-scorm: GET /chapter/{ref}, /level/{ref}, /slide/{ref}), which is a player runtime rather
+  than a catalogue API.
+- >-
+  No pagination envelope, no total counts, no next/prev links and no Link header on any collection —
+  even though Coorpacademy maintains its own @coorpacademy/baucis-links Link-header plugin on npm.
+- No id-prefix scheme, so a bare identifier cannot be typed by inspection.
+cross_links:
+  conventions: conventions/coorpacademy-conventions.yml
+  errors: errors/coorpacademy-problem-types.yml
+  packages: packages/coorpacademy-packages.yml
+pointers_emitted:
+- type: DataModel
+  url: data-model/coorpacademy-data-model.yml

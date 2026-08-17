@@ -1,0 +1,137 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  Searched for a dated changelog / release-notes / what's-new surface across
+  https://www.coorpacademy.com/ (nav, footer, sitemap_index.xml and all five child sitemaps),
+  https://api.coorpacademy.com/ (the Swagger UI), https://support.coorpacademy.com/ and
+  https://github.com/CoorpAcademy. None exists.
+changelog_published: false
+scheme: none
+current_version: null
+entries: []
+note: >-
+  Coorpacademy publishes no API changelog, no release notes and no versioning announcements. This file
+  exists to record that absence and to capture the only change evidence that IS available, as a
+  baseline a later enrichment round can diff against. NO `ChangeLog` pointer is emitted in apis.yml —
+  emitting one would credit the provider with a dated change record it does not publish.
+change_evidence_available:
+- kind: spec-build-numbers
+  detail: >-
+    Three of the fourteen specs carry high CI build numbers in info.version — platform 1.412.0,
+    progression 2.455.0, content 2.276.0 — which means those three services are actively shipped. The
+    remaining eleven are pinned at 1.0.0 (mobile at 2.0.0) and carry no signal.
+  baseline_captured: '2026-08-17'
+  how_to_use: >-
+    Re-fetch the specs listed in openapi/ and diff info.version plus the operation set. A rising patch
+    number with an unchanged operation set is internal churn; a changed operation set is an API change
+    that was shipped without any announcement.
+- kind: status-page-incident-feed
+  detail: >-
+    https://coorpacademy.status.io/pages/59c0fe78af68b1046e096a85/rss carries ten dated incident
+    entries spanning 2019-09-06 to 2023-03-16. These are outage notices, NOT API changes, and are
+    recorded in lifecycle/coorpacademy-lifecycle.yml rather than treated as changelog entries.
+- kind: npm-release-history
+  detail: >-
+    The 73 first-party npm packages under the @coorpacademy scope have real, dated releases (most
+    recent observed 2026-06-05 for @coorpacademy/components 11.40.23, player-web 4.29.24 and
+    app-review 0.46.23). This is the only continuously-dated public release trail the company
+    maintains, and it covers the front-end component estate rather than the APIs. See
+    packages/coorpacademy-packages.yml.
+spec_baseline:
+  captured: '2026-08-17'
+  source: https://api.coorpacademy.com/ (Swagger UI urls[] list)
+  services:
+  - key: content
+    info_version: 2.276.0
+    spec: openapi 3.0.0
+    paths: 39
+    operations: 53
+    schemas: 63
+  - key: platform
+    info_version: 1.412.0
+    spec: swagger 2.0
+    paths: 6
+    operations: 9
+    schemas: 16
+  - key: progression
+    info_version: 2.455.0
+    spec: swagger 2.0
+    paths: 21
+    operations: 26
+    schemas: 23
+  - key: progression-aggregations
+    info_version: 1.0.0
+    spec: swagger 2.0
+    paths: 3
+    operations: 5
+    schemas: 7
+  - key: content-scorm
+    info_version: 1.0.0
+    spec: openapi 3.0.0
+    paths: 16
+    operations: 16
+    schemas: 23
+  - key: mail
+    info_version: 1.0.0
+    spec: swagger 2.0
+    paths: 27
+    operations: 27
+    schemas: 0
+  - key: scorm
+    info_version: 1.0.0
+    spec: openapi 3.0.0
+    paths: 4
+    operations: 4
+  - key: scim
+    info_version: 1.0.0
+    spec: openapi 3.0.0
+    paths: 2
+    operations: 5
+    schemas: 1
+  - key: mobile
+    info_version: 2.0.0
+    spec: swagger 2.0
+    paths: 2
+    operations: 3
+  - key: review
+    info_version: 1.0.0
+    spec: openapi 3.0.0
+    paths: 2
+    operations: 2
+  - key: h5p
+    info_version: 1.0.0
+    spec: openapi 3.0.0
+    paths: 1
+    operations: 1
+  - key: external
+    info_version: 1.0.0
+    spec: openapi 3.0.0
+    paths: 1
+    operations: 1
+  - key: media
+    info_version: 1.0.0
+    spec: swagger 2.0
+    paths: 1
+    operations: 2
+  - key: pdf
+    info_version: 1.0.0
+    spec: openapi 3.0.0
+    paths: 1
+    operations: 1
+  totals:
+    services: 14
+    paths: 96
+    operations: 155
+probed:
+- url: https://www.coorpacademy.com/sitemap_index.xml
+  status: 200
+  note: >-
+    Five child sitemaps (post, page, cours, cursus, auteurs). No changelog, release-notes,
+    what's-new or developer page in any of them. post-sitemap lastmod is 2023-11-27.
+- url: https://api.coorpacademy.com/
+  status: 200
+  note: Swagger UI only — no changelog, no descriptions beyond info.description, no release history.
+- url: https://support.coorpacademy.com/
+  status: 200
+  note: Learner-facing FAQ (platform navigation, pedagogy, mobile app, troubleshooting). No API content.
+pointers_emitted: []

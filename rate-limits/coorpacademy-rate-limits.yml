@@ -1,0 +1,72 @@
+generated: '2026-08-17'
+method: probed
+source: >-
+  Searched all fourteen specs in openapi/ for rate-limit vocabulary and 429 declarations, and inspected
+  response headers on live unauthenticated requests to content.coorpacademy.com,
+  progression.coorpacademy.com, platform.coorpacademy.com and api.coorpacademy.com on 2026-08-17.
+docs: null
+limit_count: 0
+documented: false
+limits: []
+headers: []
+status_on_exhaustion: undocumented
+retry_after: not-served
+summary: >-
+  Coorpacademy publishes no rate limits and emits no rate-limit headers. Zero of the 155 operations
+  across the fourteen services declares a 429 response, there are zero matches for "ratelimit",
+  "rate limit", "x-rate" or "Retry-After" anywhere in the specs, and no RateLimit-*, X-RateLimit-* or
+  Retry-After header appeared on any live response. There is no runtime backpressure signal at all.
+spec_evidence:
+  specs_searched: 14
+  operations_searched: 155
+  matches_idempoten: 0
+  matches_ratelimit: 0
+  matches_retry_after: 0
+  operations_declaring_429: 0
+probes:
+- url: https://content.coorpacademy.com/api/v2/notifications
+  http_status: 401
+  rate_limit_headers: []
+  observed_headers: [x-powered-by]
+  checked: '2026-08-17'
+- url: https://progression.coorpacademy.com/api/v1/progressions
+  http_status: 401
+  rate_limit_headers: []
+  observed_headers: [x-powered-by]
+  checked: '2026-08-17'
+- url: https://platform.coorpacademy.com/api/v1/brands
+  http_status: 401
+  rate_limit_headers: []
+  observed_headers: [x-powered-by]
+  checked: '2026-08-17'
+- url: https://api.coorpacademy.com/scim/coorp/Users
+  http_status: 400
+  rate_limit_headers: []
+  observed_headers: [via (CloudFront x2), cf-ray, cf-cache-status, strict-transport-security, server]
+  checked: '2026-08-17'
+- url: https://api.coorpacademy.com/mail/api/v1/welcome
+  http_status: 403
+  rate_limit_headers: []
+  observed_headers: [via (CloudFront x2), cf-ray, cf-cache-status, strict-transport-security, server]
+  checked: '2026-08-17'
+inferred_enforcement:
+  note: >-
+    api.coorpacademy.com sits behind AWS API Gateway, then CloudFront (two hops), then Cloudflare. All
+    three of those layers CAN throttle, and AWS API Gateway applies account-level defaults whether or
+    not a provider configures them. So throttling almost certainly exists in production — it is simply
+    undisclosed and unsignalled. The three Express hosts (content, progression, platform) show no
+    gateway in front of them at all.
+  consequence: >-
+    A client cannot distinguish a throttle from an outage, cannot know when to retry, and has no quota
+    visibility. The only safe integration strategy is conservative self-throttling with exponential
+    backoff on any 5xx, and extra care on the mail service, where a retry can duplicate a
+    learner-facing email (no idempotency key exists — see conventions/).
+pointers_emitted: []
+pointer_rationale: >-
+  NO `RateLimits` pointer is emitted in apis.yml. The agent-readiness rate_limit_signal dimension asks
+  whether an agent can read a runtime backpressure signal; here it demonstrably cannot. Pointing a
+  `RateLimits` type at a file whose own limit_count is 0 would convert a verified absence into a scored
+  presence. This artifact records the honest zero.
+cross_links:
+  conventions: conventions/coorpacademy-conventions.yml
+  errors: errors/coorpacademy-problem-types.yml

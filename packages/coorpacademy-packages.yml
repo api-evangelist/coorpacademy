@@ -1,0 +1,451 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  registry.npmjs.org — scope search (https://registry.npmjs.org/-/v1/search?text=coorpacademy) plus
+  per-package metadata endpoints for every entry below; cross-checked against
+  https://github.com/CoorpAcademy. PyPI, Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist and
+  crates.io were also searched and returned nothing first-party.
+summary: >-
+  Coorpacademy maintains a large, genuinely active first-party open-source estate on npm — 73 packages
+  surfaced by a registry search, with releases as recent as 2026-07-07 — but NOT ONE OF THEM IS AN API
+  CLIENT LIBRARY. There is no @coorpacademy/api, no SDK for the content, progression, platform or SCIM
+  services, and no generated client in any language. The estate is front-end (a React design system,
+  the slide-player, the review app), infrastructure tooling (Serverless framework plugins), and
+  maintained forks. A developer integrating the fourteen documented REST services writes their own
+  HTTP client.
+sdk_finding:
+  first_party_api_client_libraries: 0
+  languages_covered: []
+  pointer_emitted: false
+  pointer_rationale: >-
+    NO `SDKs` pointer is emitted in apis.yml. The `sdk_count` check asks whether a provider ships
+    client libraries for its API; Coorpacademy ships 73 npm packages and zero API clients. Emitting
+    `SDKs` off a design-system library would credit an integration surface that does not exist. The
+    `Packages` pointer IS emitted, because the open-source estate is real and worth recording.
+registries_searched:
+- registry: npm
+  result: 73 packages found (scope @coorpacademy plus unscoped serverless-* plugins)
+- registry: pypi
+  result: none
+- registry: maven-central
+  result: none
+- registry: nuget
+  result: none
+- registry: pkg.go.dev
+  result: none
+- registry: rubygems
+  result: none
+- registry: packagist
+  result: none
+- registry: crates.io
+  result: none
+packages:
+- name: '@coorpacademy/components'
+  registry: npm
+  language: javascript
+  official: true
+  category: ui-component-library
+  version: 11.40.23
+  published: '2026-06-05'
+  releases_published: 2444
+  license: null
+  url: https://www.npmjs.com/package/@coorpacademy/components
+  repository: https://github.com/CoorpAcademy/components
+  note: >-
+    The flagship first-party package and the head of the CoorpAcademy/components monorepo (2,444
+    published versions, last pushed 2026-06-24). A React design system for the learning platform —
+    "sharable components for web applications". Not an API client. See
+    components/coorpacademy-components.yml.
+- name: '@coorpacademy/player-web'
+  registry: npm
+  language: javascript
+  official: true
+  category: application
+  version: 4.29.24
+  published: '2026-06-05'
+  releases_published: 1917
+  license: null
+  url: https://www.npmjs.com/package/@coorpacademy/player-web
+  note: The CoorpAcademy web slide-player, published from the same monorepo.
+- name: '@coorpacademy/player-store'
+  registry: npm
+  language: javascript
+  official: true
+  category: state-management
+  version: 4.3.4
+  published: '2026-02-20'
+  releases_published: 216
+  license: null
+  url: https://www.npmjs.com/package/@coorpacademy/player-store
+  note: Redux store for the slide players.
+- name: '@coorpacademy/player-services'
+  registry: npm
+  language: javascript
+  official: true
+  category: state-management
+  version: 5.3.1
+  published: '2025-05-05'
+  releases_published: 205
+  license: null
+  url: https://www.npmjs.com/package/@coorpacademy/player-services
+  note: >-
+    "Implements reactions to redux actions from player-store." The closest thing in the estate to a
+    service/data layer, but it is a Redux side-effect handler for the player, not a documented client
+    for the public REST services, and it is not presented as one.
+- name: '@coorpacademy/progression-engine'
+  registry: npm
+  language: javascript
+  official: true
+  category: domain-logic
+  version: 11.8.1
+  published: '2025-05-05'
+  releases_published: 374
+  license: null
+  url: https://www.npmjs.com/package/@coorpacademy/progression-engine
+  note: >-
+    The learner-progression state machine. Notable because it is the client-side counterpart of the
+    progression REST API (openapi/coorpacademy-progression-openapi.json) — the same move/answer/clue/
+    extra-life vocabulary appears in both.
+- name: '@coorpacademy/app-review'
+  registry: npm
+  language: javascript
+  official: true
+  category: application
+  version: 0.46.23
+  published: '2026-06-05'
+  releases_published: 1118
+  license: UNLICENSED
+  url: https://www.npmjs.com/package/@coorpacademy/app-review
+  note: >-
+    The adaptive review-mode front end, counterpart to openapi/coorpacademy-review-openapi.json.
+    Explicitly published as `UNLICENSED` even though it is public on npm.
+- name: '@coorpacademy/nova-icons'
+  registry: npm
+  language: javascript
+  official: true
+  category: ui-component-library
+  version: 4.5.1
+  published: '2025-05-05'
+  releases_published: 387
+  license: null
+  url: https://www.npmjs.com/package/@coorpacademy/nova-icons
+  note: React components built from the Nova SVG icon set.
+- name: '@coorpacademy/translate'
+  registry: npm
+  language: javascript
+  official: true
+  category: i18n
+  version: 6.3.0
+  published: '2025-02-13'
+  releases_published: 275
+  license: null
+  url: https://www.npmjs.com/package/@coorpacademy/translate
+- name: '@coorpacademy/history'
+  registry: npm
+  language: javascript
+  official: true
+  category: routing
+  version: 6.2.0
+  published: '2025-02-13'
+  releases_published: 238
+  license: null
+  url: https://www.npmjs.com/package/@coorpacademy/history
+- name: '@coorpacademy/redux-history'
+  registry: npm
+  language: javascript
+  official: true
+  category: routing
+  version: 6.2.0
+  published: '2025-02-13'
+  releases_published: 274
+  license: null
+  url: https://www.npmjs.com/package/@coorpacademy/redux-history
+- name: '@coorpacademy/redux-task'
+  registry: npm
+  language: javascript
+  official: true
+  category: state-management
+  version: 1.2.0
+  published: '2025-02-13'
+  releases_published: 140
+  license: null
+  url: https://www.npmjs.com/package/@coorpacademy/redux-task
+- name: '@coorpacademy/update-node'
+  registry: npm
+  language: javascript
+  official: true
+  category: devtool
+  version: 7.5.0
+  published: '2025-08-05'
+  releases_published: 69
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/update-node
+  repository: https://github.com/Coorpacademy/update-node
+  note: >-
+    "Update your node dependencies while you sleep" — a general-purpose dependency-automation CLI, and
+    one of the few packages in the estate with an audience outside Coorpacademy. It is a devtool, not
+    an API CLI: there is no first-party CLI for the fourteen REST services, so no `CLI` pointer is
+    emitted and no cli/ artifact is written.
+- name: '@coorpacademy/eslint-plugin-coorpacademy'
+  registry: npm
+  language: javascript
+  official: true
+  category: devtool
+  version: 10.4.0-beta
+  published: '2025-02-11'
+  releases_published: 55
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/eslint-plugin-coorpacademy
+  repository: https://github.com/CoorpAcademy/eslint-plugin-coorpacademy
+  note: >-
+    Latest published version on the `latest` dist-tag is a `-beta` prerelease (10.4.0-beta,
+    2025-02-11) — the stable channel has not moved in over eighteen months.
+- name: '@coorpacademy/swagger-ui-express'
+  registry: npm
+  language: javascript
+  official: true
+  category: api-tooling
+  version: 2.0.5
+  published: '2021-06-15'
+  releases_published: 8
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/swagger-ui-express
+  note: >-
+    Express middleware to serve Swagger UI — a fork Coorpacademy maintains and almost certainly what
+    puts the Swagger UI on https://api.coorpacademy.com/ and the api-docs endpoint on
+    content.coorpacademy.com. Last release 2021-06-15, five years stale.
+- name: '@coorpacademy/baucis'
+  registry: npm
+  language: javascript
+  official: true
+  category: api-tooling
+  version: 4.0.0
+  published: '2025-05-20'
+  releases_published: 13
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/baucis
+  note: >-
+    Maintained fork of Baucis, the MongoDB/Express REST-API builder. Coorpacademy is effectively the
+    upstream maintainer of this abandoned project now, and it is how several of the fourteen services
+    are built.
+- name: '@coorpacademy/baucis-openapi3'
+  registry: npm
+  language: javascript
+  official: true
+  category: api-tooling
+  version: 3.0.0
+  published: '2025-05-20'
+  releases_published: 14
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/baucis-openapi3
+  note: >-
+    Generates OpenAPI 3.0.0 definitions from a Baucis REST API. This is the provenance of the eight
+    OpenAPI 3.0.0 documents in openapi/ — and it explains why they are 3.0.0 and not 3.1: the
+    generator emits 3.0.0.
+- name: '@coorpacademy/baucis-swagger2'
+  registry: npm
+  language: javascript
+  official: true
+  category: api-tooling
+  version: 3.0.0
+  published: '2025-05-20'
+  releases_published: 13
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/baucis-swagger2
+  note: >-
+    Generates Swagger 2.0 definitions. The provenance of the six Swagger 2.0 documents in openapi/,
+    including platform and progression.
+- name: '@coorpacademy/baucis-swagger'
+  registry: npm
+  language: javascript
+  official: true
+  category: api-tooling
+  version: 3.0.0
+  published: '2025-05-20'
+  releases_published: 15
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/baucis-swagger
+- name: '@coorpacademy/baucis-json'
+  registry: npm
+  language: javascript
+  official: true
+  category: api-tooling
+  version: 2.0.0
+  published: '2022-12-15'
+  releases_published: 7
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/baucis-json
+- name: '@coorpacademy/baucis-links'
+  registry: npm
+  language: javascript
+  official: true
+  category: api-tooling
+  version: 2.0.0
+  published: '2025-05-20'
+  releases_published: 6
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/baucis-links
+  note: >-
+    "Set links and Link header for baucis JSON responses" — Coorpacademy maintains a hypermedia Link
+    header plugin, yet none of the fourteen published specs declares a Link header or pagination
+    links. The capability is in the toolchain and not in the contracts.
+- name: serverless-offline-sqs
+  registry: npm
+  language: javascript
+  official: true
+  category: infrastructure-tooling
+  version: 9.0.1
+  published: '2026-07-07'
+  releases_published: 37
+  license: MIT
+  url: https://www.npmjs.com/package/serverless-offline-sqs
+  repository: https://github.com/CoorpAcademy/serverless-plugins
+  note: >-
+    Part of CoorpAcademy/serverless-plugins (230 GitHub stars) — the company's most widely used open
+    source, and the most recently released cluster in the estate (2026-07-07).
+- name: serverless-offline-s3
+  registry: npm
+  language: javascript
+  official: true
+  category: infrastructure-tooling
+  version: 8.0.0
+  published: '2026-07-07'
+  releases_published: 16
+  license: MIT
+  url: https://www.npmjs.com/package/serverless-offline-s3
+  repository: https://github.com/CoorpAcademy/serverless-plugins
+- name: serverless-offline-kinesis
+  registry: npm
+  language: javascript
+  official: true
+  category: infrastructure-tooling
+  version: 9.0.0
+  published: '2026-07-07'
+  releases_published: 28
+  license: MIT
+  url: https://www.npmjs.com/package/serverless-offline-kinesis
+  repository: https://github.com/CoorpAcademy/serverless-plugins
+- name: serverless-offline-dynamodb-streams
+  registry: npm
+  language: javascript
+  official: true
+  category: infrastructure-tooling
+  version: 8.0.1
+  published: '2026-07-07'
+  releases_published: 29
+  license: MIT
+  url: https://www.npmjs.com/package/serverless-offline-dynamodb-streams
+  repository: https://github.com/CoorpAcademy/serverless-plugins
+- name: '@coorpacademy/serverless-offline-eventbridge'
+  registry: npm
+  language: javascript
+  official: true
+  category: infrastructure-tooling
+  version: 1.0.1
+  published: '2026-07-07'
+  releases_published: 2
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/serverless-offline-eventbridge
+  repository: https://github.com/CoorpAcademy/serverless-plugins
+- name: serverless-apigateway-access-logs
+  registry: npm
+  language: javascript
+  official: true
+  category: infrastructure-tooling
+  version: 3.0.0
+  published: '2026-07-07'
+  releases_published: 12
+  license: MIT
+  url: https://www.npmjs.com/package/serverless-apigateway-access-logs
+  repository: https://github.com/CoorpAcademy/serverless-plugins
+- name: serverless-granular-iam
+  registry: npm
+  language: javascript
+  official: true
+  category: infrastructure-tooling
+  version: 2.1.0
+  published: '2020-06-08'
+  releases_published: 2
+  license: MIT
+  url: https://www.npmjs.com/package/serverless-granular-iam
+- name: '@coorpacademy/squirrel'
+  registry: npm
+  language: javascript
+  official: true
+  category: infrastructure
+  version: 5.1.0
+  published: '2019-11-12'
+  releases_published: 47
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/squirrel
+  note: >-
+    "Local mirror mechanism for ETCD". The GitHub repo describes it as the microservice that "lists and
+    serves brands objects" — i.e. the brand/tenant lookup behind the platform API. Abandoned:
+    last release 2019-11-12, repo last pushed 2020-04-04.
+- name: '@coorpacademy/kinesis'
+  registry: npm
+  language: javascript
+  official: true
+  category: infrastructure
+  version: 2.2.4
+  published: '2020-01-17'
+  releases_published: 6
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/kinesis
+- name: '@coorpacademy/etcd3'
+  registry: npm
+  language: javascript
+  official: true
+  category: infrastructure
+  version: 0.2.12
+  published: '2019-05-06'
+  releases_published: 2
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/etcd3
+- name: '@coorpacademy/mysql2'
+  registry: npm
+  language: javascript
+  official: true
+  category: infrastructure
+  version: 3.0.0-rc.2
+  published: '2023-01-11'
+  releases_published: 1
+  license: MIT
+  url: https://www.npmjs.com/package/@coorpacademy/mysql2
+  note: Single published version, and it is a release candidate.
+- name: coorpacademy-core
+  registry: npm
+  language: javascript
+  official: true
+  category: legacy
+  version: 1.4.1
+  published: '2016-09-09'
+  releases_published: 20
+  license: MIT
+  url: https://www.npmjs.com/package/coorpacademy-core
+  note: >-
+    "Core library for coorpacademy projects" — the oldest first-party package, unscoped, abandoned
+    since 2016-09-09. Recorded for completeness; do not use.
+currency_analysis:
+  most_recent_release: '2026-07-07'
+  most_recent_package: serverless-offline-sqs 9.0.1 (and five sibling serverless plugins)
+  actively_maintained_clusters:
+  - 'serverless-plugins (7 packages, all released 2026-07-07)'
+  - 'components monorepo — components 11.40.23, player-web 4.29.24, app-review 0.46.23 (all 2026-06-05)'
+  stale_clusters:
+  - 'baucis forks (2025-05-20) — the API-spec generators; still the newest thing touching the specs'
+  - 'swagger-ui-express fork (2021-06-15) — five years'
+  - 'squirrel / kinesis / etcd3 (2019-2020) — abandoned'
+  - 'coorpacademy-core (2016) — abandoned'
+  abandonment_signal: >-
+    The decay pattern here is unusually informative. The front end and the infrastructure tooling are
+    shipping monthly in 2026. The API-specification generators (baucis-openapi3, baucis-swagger2) last
+    moved 2025-05-20, and the Swagger UI that serves the whole public developer surface last moved
+    2021-06-15. The parts of the toolchain that produce and present the public API contracts are the
+    parts that stopped being maintained.
+cross_links:
+  components: components/coorpacademy-components.yml
+  conformance: conformance/coorpacademy-conformance.yml
+pointers_emitted:
+- type: Packages
+  url: packages/coorpacademy-packages.yml

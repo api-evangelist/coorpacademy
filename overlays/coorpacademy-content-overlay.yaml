@@ -1,0 +1,131 @@
+overlay: 1.0.0
+info:
+  title: Coorpacademy Content API — API Evangelist enhancements
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-17'
+  method: generated
+  source: openapi/coorpacademy-content-openapi.json
+  extends: openapi/coorpacademy-content-openapi.json
+  note: Overlay only; the harvested specification is never mutated.
+actions:
+  - target: $.servers
+    description: >-
+      REORDER AND PRUNE THE SERVER LIST. The published spec lists servers[0] as the relative URL
+      `/api/v2`, followed by `http://localhost:3700/api/v2`. A tool that takes the first server gets a
+      relative base it cannot resolve; the second is a developer's machine. The production host is
+      fourth in the list. Live probe 2026-08-17: https://content.coorpacademy.com/api/v2/notifications
+      returned HTTP 401 with {"message":"Invalid or missing authorization key"}, confirming the
+      production base.
+    update:
+      - url: https://content.coorpacademy.com/api/v2
+        description: production
+      - url: https://content-staging.coorpacademy.com/api/v2
+        description: staging
+    x-rationale: verified-live-2026-08-17
+  - target: $.info
+    description: Record the alternate spec location, which the Swagger UI index gets wrong.
+    update:
+      x-spec-locations:
+        served_at: https://content.coorpacademy.com/api-docs
+        swagger_ui_declares: https://content.coorpacademy.com/swagger.json
+        note: >-
+          The Swagger UI at https://api.coorpacademy.com/ builds this document's URL as
+          https://content.coorpacademy.com/swagger.json, which returns 404 "Cannot GET /swagger.json".
+          The document is actually served at /api-docs. The Content API is therefore BROKEN in
+          Coorpacademy's own public API explorer — the dropdown entry `api-content` fails to load.
+    x-rationale: verified-live-2026-08-17
+  - target: $.tags
+    description: >-
+      DECLARE THE TAGS. The spec uses 15 distinct tag values across 53 operations but declares none of
+      them at the document root, so no tooling can render a grouped, described navigation. Names below
+      are the exact strings already used on the operations.
+    update:
+      - name: externalCourses
+        description: External courses and their external contents, per repository.
+      - name: bulkExternalContents
+        description: Bulk ingestion jobs for external content, with per-row CSV and resource error reports.
+      - name: skills
+        description: Catalogue skills with locale-specific labels.
+      - name: customSkills
+        description: Tenant-authored skills (edition side).
+      - name: customSkillsConsommation
+        description: Tenant-authored skills (published, learner-facing side).
+      - name: certifications
+        description: Certification editions, diffs and published snapshots.
+      - name: certificationsConsommation
+        description: Certifications as consumed by learners.
+      - name: custom playlists
+        description: Tenant-curated playlists (edition side).
+      - name: customPlaylistsConsommation
+        description: Tenant-curated playlists (published, learner-facing side).
+      - name: scripts
+        description: Video transcript/subtitle scripts, per video and language.
+      - name: notifications
+        description: Platform notifications typed feature, maintenance or survey.
+      - name: jobs
+        description: Repository-wide jobs, e.g. adding a locale to every resource.
+  - target: $.paths['/repository/{repository}/external-courses/{ref}'].get
+    description: Fill the empty summary and description.
+    update:
+      summary: Get one external course
+      description: >-
+        Returns a single external course by its `ref` within the repository. Addressed by the composite
+        natural key (repository, ref) — there is no object id. Declares 409 Conflict on a GET, which is
+        unusual and undocumented.
+  - target: $.paths['/repository/{repository}/external-courses/{ref}'].put
+    description: Fill the empty summary and description.
+    update:
+      summary: Update an external course
+      description: >-
+        Replaces an external course identified by (repository, ref). Returns 201 rather than 200 on a
+        successful update.
+  - target: $.paths['/repository/{repository}/external-courses/{ref}'].delete
+    description: Fill the empty summary and description.
+    update:
+      summary: Delete an external course
+      description: >-
+        Removes an external course identified by (repository, ref). Returns 204. Note that most content
+        entities in this API are soft-deleted through their `state` enum rather than removed; confirm
+        which applies here before relying on it.
+  - target: $.info
+    description: >-
+      Attach the cross-cutting operating rules an integrator needs and the spec does not state, all
+      derived from the spec itself plus live probes. Full detail in the repo artifacts.
+    update:
+      x-api-evangelist:
+        authentication:
+          scheme: apiKey
+          in: header
+          parameter: authorization
+          note: >-
+            Lower-case `authorization`. Sibling services in the same estate use `Authorization`,
+            `token`, `authentication` and `Api-Secret`. See authentication/coorpacademy-authentication.yml.
+        idempotency:
+          supported: false
+          note: >-
+            No idempotency key anywhere in the estate. POST upserts are not replay-safe; a 409 on
+            (repository, ref, version) is the only collision signal.
+        authoring_model:
+          pattern: edition / diff / snapshot / consommation
+          warning: >-
+            Certifications, custom skills and custom playlists exist in parallel edition and
+            consommation forms served from different path prefixes (`/repository/...` vs
+            `/consommation/repository/...`). WRITING TO THE EDITION DOES NOT CHANGE WHAT LEARNERS SEE.
+            Each also exposes PUT .../{ref}/undo to revert an edition to the last published snapshot.
+          see: data-model/coorpacademy-data-model.yml
+        pagination:
+          parameters: [limit, offset, skip, count]
+          envelope: none
+          note: No total counts, no next/prev links, no Link header.
+        soft_delete:
+          state_enum: [published, draft, archived, deleted]
+          escape_hatch: includeDeleted
+        errors:
+          rfc9457: false
+          shapes: [express-error, bare-message]
+          see: errors/coorpacademy-problem-types.yml
+        rate_limits:
+          published: false
+          headers: none
+          see: rate-limits/coorpacademy-rate-limits.yml

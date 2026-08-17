@@ -1,0 +1,241 @@
+generated: '2026-08-17'
+method: derived
+source: >-
+  Derived from the fourteen OpenAPI/Swagger documents in openapi/ (harvested 2026-08-17 from the
+  public Swagger UI at https://api.coorpacademy.com/), plus live unauthenticated HTTP probes of
+  content.coorpacademy.com, progression.coorpacademy.com, platform.coorpacademy.com and
+  api.coorpacademy.com on 2026-08-17.
+docs: https://api.coorpacademy.com/
+summary: >-
+  Coorpacademy is not one API but fourteen independently-versioned Node/Express and AWS
+  API-Gateway-fronted microservices indexed by a single Swagger UI. There is no cross-cutting
+  conventions document, and the services genuinely do NOT agree with one another: five different
+  API-key header names, three different error envelopes, and three different path-versioning schemes
+  across the estate. Everything below is derived from the specs and from live responses; nothing is
+  provider-documented prose, because no such prose exists.
+surface_shape:
+  services: 14
+  paths: 96
+  operations: 155
+  spec_versions:
+    openapi_3.0.0: 8
+    swagger_2.0: 6
+  note: >-
+    Six of the fourteen documents are still Swagger 2.0, eight are OpenAPI 3.0.0. No document uses
+    OpenAPI 3.1 or later.
+authentication:
+  styles: [api_key_header]
+  distinct_header_names: 5
+  headers:
+  - header: authorization
+    services: [content, review]
+  - header: Authorization
+    services: [content-scorm, mail, scorm]
+  - header: token
+    services: [h5p, scim]
+  - header: authentication
+    services: [platform, progression, progression-aggregations]
+  - header: Api-Secret
+    services: [mobile]
+  undeclared:
+    services: [external, media, pdf]
+    note: >-
+      The external, media and pdf specs declare no securityScheme at all. A live probe of the
+      api.coorpacademy.com edge returns AWS API Gateway's `{"message":"Missing Authentication
+      Token"}` (403) for unauthenticated calls on that host, so the edge gates them even though the
+      contract does not describe how. This is a spec gap, not an open API.
+  oauth2: false
+  openid_connect: false
+  bearer_tokens: false
+  agent_risk: >-
+    An agent cannot infer the auth header from the service. Five names, two of which differ only by
+    letter case (`authorization` vs `Authorization`), and one non-standard (`Api-Secret`). Reading
+    the per-service spec is mandatory.
+  see: authentication/coorpacademy-authentication.yml
+idempotency:
+  documented: false
+  header: null
+  probe: >-
+    Zero matches for "idempoten" across all fourteen specs (96 paths / 155 operations), and no
+    Idempotency-Key, request-id or dedupe parameter appears anywhere in the estate.
+  notes: >-
+    The write surface includes genuinely non-idempotent POSTs — 27 transactional-email sends
+    (POST /mail/api/v1/*), POST /v1/progressions/{id}/answers, POST /v1/progressions/{id}/move,
+    POST /v1/progressions/{id}/clues, POST /{brand}/Users (SCIM create) and every presigned-S3-URL
+    mint — with no replay primitive. The specs DO expose a partial substitute: the progression
+    service returns 409 Conflict on move/answer/clue/extraLife/resource operations, which is an
+    optimistic-concurrency rejection rather than a safe replay.
+  agent_risk: >-
+    An agent that retries POST /mail/api/v1/welcome or POST /mail/api/v1/doBattle after a socket
+    timeout will send the learner a duplicate email; a retried POST /{brand}/Users may create a
+    duplicate SCIM user. There is no documented way to make either call safe.
+  pointer_emitted: false
+  pointer_rationale: >-
+    No `Idempotency` pointer is emitted in apis.yml. The agent-readiness idempotency dimension is a
+    genuine zero for this provider, not a missing pointer.
+pagination:
+  style: mixed
+  documented: false
+  parameters:
+  - name: limit
+    services: [content, progression, content-scorm]
+    style: page-size
+  - name: offset
+    services: [content]
+    style: offset
+  - name: skip
+    services: [content]
+    style: offset
+  - name: count
+    services: [content]
+    style: page-size
+  - name: 'from[partitionKey]'
+    services: [progression]
+    style: dynamodb-cursor
+  - name: 'from[sortKey]'
+    services: [progression]
+    style: dynamodb-cursor
+  - name: 'from[updatedAt]'
+    services: [progression]
+    style: dynamodb-cursor
+  response_envelope_fields: []
+  notes: >-
+    No service publishes total counts, next/prev links or a Link header. The progression service
+    leaks its DynamoDB pagination model straight into the query string as a bracketed composite
+    cursor (`from[partitionKey]`, `from[sortKey]`, `from[updatedAt]`); the content service uses
+    offset/skip/limit/count. Which style an operation accepts is per-operation — read the spec.
+filtering:
+  style: repeated-ref-arrays
+  parameters: [refs, contentRefs, externalCoursesRefs, states, state, populations, filter, active,
+    includeDeleted, withExternalContent, minNbSlides, from, to, clusterFrom, clusterTo]
+  notes: >-
+    The dominant filter idiom across the content service is a `refs`/`contentRefs` array of opaque
+    string references plus a `states` array drawn from the publication lifecycle enum
+    (`published`, `draft`, `archived`, `deleted`). `includeDeleted` is the soft-delete escape hatch.
+field_expansion:
+  supported: false
+metadata:
+  supported: true
+  shape: >-
+    Content and progression resources carry a `meta` object (schemas `Meta`, `MetaVersion`,
+    `MetaBody`) holding version and provenance fields; the content-scorm service exposes
+    `meta.enrolmentId` as a query parameter for Go1-enrolment correlation.
+request_tracing:
+  supported: false
+  probe: >-
+    No X-Request-Id, X-Correlation-Id or trace header observed on any live response from
+    content.coorpacademy.com, progression.coorpacademy.com or platform.coorpacademy.com; zero
+    matches for "X-Request" or "correlation" across all fourteen specs. The api.coorpacademy.com edge
+    returns CloudFront `via:` and Cloudflare `cf-ray:` headers, which are CDN artifacts, not an
+    application request id.
+  agent_risk: >-
+    There is no identifier a caller can quote to support when a request fails. Support contact is
+    assistance@coorpacademy.com (from the status page), with no ticket-correlation mechanism.
+versioning:
+  scheme: per-service-path-prefix
+  variants:
+  - pattern: /api/v2
+    services: [content]
+  - pattern: /api/v1
+    services: [platform]
+  - pattern: /api (with /v1 and /v2 path segments inside)
+    services: [progression]
+  - pattern: /api (with /v1 path segments inside)
+    services: [progression-aggregations]
+  - pattern: /api/v1
+    services: [mail, mobile, review]
+  - pattern: none
+    services: [scim, scorm, content-scorm, h5p, external, media, pdf]
+  notes: >-
+    The progression service is the awkward case: it serves BOTH /v1/progressions/* (the write surface)
+    and /v2/analytics/* (the read surface) under one /api base, so "v1" and "v2" are not successive
+    versions of the same thing — they are different resource families. Seven of fourteen services are
+    unversioned entirely. There is no media-type or header versioning anywhere.
+  see: lifecycle/coorpacademy-lifecycle.yml
+error_envelope:
+  media_type: application/json
+  rfc9457: false
+  variants: 3
+  shapes:
+  - name: express-error
+    services: [content, platform, progression, progression-aggregations]
+    schema: Error
+    fields: [id, code, status, success, message, errors]
+    observed: >-
+      GET https://progression.coorpacademy.com/api/v1/progressions (401) returned
+      {"code":"server_error","status":401,"success":false,"message":"Unauthorized",
+      "errors":[{"message":"Unauthorized","code":"server_error","status":401,"statusCode":401,
+      "expose":true}]}
+  - name: bare-message
+    services: [content, mail]
+    fields: [message]
+    observed: >-
+      GET https://content.coorpacademy.com/api/v2/notifications (401) returned
+      {"message":"Invalid or missing authorization key"}; the api.coorpacademy.com edge returns
+      {"message":"Missing Authentication Token"} (403), which is AWS API Gateway's own body.
+  - name: scim-2.0-error
+    services: [scim]
+    fields: [schemas, detail, status]
+    observed: >-
+      GET https://api.coorpacademy.com/scim/coorp/Users (400) returned
+      {"schemas":["urn:ietf:params:scim:api:messages:2.0:Error"],"detail":"JWTError: ...","status":400}
+      — a genuinely RFC 7644-conformant error body.
+  notes: >-
+    `code` is always the string "server_error" in every observed body, including on a 401, so it
+    carries no discriminating information. The SCIM service is the only one in the estate with a
+    standards-conformant error envelope.
+  see: errors/coorpacademy-problem-types.yml
+rate_limit_signaling:
+  documented: false
+  headers_observed: []
+  status_on_exhaustion: undocumented
+  probe: >-
+    Zero matches for "ratelimit", "rate limit", "x-rate" or "Retry-After" across all fourteen specs.
+    No RateLimit-*, X-RateLimit-* or Retry-After header observed on any live response. No 429 is
+    declared on any of the 155 operations.
+  agent_risk: >-
+    An agent has no runtime backpressure signal at all. There is no published limit to respect and no
+    header to read, so the only safe strategy is conservative self-throttling with exponential
+    backoff on 5xx.
+  see: rate-limits/coorpacademy-rate-limits.yml
+soft_delete:
+  supported: true
+  notes: >-
+    Content resources use a state enum (`published`, `draft`, `archived`, `deleted`) rather than hard
+    deletion; `includeDeleted=true` surfaces tombstones. Several services also expose an `/undo`
+    operation (undoCertificationChange, undoCustomPlaylistChange, undoCustomSkillsChange) that
+    reverts edits back to the last published snapshot — an unusual and useful primitive.
+tenancy:
+  model: brand-scoped
+  notes: >-
+    "Brand" is the tenant unit. It appears as a path parameter (`/{brand}/Users` in SCIM,
+    `/repository/{repository}/...` in content), as a header (`brandName` on one content operation),
+    and as a first-class resource in the platform API (`/brands`). An agent must know which brand it
+    is acting for before any call.
+gateway:
+  hosts:
+  - host: api.coorpacademy.com
+    stack: AWS API Gateway behind CloudFront behind Cloudflare
+    evidence: >-
+      Response headers carry both `via: 1.1 <id>.cloudfront.net (CloudFront)` (twice, i.e. two
+      CloudFront hops) and `server: cloudflare` + `cf-ray:`; unauthenticated bodies are API
+      Gateway's `{"message":"Missing Authentication Token"}`.
+  - host: content.coorpacademy.com
+    stack: Node/Express
+    evidence: 'x-powered-by: Express'
+  - host: progression.coorpacademy.com
+    stack: Node/Express
+    evidence: 'x-powered-by: Express'
+  - host: platform.coorpacademy.com
+    stack: Node/Express
+    evidence: 'x-powered-by: Express'
+  note: >-
+    `x-powered-by: Express` is left enabled on the three Express hosts — a minor information
+    disclosure that most hardening guides tell you to switch off.
+cross_links:
+  authentication: authentication/coorpacademy-authentication.yml
+  errors: errors/coorpacademy-problem-types.yml
+  lifecycle: lifecycle/coorpacademy-lifecycle.yml
+  conformance: conformance/coorpacademy-conformance.yml
+  rate_limits: rate-limits/coorpacademy-rate-limits.yml
+  data_model: data-model/coorpacademy-data-model.yml

@@ -1,0 +1,109 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  https://github.com/CoorpAcademy/components (public monorepo, last pushed 2026-06-24) and the npm
+  metadata endpoints for each published package listed below.
+summary: >-
+  Coorpacademy publishes its front-end estate as a public npm monorepo — a React design system, an
+  icon library, the slide-player and the review app — under the @coorpacademy scope. These are
+  CLIENT-SIDE UI components, real and actively released (most recent 2026-06-05), and they are the only
+  first-party consumable libraries the company ships. They are NOT SDKs and they are NOT documented as
+  an embed/integration surface for third parties: there is no "add Coorpacademy to your app" guide, no
+  hosted loader script, no CDN embed snippet and no documented public props contract. Recorded here
+  because they exist and are consumable, with that caveat stated plainly.
+distribution:
+  registry: npm
+  scope: '@coorpacademy'
+  cdn_loader: none
+  hosted_embed: none
+  documented_embed_guide: false
+  demo_site:
+    url: http://coorpacademy.github.io/components/app-review
+    status: 404
+    checked: '2026-08-17'
+    note: >-
+      The @coorpacademy/app-review README links a "Static Demo" at
+      coorpacademy.github.io/components/app-review. Probed 2026-08-17: coorpacademy.github.io/ and
+      /components both return 404 — the GitHub Pages demo the packages advertise is dead. The README
+      also references Excalidraw architecture diagrams by relative path into the monorepo, not a
+      published URL.
+families:
+- family: design-system
+  packages:
+  - name: '@coorpacademy/components'
+    version: 11.40.23
+    published: '2026-06-05'
+    releases_published: 2444
+    description: Sharable React components for web applications
+  - name: '@coorpacademy/nova-icons'
+    version: 4.5.1
+    published: '2025-05-05'
+    releases_published: 387
+    description: React components bank based on Nova SVG icons
+  note: >-
+    2,444 published versions of the component library is a serious release cadence — this is a real,
+    living design system, not a snapshot.
+- family: slide-player
+  packages:
+  - name: '@coorpacademy/player-web'
+    version: 4.29.24
+    published: '2026-06-05'
+    releases_published: 1917
+    description: CoorpAcademy web slide-player
+  - name: '@coorpacademy/player-store'
+    version: 4.3.4
+    published: '2026-02-20'
+    releases_published: 216
+    description: Redux store for slide players
+  - name: '@coorpacademy/player-services'
+    version: 5.3.1
+    published: '2025-05-05'
+    releases_published: 205
+    description: Implements reactions to redux actions from player-store
+  - name: '@coorpacademy/progression-engine'
+    version: 11.8.1
+    published: '2025-05-05'
+    releases_published: 374
+    description: Learner-progression state machine
+  note: >-
+    This is the client half of the learning experience, and it lines up operation-for-operation with
+    the progression and content-scorm REST services in openapi/ — move, answer, clue, extra-life,
+    resource-viewed. A team that wanted to embed the Coorpacademy player in its own product has the
+    npm packages to do it and no documentation telling it how.
+- family: review-mode
+  packages:
+  - name: '@coorpacademy/app-review'
+    version: 0.46.23
+    published: '2026-06-05'
+    releases_published: 1118
+    license: UNLICENSED
+    description: Adaptive review-mode application
+  note: >-
+    Published publicly to npm but licensed `UNLICENSED`. It is downloadable and legally unusable by a
+    third party — worth knowing before building against it.
+- family: platform-plumbing
+  packages:
+  - name: '@coorpacademy/translate'
+    version: 6.3.0
+    published: '2025-02-13'
+  - name: '@coorpacademy/history'
+    version: 6.2.0
+    published: '2025-02-13'
+  - name: '@coorpacademy/redux-history'
+    version: 6.2.0
+    published: '2025-02-13'
+  - name: '@coorpacademy/redux-task'
+    version: 1.2.0
+    published: '2025-02-13'
+licensing_caveat: >-
+  Most @coorpacademy front-end packages publish NO license field on npm at all (components,
+  player-web, player-store, player-services, progression-engine, nova-icons, translate, history,
+  redux-history, redux-task), and app-review publishes `UNLICENSED`. Absent a license, default
+  copyright applies: these are public but not open source. The MIT-licensed packages in the estate are
+  the infrastructure tooling and the maintained forks, not the product code. See
+  packages/coorpacademy-packages.yml.
+cross_links:
+  packages: packages/coorpacademy-packages.yml
+pointers_emitted:
+- type: Components
+  url: components/coorpacademy-components.yml

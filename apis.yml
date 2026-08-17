@@ -1,25 +1,358 @@
 aid: coorpacademy
 name: Coorpacademy
-description: 'Coorpacademy is a company surfaced as a portfolio company of serena and added to the API
-  Evangelist network as a stub for enrichment. Sector: saas. This profile is a lead awaiting the enrichment
-  pipeline.'
+description: >-
+  Coorpacademy is a Swiss-French corporate digital-learning platform, founded in 2013 and acquired by
+  Australian edtech Go1 in April 2022, now marketed as "Coorpacademy by Go1". It sells a B2B SaaS
+  learning experience platform built on inverted-pedagogy, gamified micro-learning: brand-scoped
+  learning portals, a course and certification catalogue, skills taxonomies, learner progression and
+  adaptive review, battles/leaderboards, and HR analytics. The platform is fronted by a public Swagger
+  UI at api.coorpacademy.com that indexes fourteen internal-but-publicly-documented REST services —
+  content, platform/brand management, progression, progression aggregations, SCIM 2.0 user
+  provisioning, SCORM and SCORM-content players, H5P, transactional email, mobile, review mode, media,
+  external upload and PDF rendering. Access to every service is key-gated; there is no self-serve
+  developer signup, no published pricing, and no partner developer portal, so the specifications are
+  the only machine-readable public surface.
 url: https://raw.githubusercontent.com/api-evangelist/coorpacademy/refs/heads/main/apis.yml
+image: https://www.coorpacademy.com/assets/uploads/2025/08/cropped-Coorpacademyby-Go1-Charcoal.png
 x-type: company
 x-source: serena-portfolio
-x-tier: stub
-x-tier-reason: portfolio-lead
-specificationVersion: '0.20'
+specificationVersion: '0.21'
 created: '2026-08-17'
 modified: '2026-08-17'
 tags:
 - Company
 - Saas
-apis: []
+- corporate-learning
+- lms
+- learning-experience-platform
+- edtech
+- elearning
+- scorm
+- h5p
+- scim
+- user-provisioning
+- learning-analytics
+- skills
+- certifications
+- gamification
+- france
+- switzerland
+apis:
+- name: Coorpacademy Content API
+  description: >-
+    Manages the Coorpacademy content repository per brand — external courses and external contents,
+    skills and custom skills, certifications and certification snapshots, custom playlists, bulk
+    external content ingestion, video scripts/subtitles, notifications, and consumption
+    ("consommation") counters. 39 paths / 53 operations, 63 component schemas. Key-gated via an
+    `authorization` header.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - corporate-learning
+  - content-management
+  - skills
+  - certifications
+  - scorm
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-content-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: Overlay
+    url: overlays/coorpacademy-content-overlay.yaml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+- name: Coorpacademy Platform API
+  description: >-
+    Brand (tenant) management for the Coorpacademy platform — create, read, update, delete and migrate
+    brands, check brand existence, list brands, and extract SSO configuration from an uploaded SAML
+    `metadata.xml`. Carries the SAML/OIDC/SSO payload schemas used to configure enterprise
+    single sign-on per brand. 6 paths / 9 operations. Key-gated via an `authentication` header.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  baseURL: https://platform.coorpacademy.com/api/v1
+  tags:
+  - multi-tenancy
+  - sso
+  - saml
+  - oidc
+  - brand-management
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-platform-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+- name: Coorpacademy Progression API
+  description: >-
+    The learner progression engine — create and read progressions, record moves, answers, clue
+    requests, resource views and extra-life accept/refuse decisions, plus a v2 analytics surface for
+    completion, slide counts, per-slide analytics, review stars by skill and hero recommendations,
+    both for the calling learner and (admin-scoped) for a named userId. 21 paths / 26 operations.
+    Key-gated via an `authentication` header.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  baseURL: https://progression.coorpacademy.com/api
+  tags:
+  - learning-analytics
+  - progression
+  - adaptive-learning
+  - gamification
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-progression-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: Overlay
+    url: overlays/coorpacademy-progression-overlay.yaml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+- name: Coorpacademy Progression Aggregations API
+  description: >-
+    A separate aggregation service over the same progression data store, exposing DynamoDB-backed
+    per-slide analytics and per-user completion and slide-count reads/writes under a /v1 prefix.
+    3 paths / 5 operations. Key-gated via an `authentication` header.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  baseURL: https://aggregation-progression.coorpacademy.com/api
+  tags:
+  - learning-analytics
+  - aggregation
+  - progression
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-progression-aggregations-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+- name: Coorpacademy SCIM API
+  description: >-
+    SCIM 2.0 user provisioning and de-provisioning for identity-manager integration, scoped per brand
+    — list, create, find, PUT-update and PATCH-update users. Errors are returned in the SCIM error
+    envelope (`urn:ietf:params:scim:api:messages:2.0:Error`), confirmed on a live unauthenticated
+    probe. 2 paths / 5 operations. Key-gated via a `token` header.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=scim
+  baseURL: https://api.coorpacademy.com/scim
+  tags:
+  - scim
+  - user-provisioning
+  - identity
+  - sso
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scim-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Overlay
+    url: overlays/coorpacademy-scim-overlay.yaml
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+- name: Coorpacademy SCORM Content API
+  description: >-
+    Backing API for the Coorpacademy SCORM player — fetch slides, chapters, levels, exit nodes and
+    clue payloads, post answers and moves, mark resources as viewed, accept/refuse extra lives,
+    initialise player data, retrieve the LMS API file, resolve a SCORM launch URL, map a Go1
+    enrolment_id to a Coorpacademy progression, and mint a presigned S3 upload URL for bulk SCORM
+    packages. 16 paths / 16 operations. Key-gated via an `Authorization` header.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  baseURL: https://api.coorpacademy.com/content-scorm
+  tags:
+  - scorm
+  - lms-interoperability
+  - progression
+  - go1
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-content-scorm-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: Overlay
+    url: overlays/coorpacademy-content-scorm-overlay.yaml
+- name: Coorpacademy SCORM API
+  description: >-
+    SCORM package storage and delivery — mint presigned S3 URLs for single and bulk SCORM uploads and
+    serve root and nested files out of an unpacked SCORM resource. 4 paths / 4 operations. Key-gated
+    via an `Authorization` header.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  baseURL: https://api.coorpacademy.com/scorm
+  tags:
+  - scorm
+  - file-upload
+  - content-delivery
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+- name: Coorpacademy Email API
+  description: >-
+    Transactional email service backed by Mandrill, exposing one operation per templated message the
+    platform sends — onboarding, welcome, signup validation and self-validation, password reset,
+    first-login attempt, course finished, adaptive course finished, trending and recommended courses,
+    battle invitations and waiting-opponent notices, forum reply notifications, certification done,
+    coach unlocked, we-miss-you re-engagement, scoped export links, SAP notifications, assistance
+    requests, Go1 subscription requests and SCORM download links. 27 paths / 27 operations. Key-gated
+    via an `Authorization` header.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  baseURL: https://api.coorpacademy.com/mail
+  tags:
+  - transactional-email
+  - notifications
+  - mandrill
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-mail-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: Overlay
+    url: overlays/coorpacademy-mail-overlay.yaml
+- name: Coorpacademy Mobile API
+  description: >-
+    Minimal-version gate for the Coorpacademy iOS and Android apps — read and update the minimum
+    installable app version per key, plus a send-email operation. 2 paths / 3 operations. Key-gated
+    via an `Api-Secret` header.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  baseURL: https://api.coorpacademy.com/mobile
+  tags:
+  - mobile
+  - versioning
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-mobile-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+- name: Coorpacademy Review API
+  description: >-
+    Adaptive review mode — list the skills a given learner has available to review and fetch the next
+    review slide for a learner and skill. 2 paths / 2 operations. Key-gated via an `authorization`
+    header.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-review
+  baseURL: https://api.coorpacademy.com/review
+  tags:
+  - adaptive-learning
+  - spaced-repetition
+  - skills
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-review-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: Overlay
+    url: overlays/coorpacademy-review-overlay.yaml
+- name: Coorpacademy H5P API
+  description: >-
+    Serves files out of an unpacked H5P interactive-content resource, redirecting (301) to the stored
+    asset. 1 path / 1 operation. Key-gated via a `token` header.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  baseURL: https://api.coorpacademy.com/h5p
+  tags:
+  - h5p
+  - interactive-content
+  - content-delivery
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-h5p-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+- name: Coorpacademy External Resources API
+  description: >-
+    Mints a presigned S3 URL for uploading external content of a given file extension. 1 path /
+    1 operation. The published spec declares no security scheme.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-external
+  baseURL: https://api.coorpacademy.com/external
+  tags:
+  - file-upload
+  - content-ingestion
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-external-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: Overlay
+    url: overlays/coorpacademy-external-overlay.yaml
+- name: Coorpacademy Media API
+  description: >-
+    Media upload and on-the-fly image resize. 1 path / 2 operations. The published spec declares no
+    security scheme.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-media
+  baseURL: https://api.coorpacademy.com/api-service
+  tags:
+  - media
+  - image-processing
+  - file-upload
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-media-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+- name: Coorpacademy PDF API
+  description: >-
+    Renders a supplied URL to PDF — used to produce downloadable certificates and reports. 1 path /
+    1 operation. The published spec declares no security scheme.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+  baseURL: https://api.coorpacademy.com/pdf
+  tags:
+  - pdf
+  - document-generation
+  - certifications
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-pdf-openapi.json
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/coorpacademy-domain-security.yml
 - type: Website
   url: https://www.coorpacademy.com/
+- type: APIReference
+  url: https://api.coorpacademy.com/
+- type: Documentation
+  url: https://api.coorpacademy.com/
+- type: Support
+  url: https://support.coorpacademy.com/
+- type: Blog
+  url: https://www.coorpacademy.com/blog
+- type: GitHubOrganization
+  url: https://github.com/CoorpAcademy
+- type: TermsOfService
+  url: https://www.coorpacademy.com/mentions-legales/
+- type: PrivacyPolicy
+  url: https://www.coorpacademy.com/privacy-policy/
+- type: StatusPage
+  url: https://coorpacademy.status.io/
+- type: Login
+  url: https://connect.coorpacademy.com/login
+- type: Lifecycle
+  url: lifecycle/coorpacademy-lifecycle.yml
+- type: Authentication
+  url: authentication/coorpacademy-authentication.yml
+- type: Conventions
+  url: conventions/coorpacademy-conventions.yml
+- type: Conformance
+  url: conformance/coorpacademy-conformance.yml
+- type: Compliance
+  url: conformance/coorpacademy-conformance.yml
+- type: ErrorCatalog
+  url: errors/coorpacademy-problem-types.yml
+- type: DataModel
+  url: data-model/coorpacademy-data-model.yml
+- type: Packages
+  url: packages/coorpacademy-packages.yml
+- type: Components
+  url: components/coorpacademy-components.yml
+- type: LLMsTxt
+  url: llms/coorpacademy-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Plans
+  url: plans/coorpacademy-plans-pricing.yml
+x-enrichment:
+  date: '2026-08-17'
+  status: enriched
+  artifacts_added: 43
+  pass: local-v1

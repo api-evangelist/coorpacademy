@@ -1,0 +1,51 @@
+overlay: 1.0.0
+info:
+  title: Coorpacademy Review API — API Evangelist corrections
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-17'
+  method: generated
+  source: openapi/coorpacademy-review-openapi.json
+  extends: openapi/coorpacademy-review-openapi.json
+actions:
+  - target: $.servers
+    description: >-
+      RESOLVE A RELATIVE SERVER. The published spec declares its only server as the relative URL
+      `/review`, which no client can resolve without out-of-band knowledge of the host. The Swagger UI
+      index at https://api.coorpacademy.com/ builds this service's URL from host `api` and path
+      `/review`, giving the absolute base below.
+    update:
+      - url: https://api.coorpacademy.com/review
+        description: production
+      - url: https://api-staging.coorpacademy.com/review
+        description: staging (host pattern declared by the Swagger UI index; not probed)
+    x-rationale: relative-server-in-published-spec
+  - target: $.paths['/api/v1/review/users/{userId}/skills'].get
+    description: Record the doubled path prefix and the privilege level.
+    update:
+      x-api-evangelist:
+        effective_url: >-
+          https://api.coorpacademy.com/review/api/v1/review/users/{userId}/skills — the path repeats
+          `review` because the service is mounted at /review AND versions its own paths under
+          /api/v1/review. Verify against Coorpacademy before hard-coding; the spec's relative server
+          makes this ambiguous.
+        privacy: personal-data
+        scope: >-
+          Reads a named learner's review state. No scopes exist in this estate; entitlement is a
+          property of the API key.
+        authentication:
+          scheme: apiKey
+          in: header
+          parameter: authorization
+  - target: $.paths['/api/v1/review/users/{userId}/skills/{skillRef}/slide'].get
+    description: Document the only declared response and its consequence.
+    update:
+      x-api-evangelist:
+        responses_declared: ['200']
+        warning: >-
+          Only a 200 is declared. No 401, 403 or 404 appears in the contract even though the sibling
+          operation and every other service in the estate return them. A client must handle
+          undocumented error statuses.
+        related: >-
+          The client-side counterpart is the open-source @coorpacademy/app-review npm package
+          (0.46.23, 2026-06-05) — published publicly but licensed UNLICENSED.

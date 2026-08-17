@@ -1,0 +1,79 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  https://www.coorpacademy.com/ (nav + footer), https://www.coorpacademy.com/sitemap_index.xml and its
+  five child sitemaps, plus direct probes of the conventional pricing paths listed under `probed`.
+docs: null
+plan_count: 0
+pricing_published: false
+currency: null
+billing_periods: []
+plans: []
+summary: >-
+  Coorpacademy publishes NO pricing of any kind — no plan tiers, no seat prices, no list price, no
+  per-API metering, and no self-serve checkout. Every commercial path on the site is a
+  contact-sales/demo-request funnel, and since the Go1 acquisition those funnels point at go1.com
+  rather than at Coorpacademy. There is also no developer plan: the fourteen documented REST services
+  have no signup, no key-issuance page and no published cost, so API access is negotiated inside a
+  platform contract.
+commercial_model:
+  motion: enterprise-sales
+  self_serve_signup: false
+  free_tier: false
+  trial_published: false
+  api_plan: none
+  api_key_issuance: >-
+    Not documented anywhere. All fourteen services are API-key gated (five different header names) and
+    no page explains how to obtain a key. See authentication/coorpacademy-authentication.yml.
+  demo_request: https://www.go1.com/fr/contenu-de-formation?utm_source=coorpacademy
+  contact_sales: https://www.go1.com/fr/speak-with-an-expert-old
+  note: >-
+    Both commercial CTAs on coorpacademy.com now resolve to go1.com — and the contact link is to a URL
+    literally suffixed `-old`, which suggests the funnel has been re-pointed at a legacy Go1 page
+    rather than maintained.
+probed:
+- url: https://www.coorpacademy.com/pricing
+  status: 500
+  checked: '2026-08-17'
+- url: https://www.coorpacademy.com/en/
+  status: 302
+  redirect_to: https://www.go1.com/?source=coorp
+  checked: '2026-08-17'
+- url: https://www.coorpacademy.com/demo
+  status: 500
+  checked: '2026-08-17'
+- url: https://www.coorpacademy.com/login
+  status: 500
+  checked: '2026-08-17'
+- url: https://connect.coorpacademy.com/login
+  status: 200
+  checked: '2026-08-17'
+  note: >-
+    A working learner login/signup page (email+password, plus Facebook/Google/LinkedIn social sign-on and
+    self-serve account creation) on a separate host that the marketing site does not link. It is the
+    LEARNER front door for brand portals, not a developer or commercial signup, and no plan or price is
+    attached to it. A `Login` pointer IS emitted for this URL; no `Pricing` or `SignUp` pointer is.
+- url: https://www.coorpacademy.com/sitemap_index.xml
+  status: 200
+  checked: '2026-08-17'
+  note: >-
+    Five child sitemaps (post, page, cours, cursus, auteurs). No pricing, plans, tarifs, offers or
+    signup page in any of them.
+- url: https://www.coorpacademy.com/
+  status: 200
+  checked: '2026-08-17'
+  note: >-
+    Nav and footer carry no pricing link. Footer: mentions légales et CGU, privacy policy, règlement
+    intérieur (a Google Drive PDF), accessibilité, santé des plateformes (status page), plan du site.
+third_party_pricing_note: >-
+  Software-directory sites (softwarefinder.com, softwareadvice.com) carry Coorpacademy pricing pages.
+  Those are third-party estimates, not provider-published prices, and are deliberately NOT recorded
+  here — this file records only what Coorpacademy itself publishes.
+pointers_emitted:
+- type: Plans
+  url: plans/coorpacademy-plans-pricing.yml
+pointer_rationale: >-
+  The `Plans` artifact is written and pointed at because a verified plan_count of 0 is data. NO
+  `Pricing` link-property pointer is emitted in apis.yml, because there is no pricing page to link —
+  /pricing returns HTTP 500 and no pricing URL exists in the sitemap. NO `SignUp` or `Login` pointer is
+  emitted for the same reason.

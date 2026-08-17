@@ -1,0 +1,194 @@
+generated: '2026-08-17'
+method: derived
+source: >-
+  Derived from the 4xx/5xx responses declared across the fourteen OpenAPI/Swagger documents in
+  openapi/ (255 error responses over 155 operations), enriched with error bodies observed on live
+  unauthenticated probes of content.coorpacademy.com, progression.coorpacademy.com,
+  platform.coorpacademy.com and api.coorpacademy.com/scim on 2026-08-17. No provider error reference
+  page exists — none was found on any Coorpacademy host.
+format: proprietary
+rfc9457: false
+media_type: application/json
+summary: >-
+  Three incompatible error envelopes across one estate. Coorpacademy declares 255 error responses but
+  no problem+json, no machine-readable error-code registry, and no documented error taxonomy. The
+  `code` field, where present, was "server_error" on every live body observed — including a 401 — so
+  it discriminates nothing. Only the SCIM service returns a standards-conformant error.
+envelopes:
+- id: express-error
+  services: [content, platform, progression, progression-aggregations]
+  schema: Error
+  fields:
+    id: string — opaque error instance id (not returned on every observed body)
+    code: string — observed value was always "server_error"; not a discriminating code
+    status: integer — duplicates the HTTP status
+    success: boolean — always false
+    message: string — human-readable, English
+    errors: array of objects — nested per-cause detail; items are untyped `object` in the schema
+  observed:
+    url: https://progression.coorpacademy.com/api/v1/progressions
+    http_status: 401
+    body: >-
+      {"code":"server_error","status":401,"success":false,"message":"Unauthorized",
+      "errors":[{"message":"Unauthorized","code":"server_error","status":401,"statusCode":401,
+      "expose":true}]}
+    checked: '2026-08-17'
+  note: >-
+    The nested `errors[]` items are declared as bare `type: object` with no properties, so a client
+    cannot type them from the contract. The live body shows they actually carry
+    {message, code, status, statusCode, expose}.
+- id: bare-message
+  services: [content, mail]
+  fields:
+    message: string
+  observed:
+  - url: https://content.coorpacademy.com/api/v2/notifications
+    http_status: 401
+    body: '{"message":"Invalid or missing authorization key"}'
+    checked: '2026-08-17'
+  - url: https://api.coorpacademy.com/mail/api/v1/welcome
+    http_status: 403
+    body: '{"message":"Missing Authentication Token"}'
+    note: >-
+      This body is AWS API Gateway''s own, not Coorpacademy''s — the edge rejects the call before it
+      reaches the mail service. Callers on api.coorpacademy.com will see gateway errors mixed in with
+      application errors and cannot tell them apart from the shape alone.
+    checked: '2026-08-17'
+- id: scim-2.0-error
+  services: [scim]
+  fields:
+    schemas: array — ['urn:ietf:params:scim:api:messages:2.0:Error']
+    detail: string
+    status: integer
+  observed:
+    url: https://api.coorpacademy.com/scim/coorp/Users
+    http_status: 400
+    body: >-
+      {"schemas":["urn:ietf:params:scim:api:messages:2.0:Error"],"detail":"JWTError: Expecting type:
+      string at key: authorization but instead got: undefined","status":400}
+    checked: '2026-08-17'
+  note: >-
+    RFC 7644 §3.12-conformant, and the only conformant envelope in the estate. It does however leak
+    an internal library name and parse detail ("JWTError: Expecting type: string at key:
+    authorization") to an unauthenticated caller. It also omits the SCIM `scimType` field, which is
+    the part an IdP uses to distinguish invalidValue from uniqueness from mutability.
+status_codes:
+- status: 400
+  count: 37
+  title: Bad Request
+  services: [content, external, h5p, pdf, platform, scorm, progression, progression-aggregations,
+    content-scorm, scim]
+  meanings:
+  - 'content: request body does not match the model definition (notification, skill, script, generic body)'
+  - 'content: script on request is not well formatted'
+  - 'platform: a validation error'
+  - 'platform: missing header'
+  - 'scorm: SCORM file error'
+  - 'external / scorm / h5p: "Undefined / Internal errors" — the spec explicitly conflates a client
+    validation failure with an internal error under 400'
+  - 'pdf: BadRequest error'
+  remediation: >-
+    Validate the request body against the component schema before sending. Note that three services
+    (external, scorm, h5p) describe 400 as covering "Undefined/Internal errors", so a 400 from those
+    services is NOT reliably a client-side fault and MUST NOT be treated as non-retryable.
+- status: 401
+  count: 80
+  title: Unauthorized
+  services: [content, platform, progression, progression-aggregations, review]
+  meanings:
+  - 'content: "User not identified by the server"'
+  - 'live: {"message":"Invalid or missing authorization key"} (content), {"message":"Unauthorized"} (progression, platform)'
+  remediation: >-
+    Supply the correct API-key header FOR THAT SERVICE — the header name differs per service
+    (`authorization`, `Authorization`, `token`, `authentication`, `Api-Secret`). A 401 here most often
+    means the right key was sent under the wrong header name. See
+    authentication/coorpacademy-authentication.yml.
+  most_common: true
+- status: 403
+  count: 27
+  title: Forbidden
+  services: [content, progression, progression-aggregations, mobile]
+  meanings:
+  - 'content: "Logged in user is not allowed to create/modify/delete skill on the given repository"'
+  - 'progression: the caller may not read or write another user''s progression (the /users/{userId}/ surface)'
+  - 'api.coorpacademy.com edge: {"message":"Missing Authentication Token"} — AWS API Gateway'
+  remediation: >-
+    Authorization in this estate is brand/repository-scoped. A 403 means the key authenticated but is
+    not entitled to that brand, repository or userId. There is no scopes document to consult — there
+    is no OAuth surface at all — so entitlement must be arranged with Coorpacademy.
+- status: 404
+  count: 35
+  title: Not Found
+  services: [content, platform, h5p, scorm, content-scorm]
+  meanings:
+  - 'content: requested skill / custom skill / certification / custom playlist / notification /
+    script / external course does not exist'
+  - 'platform: "brand not found"; "an non-existing status"'
+  - 'content-scorm: no progression for the supplied Go1 enrolment_id'
+  - 'scorm: "Undefined/Internal errors" again mapped onto 404'
+  remediation: >-
+    Confirm the `ref` and the `repository`/`brand` scope. Because content uses soft deletion
+    (state `deleted` plus `includeDeleted`), a resource that 404s on a normal read may still exist as
+    a tombstone.
+- status: 409
+  count: 20
+  title: Conflict
+  services: [content, platform, progression, content-scorm]
+  meanings:
+  - 'content: "The given document with the attributes repository, ref and version already exists"'
+  - 'content: the notification / script / skill name already exists in the database'
+  - 'platform: "header brandName value is not the same as given id parameter"'
+  - 'progression: optimistic-concurrency rejection on move / answers / clues / extraLife / resources'
+  remediation: >-
+    On content, 409 is a uniqueness violation on (repository, ref, version) — pick a new ref or bump
+    the version. On progression, 409 signals the progression state moved under you: re-read
+    GET /v1/progressions/{id} and replay the move against the fresh state. This 409 is the closest
+    thing the estate has to a replay-safety primitive, and it is NOT a substitute for idempotency
+    keys — see conventions/coorpacademy-conventions.yml.
+- status: 500
+  count: 52
+  title: Internal Server Error
+  services: [content-scorm, mail, media, mobile, scorm]
+  meanings:
+  - 'media: "lambda error translates to API GW 500 error"'
+  - 'content-scorm and mail declare 500 on EVERY operation as the only non-2xx outcome'
+  remediation: >-
+    Retry with exponential backoff. Be careful on the mail service: all 27 send operations declare
+    only 200 and 500, so a 500 does not tell you whether the message was already handed to Mandrill.
+    With no idempotency key, a retry can duplicate a learner-facing email.
+- status: 501
+  count: 1
+  title: Not Implemented
+  services: [content-scorm]
+  meanings:
+  - 'content-scorm POST /presignedS3Url: declared but undescribed'
+- status: default
+  count: 9
+  title: Unexpected error
+  services: [platform]
+  meanings:
+  - 'platform: "Unexpected error" catch-all, typed as the Error schema'
+error_code_registry:
+  published: false
+  note: >-
+    No named error-code registry exists. The `code` field is present in the Error schema but was
+    "server_error" in every observed body. Two schemas hint at a bulk-ingest error taxonomy that is
+    not documented anywhere: `ErrorCSV` {column, errorCode, description} and `ErrorResource`
+    {type, fileName} in the content API, used by the bulk-external-content metadata report
+    (GET /repository/{repository}/bulk-external-contents/{ref}/metadata-report). The `errorCode`
+    values that report emits are not enumerated in the contract, so a client cannot branch on them.
+retry_guidance:
+  derived: true
+  safe_to_retry: [500, 501, 502, 503, 504]
+  never_blind_retry:
+  - 'POST /mail/api/v1/* (27 operations) — duplicate learner email, no idempotency key'
+  - 'POST /{brand}/Users (SCIM) — duplicate user creation'
+  - 'POST /v1/progressions/{id}/answers, /move, /clues — re-read state first, expect 409'
+  - 'any presignedUrl / presignedBulkUrl / presignedS3Url mint — cheap but unbounded'
+  caution_400: >-
+    A 400 from the external, scorm or h5p services is documented as possibly meaning
+    "Undefined/Internal errors", so it cannot be classified as permanently non-retryable.
+cross_links:
+  conventions: conventions/coorpacademy-conventions.yml
+  authentication: authentication/coorpacademy-authentication.yml
+  conformance: conformance/coorpacademy-conformance.yml

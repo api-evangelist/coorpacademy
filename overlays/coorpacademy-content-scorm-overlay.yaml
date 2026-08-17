@@ -1,0 +1,63 @@
+overlay: 1.0.0
+info:
+  title: Coorpacademy SCORM Content API — API Evangelist enhancements
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-17'
+  method: generated
+  source: openapi/coorpacademy-content-scorm-openapi.json
+  extends: openapi/coorpacademy-content-scorm-openapi.json
+actions:
+  - target: $.servers
+    description: >-
+      PRUNE THE LOCALHOST SERVER. The published spec ships http://localhost:13000 as a selectable server
+      in a public document. Harmless to a human reading the Swagger UI, actively misleading to a code
+      generator or an agent picking a base URL.
+    update:
+      - url: https://api.coorpacademy.com/content-scorm
+        description: production
+      - url: https://api-staging.coorpacademy.com/content-scorm
+        description: staging
+    x-rationale: localhost-server-in-public-spec
+  - target: $.info
+    description: Attach the operating rules and the Go1 boundary.
+    update:
+      x-api-evangelist:
+        purpose: >-
+          This is the runtime API behind the Coorpacademy SCORM player — the service a host LMS's
+          embedded player talks to. It is not a content-management API; the catalogue side lives in the
+          Content API.
+        authentication:
+          scheme: apiKey
+          in: header
+          parameter: Authorization
+        go1_boundary: >-
+          POST /getProgressionFromEnrolment resolves a Go1 `enrolment_id` into a Coorpacademy
+          progression, and MetaBody carries `enrolmentId` as a foreign key. The Go1 side of that
+          relationship is not documented on any Coorpacademy host — this is the seam between the two
+          companies' systems, and the only place the acquisition shows up in a contract.
+        error_semantics: >-
+          Every operation declares only 200 and 500 (three also declare 404). There is no 400, 401 or
+          403 anywhere in the document despite the API being key-gated, so validation and auth failures
+          arrive as undocumented statuses.
+        idempotency:
+          supported: false
+          hazard: >-
+            POST /post-answer, /mark-resource-as-viewed, /request-clue and /extralife/{state} all mutate
+            a learner's recorded performance with no replay-safe primitive and no 409. A retry after a
+            timeout can double-count.
+  - target: $.paths['/lms-api'].get
+    description: Explain what this actually serves.
+    update:
+      description: >-
+        Returns the SCORM LMS API JavaScript shim from S3 — the `API`/`API_1484_11` object a SCORM
+        package expects to find in its host window. This is the interoperability hinge: the shim
+        translates SCORM data-model calls into this service's REST operations.
+  - target: $.paths['/presignedS3Url'].post
+    description: Record the undocumented 501.
+    update:
+      x-api-evangelist:
+        note: >-
+          This is the only operation in the entire fourteen-service estate that declares a 501 Not
+          Implemented, and the spec gives it no description. Treat the bulk-upload path as
+          not-guaranteed-available.

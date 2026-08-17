@@ -1,0 +1,82 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  Searched all fourteen specs in openapi/ for webhook, callback and event vocabulary; searched
+  https://api.coorpacademy.com/ (the Swagger UI index lists every service Coorpacademy documents),
+  https://github.com/CoorpAcademy (101 repos), the npm @coorpacademy scope, and probed
+  /asyncapi.yaml + /asyncapi.json on api.coorpacademy.com, content.coorpacademy.com,
+  progression.coorpacademy.com and platform.coorpacademy.com.
+asyncapi_published: false
+webhooks_published: false
+event_catalog: []
+summary: >-
+  Coorpacademy publishes NO AsyncAPI document and NO customer-registerable webhook surface. There is no
+  callbacks block in any of the fourteen OpenAPI documents (zero matches for "webhook" or "callback"
+  across 155 operations), no event catalogue, and no subscription endpoint. Everything in the estate is
+  request/response REST. No `AsyncAPI` and no `Webhooks` pointer is emitted.
+probes:
+- url: https://api.coorpacademy.com/asyncapi.json
+  status: 404
+  checked: '2026-08-17'
+- url: https://api.coorpacademy.com/asyncapi.yaml
+  status: 404
+  checked: '2026-08-17'
+- url: https://api.coorpacademy.com/
+  status: 200
+  checked: '2026-08-17'
+  note: >-
+    The Swagger UI enumerates exactly fourteen documents, all REST. This list is Coorpacademy's own
+    inventory of what it documents, so an event API would appear here if one were published.
+spec_evidence:
+  matches_webhook: 0
+  matches_callback: 0
+  openapi_callbacks_blocks: 0
+  operations_searched: 155
+what_exists_instead:
+- kind: outbound-transactional-email
+  detail: >-
+    The mail service (openapi/coorpacademy-mail-openapi.json, 27 operations) is the platform's
+    notification fan-out — onboarding, welcome, course finished, battle invitations, forum replies,
+    certification done, we-miss-you re-engagement, and so on. But it is a SEND API the platform calls,
+    not an event stream a customer can subscribe to. It is push-to-human, not push-to-system.
+  tags_observed: ['learner / bricklane', 'learner / mooc', 'client / mooc', 'personalHooks', 'review',
+    'mobile', 'coorpmanager', 'Content Scorm']
+  note: >-
+    One tag is named `personalHooks` (POST /api/v1/signupSelfValidation). Despite the name it is an
+    ordinary email-send operation, not a webhook registration. Recorded here so a later round does not
+    mistake the tag for an event surface.
+- kind: status-page-webhooks
+  detail: >-
+    https://coorpacademy.status.io/ offers email, SMS and webhook subscriptions plus an RSS feed and an
+    iCal feed. These are status.io's notification features covering incident and maintenance
+    announcements, not Coorpacademy platform events.
+  rss: https://coorpacademy.status.io/pages/59c0fe78af68b1046e096a85/rss
+  ical: https://coorpacademy.status.io/pages/59c0fe78af68b1046e096a85/calendar/all.ics
+  note: >-
+    This is the only machine-subscribable feed Coorpacademy points at, and it carries operational
+    incidents (10 entries, 2019-2023), not learning events. Recorded in
+    lifecycle/coorpacademy-lifecycle.yml.
+- kind: internal-event-infrastructure
+  detail: >-
+    Coorpacademy clearly runs event-driven infrastructure internally — it maintains and actively
+    releases public Serverless-framework plugins for SQS, SNS, Kinesis, S3, DynamoDB Streams and
+    EventBridge (seven packages, all released 2026-07-07, in CoorpAcademy/serverless-plugins), and the
+    progression read model is DynamoDB-backed with its stream cursor leaking into the query string.
+    None of that is exposed as a customer-facing event contract.
+  see: packages/coorpacademy-packages.yml
+integration_consequence: >-
+  An HR or LMS integrator cannot be notified when a learner completes a course, earns a certification
+  or fails a review. The only way to detect a change is to poll — GET /v2/analytics/completion,
+  GET /v1/progressions, or the DynamoDB-cursor analytics reads — with no rate-limit signal to poll
+  against and no updatedAt-since filter on most collections. For an LXP whose whole value is learner
+  activity data, the absence of both an event surface and an xAPI/LRS endpoint (see
+  conformance/coorpacademy-conformance.yml) is the largest integration gap in the profile.
+pointers_emitted: []
+pointer_rationale: >-
+  No `AsyncAPI` pointer (no AsyncAPI document exists) and no `Webhooks` pointer (no
+  customer-registerable webhook surface exists). The asyncapi scoring family is correctly N/A for this
+  provider rather than a fabricated presence.
+cross_links:
+  lifecycle: lifecycle/coorpacademy-lifecycle.yml
+  packages: packages/coorpacademy-packages.yml
+  conformance: conformance/coorpacademy-conformance.yml

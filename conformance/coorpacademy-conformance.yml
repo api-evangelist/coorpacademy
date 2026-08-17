@@ -1,0 +1,169 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  https://api.coorpacademy.com/ (public Swagger UI + the fourteen specs it indexes),
+  https://www.coorpacademy.com/privacy-policy/, https://www.coorpacademy.com/ (footer Qualiopi mark),
+  https://coorpacademy.status.io/, plus live unauthenticated probes of api.coorpacademy.com/scim.
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: >-
+    Eight of the fourteen published documents are OpenAPI 3.0.0 and parse cleanly: content (39 paths /
+    53 ops / 63 schemas), content-scorm, scim, scorm, h5p, external, pdf, review. Captured verbatim to
+    openapi/.
+- id: openapi-3.1
+  conforms: false
+  evidence: No document in the estate declares openapi 3.1 or later.
+- id: swagger-2.0
+  conforms: true
+  evidence: >-
+    Six documents are still Swagger 2.0: platform (v1.412.0), progression (v2.455.0),
+    progression-aggregations, mail, media, mobile. Swagger 2.0 was superseded in 2017; these are the
+    two most operationally important services in the estate (platform and progression) and both are on
+    the older format.
+- id: scim-2.0
+  conforms: true
+  evidence: >-
+    CONFIRMED LIVE, not just claimed. openapi/coorpacademy-scim-openapi.json describes
+    /{brand}/Users with LIST/CREATE/FIND/PUT/PATCH, and an unauthenticated GET of
+    https://api.coorpacademy.com/scim/coorp/Users returned HTTP 400 with the RFC 7644 error envelope
+    {"schemas":["urn:ietf:params:scim:api:messages:2.0:Error"],"detail":"...","status":400}
+    (probed 2026-08-17). A provider that emits the SCIM error schema on an anonymous request is
+    genuinely running SCIM, not approximating it.
+  gaps: >-
+    Only the /Users resource is published — no /Groups, no /ServiceProviderConfig, no /Schemas, no
+    /ResourceTypes, and no DELETE. Entra ID / Okta group provisioning is therefore not supported by
+    the published contract, and the discovery endpoints an IdP normally reads to self-configure are
+    absent.
+- id: saml-2.0
+  conforms: true
+  evidence: >-
+    The platform API exposes POST /brands/{id}/metadatas — "extract brand sso config info from
+    metadata.xml" — and carries SAMLPayload, OIDCPayload, SSOPayload and userMappingPayload schemas
+    (openapi/coorpacademy-platform-openapi.json). Enterprise SAML SSO is configured per brand by
+    uploading IdP metadata.
+- id: oidc
+  conforms: partial
+  evidence: >-
+    An OIDCPayload schema exists in the platform API, so OIDC is an accepted per-brand SSO mode. But
+    Coorpacademy itself publishes no /.well-known/openid-configuration on any host (all 404 — see
+    well-known/coorpacademy-well-known.yml), so it is an OIDC relying party, not an OIDC provider.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 or openIdConnect securityScheme in any of the fourteen specs; all fourteen use
+    header-borne API keys. No /.well-known/oauth-authorization-server or
+    /.well-known/oauth-protected-resource on any host (404). Third-party review sites describe
+    Coorpacademy as offering "REST API with OAuth 2.0"; the published contracts do not support that
+    claim and API Evangelist does not record it.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Zero application/problem+json media types across 155 operations. Errors are application/json in
+    three different shapes — an Express `{id,code,status,success,message,errors[]}` envelope, a bare
+    `{message}`, and (SCIM only) the SCIM 2.0 error schema. See
+    errors/coorpacademy-problem-types.yml.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt 301s to https://static.coorpacademy.com/www/.well-known/security.txt on
+    both www and api hosts, which returns S3 NoSuchKey (404). platform host returns 404 directly.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: >-
+    No Deprecation or Sunset header documented anywhere; zero operations across the estate carry
+    `deprecated: true`; no deprecation policy published.
+- id: rfc9116-idempotency
+  conforms: false
+  evidence: Zero matches for "idempoten" across all fourteen specs. See conventions/.
+- id: rfc6585-429-rate-limiting
+  conforms: false
+  evidence: >-
+    No 429 declared on any of the 155 operations; no RateLimit-*/X-RateLimit-*/Retry-After header
+    observed on any live response.
+- id: scorm-1.2-2004
+  conforms: true
+  evidence: >-
+    Two dedicated services implement SCORM interoperability: the scorm API (presigned single and bulk
+    package upload, root-file and nested-file serving out of an unpacked package) and the
+    content-scorm API (the player runtime — slides, chapters, levels, exit nodes, clues, answers,
+    moves, extra lives, plus GET /lms-api which serves the SCORM LMS API JavaScript shim from S3 and
+    POST /getLaunchUrl which resolves a player launch URL). The specific SCORM profile version is not
+    stated in the contract.
+- id: h5p
+  conforms: true
+  evidence: >-
+    A dedicated h5p service serves files out of an unpacked H5P interactive-content package
+    (openapi/coorpacademy-h5p-openapi.json).
+- id: xapi-tincan
+  conforms: false
+  evidence: >-
+    No xAPI/Tin Can LRS surface found. Learner activity is captured through the proprietary
+    progression model (POST /v1/progressions/{id}/answers, /move, /clues, /resources) rather than
+    xAPI statements. For an LXP this is a notable interoperability gap — an enterprise LRS cannot
+    receive Coorpacademy activity through a standard.
+- id: lti
+  conforms: false
+  evidence: No LTI 1.1/1.3 launch, deep-linking or AGS surface found in any spec or on the site.
+- id: json-schema
+  conforms: partial
+  evidence: >-
+    OpenAPI 3.0.0 subset schemas only (156 component schemas across the estate); no 2020-12 JSON
+    Schema documents are published separately.
+- id: rgpd-gdpr
+  conforms: true
+  evidence: >-
+    https://www.coorpacademy.com/privacy-policy/ is a full RGPD/GDPR privacy notice naming a
+    Délégué à la Protection des Données (DPO) with a postal address (4-6 boulevard Poissonnière,
+    75009 Paris, France) and an email contact. Last updated 14 April 2020, which is stale for a
+    policy of this kind.
+  verification: published-policy
+- id: iso-27001
+  conforms: false
+  evidence: >-
+    No ISO 27001 claim found anywhere on coorpacademy.com (homepage, privacy policy, legal notices).
+    Zero matches for "iso 27001" in the homepage HTML.
+- id: soc2
+  conforms: false
+  evidence: No SOC 2 claim found on any Coorpacademy page.
+certifications:
+- name: Qualiopi — Actions de formation
+  status: published
+  source: https://www.coorpacademy.com/
+  location: site-wide footer
+  evidence_text: >-
+    Footer certification mark served at
+    https://www.coorpacademy.com/assets/uploads/2026/03/qualiopi-actions-de-formation.png (HTTP 200,
+    asset uploaded 2026-03), appearing twice in the homepage HTML.
+  scope: >-
+    Qualiopi is the French national quality certification (référentiel national qualité) required of
+    training providers that want their programmes funded by public or mutualised funds. The mark
+    Coorpacademy displays is scoped to "actions de formation".
+  certificate_published: false
+  certifying_body_named: false
+  checked: '2026-08-17'
+- name: RGPD / GDPR
+  status: claimed
+  source: https://www.coorpacademy.com/privacy-policy/
+  evidence_text: >-
+    Full French-language RGPD privacy notice with a named DPO function and postal address; states
+    "La présente Politique de confidentialité a été mise à jour en date du 14 avril 2020."
+  report_available: false
+  checked: '2026-08-17'
+compliance_gap: >-
+  For a platform that provisions users over SCIM, brokers enterprise SAML SSO and holds learner
+  performance data for BNP Paribas, Société Générale, L'Oréal, Nestlé, Capgemini, Michelin, Safran and
+  Sopra, the published assurance posture is thin: no ISO 27001, no SOC 2, no trust centre, no
+  sub-processor list, no security.txt, no vulnerability-disclosure policy, and a privacy policy last
+  revised in April 2020. The one hard third-party certification on the site (Qualiopi) certifies
+  training QUALITY, not information security. Buyers' security teams will have to request everything
+  by email.
+pointers_emitted:
+- type: Conformance
+  url: conformance/coorpacademy-conformance.yml
+- type: Compliance
+  url: conformance/coorpacademy-conformance.yml
+pointer_rationale: >-
+  The `Compliance` pointer is emitted on the strength of ONE genuinely published, third-party,
+  currently-displayed certification (Qualiopi) plus a substantive RGPD privacy notice. It is NOT
+  emitted for ISO 27001 or SOC 2, neither of which Coorpacademy claims.

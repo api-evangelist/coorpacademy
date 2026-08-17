@@ -1,0 +1,81 @@
+overlay: 1.0.0
+info:
+  title: Coorpacademy Progression API — API Evangelist enhancements
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-17'
+  method: generated
+  source: openapi/coorpacademy-progression-openapi.json
+  extends: openapi/coorpacademy-progression-openapi.json
+  note: >-
+    Overlay only. The source document is Swagger 2.0 (info.version 2.455.0), so the JSONPath targets
+    below address Swagger 2.0 structure (host/basePath/definitions), not OpenAPI 3 servers[].
+actions:
+  - target: $.info
+    description: >-
+      Record the base URL and the v1/v2 trap. Live probe 2026-08-17:
+      GET https://progression.coorpacademy.com/api/v1/progressions returned HTTP 401 with
+      {"code":"server_error","status":401,"success":false,"message":"Unauthorized","errors":[...]},
+      confirming host + basePath.
+    update:
+      x-api-evangelist:
+        base_url: https://progression.coorpacademy.com/api
+        version_trap: >-
+          /v1 and /v2 in this API are NOT successive versions of the same resource. /v1/progressions/* is
+          the write surface (create a progression, record moves, answers, clue requests, resource views,
+          extra-life decisions). /v2/analytics/* and /v2/recommendations/* are the read surface. You need
+          BOTH. Do not migrate from v1 to v2 — there is nothing to migrate to.
+        sibling_service: >-
+          A separate aggregation service at https://aggregation-progression.coorpacademy.com/api serves a
+          /v1/ prefixed subset of the same analytics reads
+          (openapi/coorpacademy-progression-aggregations-openapi.json). Which of the two to call for a
+          given aggregate is not documented.
+        authentication:
+          scheme: apiKey
+          in: header
+          parameter: authentication
+        rate_limits:
+          published: false
+          headers: none
+        idempotency:
+          supported: false
+    x-rationale: verified-live-2026-08-17
+  - target: $.paths['/v1/progressions/{id}/move'].post
+    description: Document the 409 concurrency contract the spec declares but does not explain.
+    update:
+      x-api-evangelist:
+        conflict_semantics: >-
+          409 means the progression state moved under you — another client (usually the learner's own
+          player session) advanced it first. Correct handling is to re-read GET /v1/progressions/{id},
+          recompute nextContent from the returned State, and replay. Do NOT blind-retry the same body:
+          there is no idempotency key, so a retry that succeeds against changed state corrupts the
+          learner's recorded path.
+        client_counterpart: >-
+          The same state machine is published as the open-source @coorpacademy/progression-engine npm
+          package (11.8.1, 2025-05-05), which is the most reliable reference for what a legal move is.
+  - target: $.paths['/v1/progressions/{id}/answers'].post
+    description: Same concurrency contract on the answer path.
+    update:
+      x-api-evangelist:
+        conflict_semantics: >-
+          409 on answer submission means the progression advanced already. Re-read state before replay.
+          A blind retry can double-count stars or consume a life twice.
+        consequence: write-learner-performance-record
+  - target: $.paths['/v2/analytics/completion'].get
+    description: Document the DynamoDB cursor the spec exposes without explanation.
+    update:
+      x-api-evangelist:
+        pagination: >-
+          This surface is DynamoDB-backed and its pagination cursor is exposed directly as bracketed
+          query parameters: from[partitionKey], from[sortKey], from[updatedAt]. Echo the values from the
+          previous page's last item. No total count and no next-link is returned, so termination is
+          detected by an empty page.
+  - target: $.paths['/v2/users/{userId}/analytics/completion'].get
+    description: Flag the admin-scoped surface.
+    update:
+      x-api-evangelist:
+        scope: >-
+          The /v2/users/{userId}/ family reads ANOTHER learner's data and declares 403. The estate has no
+          OAuth scopes and no permissions document, so entitlement is a property of the API key
+          arranged with Coorpacademy. Treat these operations as privileged and personal-data-bearing.
+        privacy: personal-data

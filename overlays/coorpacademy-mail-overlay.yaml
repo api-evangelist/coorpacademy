@@ -1,0 +1,55 @@
+overlay: 1.0.0
+info:
+  title: Coorpacademy Email API — API Evangelist corrections
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-17'
+  method: generated
+  source: openapi/coorpacademy-mail-openapi.json
+  extends: openapi/coorpacademy-mail-openapi.json
+  note: Source document is Swagger 2.0 (host/basePath, not servers[]).
+actions:
+  - target: $.paths['/api/v1/skillToReview'].post
+    description: >-
+      SUPPLY A MISSING operationId. Two of the 27 operations in this document have no operationId at
+      all, so a code generator invents names for them from the path.
+    update:
+      operationId: sendSkillToReviewEmail
+    x-rationale: missing-operationid
+  - target: $.paths['/api/v1/mobileConnection'].post
+    description: SUPPLY A MISSING operationId.
+    update:
+      operationId: sendMobileConnectionEmail
+    x-rationale: missing-operationid
+  - target: $.info
+    description: >-
+      Attach the safety contract. This is the most dangerous service in the estate for an autonomous
+      caller and the specification says nothing about it.
+    update:
+      x-api-evangelist:
+        base_url: https://api.coorpacademy.com/mail
+        what_it_is: >-
+          27 operations, one per templated message the platform sends, backed by Mandrill. Every call
+          delivers a real email to a real learner or administrator.
+        authentication:
+          scheme: apiKey
+          in: header
+          parameter: Authorization
+          observed: >-
+            Live probe 2026-08-17: POST https://api.coorpacademy.com/mail/api/v1/welcome without
+            credentials returned HTTP 403 {"message":"Missing Authentication Token"} — the AWS API
+            Gateway edge body, not this service's.
+        idempotency:
+          supported: false
+          hazard: >-
+            NO REPLAY-SAFE PRIMITIVE, and every operation declares only 200 and 500. A 500 does not tell
+            you whether the message was already handed to Mandrill, so a retry may duplicate a
+            learner-facing email. Never expose these operations as autonomous agent tools; require an
+            explicit human confirmation per send.
+        rate_limits:
+          published: false
+          headers: none
+          note: >-
+            No published limit on a bulk-send surface. Mandrill applies its own reputation and rate
+            controls that this contract does not surface.
+        agent_guidance: consequence=irreversible-external-side-effect; escalation=human-approval-required

@@ -1,0 +1,188 @@
+generated: '2026-08-17'
+method: derived
+source: >-
+  Derived from the fourteen OpenAPI/Swagger documents in openapi/. Searched first for a
+  provider-published MCP server: web search for "Coorpacademy MCP" / "model context protocol", the
+  CoorpAcademy GitHub organisation (101 repos), the npm @coorpacademy scope (73 packages),
+  https://api.coorpacademy.com/mcp (404), https://mcp.coorpacademy.com/ (DNS does not resolve), and a
+  JSON-RPC tools/list POST to https://api.coorpacademy.com/mcp (CloudFront 403). Nothing exists.
+status: candidate
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+server_published: false
+summary: >-
+  Coorpacademy ships NO MCP server — no hosted endpoint, no stdio package, no listing in any connector
+  directory. The tools below are a CANDIDATE set API Evangelist derived from the published REST
+  operations to show what an MCP server over this estate would look like. They are not implemented and
+  must not be called. No `MCPServer` pointer is emitted in apis.yml.
+probes:
+- url: https://api.coorpacademy.com/mcp
+  method: GET
+  status: 404
+  checked: '2026-08-17'
+- url: https://api.coorpacademy.com/mcp
+  method: POST (jsonrpc tools/list)
+  status: 403
+  body_note: CloudFront "The request could not be satisfied" HTML — no MCP endpoint behind it.
+  checked: '2026-08-17'
+- url: https://mcp.coorpacademy.com/
+  status: dns-nxdomain
+  checked: '2026-08-17'
+- url: https://api.coorpacademy.com/.well-known/oauth-authorization-server
+  status: 301
+  final_status: 404
+  checked: '2026-08-17'
+  note: 301s to static.coorpacademy.com/www/.well-known/... which answers S3 NoSuchKey (404).
+- url: https://api.coorpacademy.com/.well-known/oauth-protected-resource
+  status: 301
+  final_status: 404
+  checked: '2026-08-17'
+candidate_tools:
+- tool: list_learner_progressions
+  rest: [progressionsGET]
+  service: progression
+  operation: GET /v1/progressions
+  category: read
+  consequence: low
+- tool: get_progression
+  rest: [progressionGET]
+  service: progression
+  operation: GET /v1/progressions/{id}
+  category: read
+  consequence: low
+- tool: get_progression_actions
+  rest: [actionsGET]
+  service: progression
+  operation: GET /v1/progressions/{id}/actions
+  category: read
+  consequence: low
+- tool: get_learner_completion
+  rest: [completionFromDynamodbForUserGET]
+  service: progression
+  operation: GET /v2/users/{userId}/analytics/completion
+  category: read
+  consequence: low
+  note: Reads another learner's completion data — 403 unless the key is admin-scoped for that brand.
+- tool: get_learner_review_stars_by_skill
+  rest: [starsBySkillIForUserGET]
+  service: progression
+  operation: GET /v2/users/{userId}/analytics/review
+  category: read
+  consequence: low
+- tool: get_hero_recommendation
+  rest: [heroRecommendationFromDynamodbGET]
+  service: progression
+  operation: GET /v2/recommendations/hero
+  category: read
+  consequence: low
+- tool: list_skills
+  rest: [skillsGET]
+  service: content
+  operation: GET /repository/{repository}/skills
+  category: read
+  consequence: low
+- tool: list_certifications
+  rest: [findCertifications]
+  service: content
+  operation: GET /repository/{repository}/certifications
+  category: read
+  consequence: low
+- tool: get_certification
+  rest: [findOneCertification]
+  service: content
+  operation: GET /repository/{repository}/certifications/{ref}
+  category: read
+  consequence: low
+- tool: list_custom_playlists
+  rest: [findCustomPlaylists]
+  service: content
+  operation: GET /repository/{repository}/custom-playlists
+  category: read
+  consequence: low
+- tool: list_external_courses
+  rest: [findExternalCourses]
+  service: content
+  operation: GET /repository/{repository}/external-courses
+  category: read
+  consequence: low
+- tool: list_brands
+  rest: [brandsListGET, brandsGET]
+  service: platform
+  operation: GET /brands/list, GET /brands
+  category: read
+  consequence: low
+- tool: get_brand
+  rest: [brandsIdGET]
+  service: platform
+  operation: GET /brands/{id}
+  category: read
+  consequence: medium
+  note: The brand payload includes the SSO configuration, including the SAML IdP certificate.
+- tool: list_scim_users
+  rest: [listUsers]
+  service: scim
+  operation: GET /{brand}/Users
+  category: read
+  consequence: medium
+  note: Returns personal data. Gate behind an explicit human authorisation.
+- tool: get_review_skills_for_learner
+  rest: [getUserSkillsToReview]
+  service: review
+  operation: GET /api/v1/review/users/{userId}/skills
+  category: read
+  consequence: low
+- tool: get_next_review_slide
+  rest: [getSlideToReview]
+  service: review
+  operation: GET /api/v1/review/users/{userId}/skills/{skillRef}/slide
+  category: read
+  consequence: low
+write_operations_deliberately_excluded:
+  count: 88
+  rationale: >-
+    The estate has 88 non-GET operations and NOT ONE of them is safe for an autonomous agent as the
+    contracts currently stand. There is no idempotency key anywhere (zero matches for "idempoten"
+    across 155 operations), no rate-limit signal, and no dry-run mode. The specific hazards:
+  hazards:
+  - 'mail: 27 POST operations each send a real templated email to a real learner. A retry after a
+    timeout duplicates the message. Never expose these as agent tools.'
+  - 'scim: POST /{brand}/Users creates a user; PUT/PATCH mutate an identity record. A retry can
+    duplicate a person.'
+  - 'platform: DELETE /brands/{id} deletes a tenant; POST /brands/{id}/migrate migrates one. These are
+    destructive at the tenant level.'
+  - 'content: the edition/snapshot/consommation split means an upsert to the wrong surface silently
+    fails to publish, or silently publishes to learners. An agent cannot tell which it did from the
+    response. See data-model/coorpacademy-data-model.yml.'
+  - 'progression: POST move/answers/clues/extraLife mutate a learner''s recorded performance and return
+    409 on state drift, which requires a read-modify-retry loop the agent must implement itself.'
+  - 'presigned-URL mints (external, scorm, content-scorm) are cheap individually and unbounded in
+    aggregate, with no quota signal.'
+tool_crosswalk:
+  emitted: false
+  rationale: >-
+    A tool crosswalk binds MCP tools (or GraphQL fields) to backing REST operationIds. Coorpacademy has
+    no MCP server and no GraphQL endpoint, so there is nothing to cross-walk — the candidate list above
+    already carries its REST bindings inline. No `ToolCrosswalk` pointer is emitted.
+graphql:
+  probed: true
+  result: none
+  probes:
+  - url: https://api.coorpacademy.com/graphql
+    status: 404
+    checked: '2026-08-17'
+  note: No GraphQL surface exists anywhere in the estate; all fourteen services are REST.
+pointers_emitted: []
+pointer_rationale: >-
+  NO `MCPServer` and NO `ToolCrosswalk` pointer. Both assert an agent-callable surface the provider
+  operates. Coorpacademy operates neither. Emitting `MCPServer` for a derived candidate would credit
+  16 points (4 experience + 12 agent readiness) for work nobody did.
+cross_links:
+  conventions: conventions/coorpacademy-conventions.yml
+  authentication: authentication/coorpacademy-authentication.yml
+  data_model: data-model/coorpacademy-data-model.yml
+  skills: skills/_index.yml

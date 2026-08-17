@@ -1,0 +1,80 @@
+overlay: 1.0.0
+info:
+  title: Coorpacademy SCIM API — API Evangelist corrections
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-17'
+  method: generated
+  source: openapi/coorpacademy-scim-openapi.json
+  extends: openapi/coorpacademy-scim-openapi.json
+  note: >-
+    Overlay only. The harvested specification in openapi/ is never mutated. Every correction below is
+    justified against evidence recorded in the x-rationale of the action.
+actions:
+  - target: $.servers
+    description: >-
+      CORRECT THE BASE URL. The published spec declares servers[0].url as
+      https://api.coorpacademy.com with paths of the form /{brand}/Users, which resolves to
+      https://api.coorpacademy.com/{brand}/Users — a path that does not exist. The real base carries a
+      /scim prefix, as the Swagger UI index itself declares (host 'api', path '/scim') and as a live
+      probe confirms: GET https://api.coorpacademy.com/scim/coorp/Users returned HTTP 400 with the SCIM
+      2.0 error envelope {"schemas":["urn:ietf:params:scim:api:messages:2.0:Error"],...} on 2026-08-17,
+      while the spec-derived URL is not served.
+    update:
+      - url: https://api.coorpacademy.com/scim
+        description: production
+      - url: https://api-staging.coorpacademy.com/scim
+        description: staging (host pattern declared by the Swagger UI index; not probed)
+    x-rationale: verified-live-2026-08-17
+  - target: $.paths['/{brand}/Users'].post
+    description: >-
+      FIX A COPY-PASTED operationId. The published spec names this operation `onboardingPOST`, which is
+      the operationId of POST /api/v1/onboarding in the UNRELATED email API
+      (openapi/coorpacademy-mail-openapi.json). A generated client would produce a method called
+      `onboardingPOST` that creates a SCIM user.
+    update:
+      operationId: createScimUser
+    x-rationale: duplicate-operationid-across-specs
+  - target: $.paths['/{brand}/Users/{userId}'].get
+    description: >-
+      FIX A COPY-PASTED operationId, and a worse one. The published spec names this GET operation
+      `recommendedCoursePOST` — the operationId of POST /api/v1/recommendedCourse in the email API. The
+      name says POST, the method is GET, and the noun is from a different product. Any code generator
+      run against this spec emits a method whose name actively misleads.
+    update:
+      operationId: getScimUser
+    x-rationale: duplicate-operationid-across-specs
+  - target: $.paths['/{brand}/Users'].get
+    description: Document the missing pagination and filtering contract.
+    update:
+      description: >-
+        Lists provisioned users for the brand. The published spec declares no pagination or filtering
+        parameters, so the SCIM 2.0 `startIndex`, `count` and `filter` query parameters an identity
+        provider normally sends are undocumented — an IdP cannot tell from this contract whether they
+        are honoured. Verify with Coorpacademy before relying on them.
+  - target: $.paths['/{brand}/Users/{userId}'].patch
+    description: Record the missing SCIM error discriminator.
+    update:
+      description: >-
+        SCIM PATCH. Error bodies use the RFC 7644 error envelope but omit the `scimType` field, which is
+        the value an identity provider reads to distinguish `invalidValue` from `uniqueness` from
+        `mutability`. Without it, an IdP cannot classify a 400 and will surface a generic failure.
+  - target: $.components.securitySchemes.token
+    description: >-
+      Record what the live surface actually validates. The scheme is declared as an apiKey in a `token`
+      header, but the live 400 body reports "JWTError: Expecting type: string at key: authorization but
+      instead got: undefined" — i.e. the implementation reads an `authorization` header and expects a
+      JWT, not the `token` header the contract names.
+    update:
+      description: >-
+        DECLARED: apiKey in a `token` header. OBSERVED 2026-08-17: an unauthenticated request returns
+        "JWTError: Expecting type: string at key: authorization but instead got: undefined", which
+        indicates the service validates a JWT read from an `authorization` header. The declared scheme
+        and the observed behaviour disagree; confirm with Coorpacademy which header is authoritative.
+    x-rationale: verified-live-2026-08-17
+x-gaps-not-fixable-by-overlay:
+  - >-
+    Only the /Users resource is published. SCIM /Groups, /ServiceProviderConfig, /Schemas and
+    /ResourceTypes are absent, so group provisioning is unsupported and an IdP cannot self-configure by
+    discovery. No DELETE operation is published either, so de-provisioning presumably relies on a PATCH
+    to `active: false` — which the contract does not state.

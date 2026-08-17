@@ -1,0 +1,219 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  https://coorpacademy.status.io/ (+ its machine-readable status.io API and RSS feed),
+  https://www.coorpacademy.com/ (footer), https://www.coorpacademy.com/mentions-legales/,
+  https://www.coorpacademy.com/sitemap_index.xml, and the info.version values in the fourteen
+  captured specs.
+versioning:
+  scheme: per-service-path-prefix
+  consistent: false
+  notes: >-
+    Each of the fourteen services versions itself independently and three different schemes coexist —
+    /api/v2 (content), /api/v1 (platform, mail, mobile, review), /api with v1 and v2 as RESOURCE
+    families rather than versions (progression, progression-aggregations), and no version segment at
+    all (scim, scorm, content-scorm, h5p, external, media, pdf). There is no estate-wide API version,
+    no media-type versioning and no version header.
+  spec_declared_versions:
+  - service: platform
+    info_version: 1.412.0
+    spec_format: swagger 2.0
+  - service: progression
+    info_version: 2.455.0
+    spec_format: swagger 2.0
+  - service: content
+    info_version: 2.276.0
+    spec_format: openapi 3.0.0
+  - service: mobile
+    info_version: 2.0.0
+    spec_format: swagger 2.0
+  - service: content-scorm
+    info_version: 1.0.0
+  - service: scorm
+    info_version: 1.0.0
+  - service: scim
+    info_version: 1.0.0
+  - service: h5p
+    info_version: 1.0.0
+  - service: review
+    info_version: 1.0.0
+  - service: external
+    info_version: 1.0.0
+  - service: media
+    info_version: 1.0.0
+  - service: pdf
+    info_version: 1.0.0
+  - service: mail
+    info_version: 1.0.0
+  - service: progression-aggregations
+    info_version: 1.0.0
+  version_observation: >-
+    The three build-numbered specs (platform 1.412.0, progression 2.455.0, content 2.276.0) are the
+    only usable change signal Coorpacademy publishes about its APIs: those patch numbers are CI build
+    counters, and they are high, which means these services are still being shipped. The other eleven
+    are pinned at 1.0.0 and tell you nothing. Captured 2026-08-17 as a baseline so a later round can
+    diff them.
+status_page:
+  url: https://coorpacademy.status.io/
+  provider: status.io
+  page_id: 59c0fe78af68b1046e096a85
+  machine_readable_api: true
+  api_url: https://api.status.io/1.0/status/59c0fe78af68b1046e096a85
+  rss: https://coorpacademy.status.io/pages/59c0fe78af68b1046e096a85/rss
+  ical: https://coorpacademy.status.io/pages/59c0fe78af68b1046e096a85/calendar/all.ics
+  subscribe_channels: [email, sms, webhook]
+  support_contact: assistance@coorpacademy.com
+  components:
+  - name: Learning Platform
+    infrastructure: [Heroku Ireland]
+  - name: Connect
+    infrastructure: [Heroku Ireland, AWS]
+  - name: Store
+    infrastructure: [Heroku Ireland]
+  - name: Api Platform
+    infrastructure: [Docker Cloud]
+  - name: Setup
+    infrastructure: [Docker Cloud]
+  - name: API Progression
+    infrastructure: [Docker Cloud]
+  - name: Bricklane
+    infrastructure: [AWS]
+  - name: Cockpit
+    infrastructure: [Docker Cloud, AWS]
+  third_party_dependencies_monitored: [AWS EC2, AWS S3, Cloudflare, GitHub, Heroku, Intercom,
+    Mandrill, Stripe, Travis CI, Vimeo]
+  observed:
+    overall_status: Operational
+    overall_status_code: 100
+    updated: '2026-08-17T13:30:05.111Z'
+    all_components_operational: true
+  probed:
+  - url: https://coorpacademy.status.io/
+    status: 200
+    checked: '2026-08-17'
+  - url: https://api.status.io/1.0/status/59c0fe78af68b1046e096a85
+    status: 200
+    checked: '2026-08-17'
+  - url: https://coorpacademy.status.io/pages/59c0fe78af68b1046e096a85/rss
+    status: 200
+    checked: '2026-08-17'
+  note: >-
+    A genuine machine-readable status surface — a status.io page with a public JSON status API, an RSS
+    feed and an iCal feed, and it names the underlying infrastructure per component. This is the
+    strongest operational artifact Coorpacademy publishes. But note the component list is the
+    2017-era architecture (Docker Cloud shut down in 2018; "Bricklane" and "Cockpit" are internal
+    codenames) and every component's own `updated` timestamp is 2023-03-16, so the page itself has
+    not been reorganised in three years even though the overall status object refreshes live.
+  named_components_do_not_match_apis: >-
+    The status page monitors "Api Platform" and "API Progression", which map to the platform and
+    progression services in openapi/. The other twelve services (content, scim, scorm, content-scorm,
+    mail, mobile, review, h5p, external, media, pdf, progression-aggregations) have NO component on
+    the status page, so an integrator watching status.io cannot see the health of the services it
+    actually calls.
+incident_history:
+  source: https://coorpacademy.status.io/pages/59c0fe78af68b1046e096a85/rss
+  entries_published: 10
+  most_recent: '2023-03-16'
+  entries:
+  - date: '2023-03-16'
+    title: content API unreachable after a certificate change
+  - date: '2022-03-17'
+    title: Bug disabling a core functionality on one of our platforms
+  - date: '2021-09-20'
+    title: Temporary unavailability of some platforms
+  - date: '2021-09-17'
+    title: Difficulties to access some of our platforms (due to an active Heroku incident)
+  - date: '2021-08-18'
+    title: Unavailability due to excess ES
+  - date: '2021-08-12'
+    title: Automated emails are not being sent
+  - date: '2020-04-03'
+    title: Change of primary node of MongoDB cluster not detected by the MOOC
+  - date: '2019-12-07'
+    title: Data Base Migration
+  - date: '2019-10-10'
+    title: Partial Disruption on all platforms
+  - date: '2019-09-06'
+    title: Some platforms not responding (503 errors)
+  note: >-
+    Ten incidents published over 2019-2023, with none posted in the three years since 2023-03-16.
+    Read two ways: either a genuinely quiet run, or the page stopped being updated after the Go1
+    acquisition completed. The dated feed is real either way, and it is the only dated
+    provider-published record of any kind in this profile.
+deprecation:
+  policy_documented: false
+  deprecated_operations: []
+  sunset_header: false
+  notes: >-
+    No deprecation or sunset policy on any Coorpacademy page. Zero of the 155 operations across the
+    fourteen specs carry `deprecated: true`, and zero specs mention Deprecation or Sunset headers. No
+    `Deprecation` pointer is emitted — this is a real absence, not a missing pointer.
+  material_risk: >-
+    The relevant deprecation question for this provider is not per-operation, it is whole-product.
+    Coorpacademy was acquired by Go1 in April 2022 and the site now brands itself "Coorpacademy by
+    Go1"; https://www.coorpacademy.com/en/ and /en/blog/ both 302 to https://www.go1.com/?source=coorp,
+    the top-nav "Bibliothèque Go1" and CONTACT links point at go1.com, and the SCORM content API
+    carries POST /getProgressionFromEnrolment "Get Progressions from go1 enrolment_id" while the mail
+    API carries POST /api/v1/go1Subscription. The English-language front door has already been handed
+    over to Go1. Anyone integrating against api.coorpacademy.com should ask Go1 directly how long
+    these fourteen services will be served, because no published policy answers it.
+  probed:
+  - url: https://www.coorpacademy.com/en/
+    status: 302
+    redirect_to: https://www.go1.com/?source=coorp
+    checked: '2026-08-17'
+  - url: https://www.coorpacademy.com/en/blog/
+    status: 302
+    redirect_to: https://www.go1.com/?source=coorp
+    checked: '2026-08-17'
+sla:
+  documented: false
+  notes: >-
+    No SLA, uptime commitment or credit scheme published. The status page renders "100.00%" uptime for
+    day/week/month and average response times of 1,055-1,108 ms, but those are reported metrics, not a
+    contractual commitment.
+roadmap:
+  published: false
+  probed:
+  - url: https://www.coorpacademy.com/pricing
+    status: 500
+    checked: '2026-08-17'
+  - url: https://www.coorpacademy.com/demo
+    status: 500
+    checked: '2026-08-17'
+terms:
+  url: https://www.coorpacademy.com/mentions-legales/
+  status: 200
+  note: French "Mentions légales et CGU" — legal notices combined with terms of use.
+privacy:
+  url: https://www.coorpacademy.com/privacy-policy/
+  status: 200
+  last_updated: '2020-04-14'
+  note: >-
+    RGPD notice naming a DPO (postal address 4-6 boulevard Poissonnière, 75009 Paris). Six years
+    stale.
+accessibility:
+  url: https://www.coorpacademy.com/accessibilite/
+  status: 200
+site_health_observation:
+  note: >-
+    The marketing WordPress site is partly broken, which matters because it is where every legal and
+    commercial artifact lives. Probed 2026-08-17: /pricing, /demo, /login, /terms, /legal, /en, /fr
+    and /blog/feed/ all return HTTP 500 (a 17-byte text/plain body), while /, /blog, /contact,
+    /privacy-policy/, /mentions-legales/ and /accessibilite/ return 200. /llms.txt also 500s rather
+    than 404s.
+changelog:
+  published: false
+  see: changelog/coorpacademy-changelog.yml
+cross_links:
+  conventions: conventions/coorpacademy-conventions.yml
+  conformance: conformance/coorpacademy-conformance.yml
+  changelog: changelog/coorpacademy-changelog.yml
+pointers_emitted:
+- type: Lifecycle
+  url: lifecycle/coorpacademy-lifecycle.yml
+- type: StatusPage
+  url: https://coorpacademy.status.io/
+pointer_rationale: >-
+  `StatusPage` is emitted — the page is live, machine-readable and provider-operated. `Deprecation` is
+  NOT emitted: no deprecation policy exists. `ChangeLog` is NOT emitted: no changelog exists.

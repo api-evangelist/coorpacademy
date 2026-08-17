@@ -42,6 +42,40 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Coorpacademy is a company surfaced as a portfolio company of serena and added to the API Evangelist network as a stub for enrichment. Sector: saas. This profile is a lead awaiting the enrichment pipeline.
+Coorpacademy (marketed since 2022 as "Coorpacademy by Go1") is a Swiss-French B2B corporate
+digital-learning platform — a learning experience platform built on inverted pedagogy and gamified
+micro-learning, selling brand-scoped learning portals, a course and certification catalogue, skills
+taxonomies, learner progression and adaptive review, and HR analytics to large European enterprises.
+Founded 2013; acquired by Australian edtech Go1 in April 2022.
+
+## Public API surface
+
+Coorpacademy runs no developer portal, publishes no pricing and offers no self-serve API signup. What it
+does publish is a **public Swagger UI at [api.coorpacademy.com](https://api.coorpacademy.com/)** indexing
+**fourteen REST services — 96 paths and 155 operations**. All fourteen specifications were harvested
+verbatim on 2026-08-17 into [`openapi/`](openapi/): eight OpenAPI 3.0.0, six still Swagger 2.0.
+
+Highlights and caveats an integrator should read before starting:
+
+- **SCIM 2.0 provisioning is real** and confirmed live — an anonymous request returns a genuine RFC 7644
+  error envelope. But only `/Users` is published: no `/Groups`, no discovery endpoints, no DELETE.
+- **Enterprise SSO is brokered per brand** (SAML 2.0 via IdP `metadata.xml` upload, plus OIDC) through
+  the Platform API.
+- **SCORM and H5P interoperability** ship as dedicated services, including the SCORM LMS API shim. There
+  is **no xAPI/LRS and no LTI**.
+- **Five different API-key header names** across fourteen services, two differing only by letter case;
+  three services declare no security scheme at all.
+- **No idempotency anywhere** (zero matches across 155 operations), **no rate limits and no rate-limit
+  headers**, **no webhooks or AsyncAPI**, and **no SDKs** — 73 first-party npm packages, not one an API
+  client.
+- **A real machine-readable status page** at [coorpacademy.status.io](https://coorpacademy.status.io/),
+  with a public JSON status API and an RSS incident feed.
+
+Derived and probed detail lives in [`conventions/`](conventions/), [`errors/`](errors/),
+[`data-model/`](data-model/), [`authentication/`](authentication/), [`conformance/`](conformance/),
+[`lifecycle/`](lifecycle/) and [`packages/`](packages/); five packaged Agent Skills grounded in verified
+`operationId`s live in [`skills/`](skills/); corrections to defects in the published specs (a wrong SCIM
+base URL, two copy-pasted operationIds, a staging host pointing at the wrong service, localhost servers
+in public documents) are captured non-destructively as OpenAPI Overlays in [`overlays/`](overlays/).
 
 Source: portfolio company of [serena](https://github.com/api-evangelist/serena) — https://www.coorpacademy.com/
