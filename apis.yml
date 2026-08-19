@@ -16,7 +16,7 @@ url: https://raw.githubusercontent.com/api-evangelist/coorpacademy/refs/heads/ma
 image: https://www.coorpacademy.com/assets/uploads/2025/08/cropped-Coorpacademyby-Go1-Charcoal.png
 x-type: company
 x-source: serena-portfolio
-specificationVersion: '0.21'
+specificationVersion: '0.23'
 created: '2026-08-17'
 modified: '2026-08-17'
 tags:
