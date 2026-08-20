@@ -21,6 +21,24 @@ created: '2026-08-17'
 modified: '2026-08-17'
 tags:
 - Company
+- Software-as-a-Service
+- Corporate Learning
+- LMS
+- Learning Experience Platform
+- EdTech
+- E-Learning
+- SCORM
+- h5p
+- SCIM
+- User Provisioning
+- Learning Analytics
+- Skills
+- Certifications
+- Gamification
+- France
+- Switzerland
+tags_raw:
+- Company
 - Saas
 - corporate-learning
 - lms
@@ -48,6 +66,12 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Corporate Learning
+  - Content Management
+  - Skills
+  - Certifications
+  - SCORM
+  tags_raw:
   - corporate-learning
   - content-management
   - skills
@@ -73,6 +97,12 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-platform
   baseURL: https://platform.coorpacademy.com/api/v1
   tags:
+  - Multi-Tenancy
+  - SSO
+  - SAML
+  - OIDC
+  - Brand Management
+  tags_raw:
   - multi-tenancy
   - sso
   - saml
@@ -95,6 +125,11 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-progression
   baseURL: https://progression.coorpacademy.com/api
   tags:
+  - Learning Analytics
+  - Progression
+  - Adaptive Learning
+  - Gamification
+  tags_raw:
   - learning-analytics
   - progression
   - adaptive-learning
@@ -116,6 +151,10 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
   baseURL: https://aggregation-progression.coorpacademy.com/api
   tags:
+  - Learning Analytics
+  - Aggregation
+  - Progression
+  tags_raw:
   - learning-analytics
   - aggregation
   - progression
@@ -133,6 +172,11 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=scim
   baseURL: https://api.coorpacademy.com/scim
   tags:
+  - SCIM
+  - User Provisioning
+  - Identity
+  - SSO
+  tags_raw:
   - scim
   - user-provisioning
   - identity
@@ -156,6 +200,11 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
   baseURL: https://api.coorpacademy.com/content-scorm
   tags:
+  - SCORM
+  - lms-interoperability
+  - Progression
+  - go1
+  tags_raw:
   - scorm
   - lms-interoperability
   - progression
@@ -175,6 +224,10 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-scorm
   baseURL: https://api.coorpacademy.com/scorm
   tags:
+  - SCORM
+  - File Upload
+  - Content Delivery
+  tags_raw:
   - scorm
   - file-upload
   - content-delivery
@@ -195,6 +248,10 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-mail
   baseURL: https://api.coorpacademy.com/mail
   tags:
+  - Transactional Email
+  - Notification
+  - mandrill
+  tags_raw:
   - transactional-email
   - notifications
   - mandrill
@@ -213,6 +270,9 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-mobile
   baseURL: https://api.coorpacademy.com/mobile
   tags:
+  - Mobile
+  - Versioning
+  tags_raw:
   - mobile
   - versioning
   properties:
@@ -228,6 +288,10 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-review
   baseURL: https://api.coorpacademy.com/review
   tags:
+  - Adaptive Learning
+  - Spaced Repetition
+  - Skills
+  tags_raw:
   - adaptive-learning
   - spaced-repetition
   - skills
@@ -246,6 +310,10 @@ apis:
   baseURL: https://api.coorpacademy.com/h5p
   tags:
   - h5p
+  - Interactive Content
+  - Content Delivery
+  tags_raw:
+  - h5p
   - interactive-content
   - content-delivery
   properties:
@@ -260,6 +328,9 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-external
   baseURL: https://api.coorpacademy.com/external
   tags:
+  - File Upload
+  - content-ingestion
+  tags_raw:
   - file-upload
   - content-ingestion
   properties:
@@ -276,6 +347,10 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-media
   baseURL: https://api.coorpacademy.com/api-service
   tags:
+  - Media
+  - Image Processing
+  - File Upload
+  tags_raw:
   - media
   - image-processing
   - file-upload
@@ -291,6 +366,10 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-pdf
   baseURL: https://api.coorpacademy.com/pdf
   tags:
+  - PDF
+  - Document Generation
+  - Certifications
+  tags_raw:
   - pdf
   - document-generation
   - certifications
