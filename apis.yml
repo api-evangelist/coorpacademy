@@ -56,326 +56,2918 @@ tags_raw:
 - france
 - switzerland
 apis:
-- name: Coorpacademy Content API
-  description: >-
-    Manages the Coorpacademy content repository per brand — external courses and external contents,
-    skills and custom skills, certifications and certification snapshots, custom playlists, bulk
-    external content ingestion, video scripts/subtitles, notifications, and consumption
-    ("consommation") counters. 39 paths / 53 operations, 63 component schemas. Key-gated via an
-    `authorization` header.
+- aid: coorpacademy:coorpacademy-actions-api
+  name: Coorpacademy Actions API
+  description: The actions API from Coorpacademy — 1 operation(s) for actions.
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
-  - Corporate Learning
-  - Content Management
-  - Skills
-  - Certifications
-  - SCORM
-  tags_raw:
-  - corporate-learning
-  - content-management
-  - skills
-  - certifications
-  - scorm
+  - actions
   properties:
   - type: OpenAPI
-    url: openapi/coorpacademy-content-openapi.json
+    url: openapi/coorpacademy-actions-api-openapi.yml
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-content
   - type: DataModel
     url: data-model/coorpacademy-data-model.yml
-  - type: Overlay
-    url: overlays/coorpacademy-content-overlay.yaml
   - type: ErrorCatalog
     url: errors/coorpacademy-problem-types.yml
-- name: Coorpacademy Platform API
-  description: >-
-    Brand (tenant) management for the Coorpacademy platform — create, read, update, delete and migrate
-    brands, check brand existence, list brands, and extract SSO configuration from an uploaded SAML
-    `metadata.xml`. Carries the SAML/OIDC/SSO payload schemas used to configure enterprise
-    single sign-on per brand. 6 paths / 9 operations. Key-gated via an `authentication` header.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-platform
-  baseURL: https://platform.coorpacademy.com/api/v1
-  tags:
-  - Multi-Tenancy
-  - SSO
-  - SAML
-  - OIDC
-  - Brand Management
-  tags_raw:
-  - multi-tenancy
-  - sso
-  - saml
-  - oidc
-  - brand-management
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-platform-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-platform
   - type: Authentication
     url: authentication/coorpacademy-authentication.yml
-- name: Coorpacademy Progression API
-  description: >-
-    The learner progression engine — create and read progressions, record moves, answers, clue
-    requests, resource views and extra-life accept/refuse decisions, plus a v2 analytics surface for
-    completion, slide counts, per-slide analytics, review stars by skill and hero recommendations,
-    both for the calling learner and (admin-scoped) for a named userId. 21 paths / 26 operations.
-    Key-gated via an `authentication` header.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-progression
-  baseURL: https://progression.coorpacademy.com/api
-  tags:
-  - Learning Analytics
-  - Progression
-  - Adaptive Learning
-  - Gamification
-  tags_raw:
-  - learning-analytics
-  - progression
-  - adaptive-learning
-  - gamification
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-progression-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-progression
-  - type: Overlay
-    url: overlays/coorpacademy-progression-overlay.yaml
-  - type: ErrorCatalog
-    url: errors/coorpacademy-problem-types.yml
-- name: Coorpacademy Progression Aggregations API
-  description: >-
-    A separate aggregation service over the same progression data store, exposing DynamoDB-backed
-    per-slide analytics and per-user completion and slide-count reads/writes under a /v1 prefix.
-    3 paths / 5 operations. Key-gated via an `authentication` header.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
-  baseURL: https://aggregation-progression.coorpacademy.com/api
-  tags:
-  - Learning Analytics
-  - Aggregation
-  - Progression
-  tags_raw:
-  - learning-analytics
-  - aggregation
-  - progression
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-progression-aggregations-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
-- name: Coorpacademy SCIM API
-  description: >-
-    SCIM 2.0 user provisioning and de-provisioning for identity-manager integration, scoped per brand
-    — list, create, find, PUT-update and PATCH-update users. Errors are returned in the SCIM error
-    envelope (`urn:ietf:params:scim:api:messages:2.0:Error`), confirmed on a live unauthenticated
-    probe. 2 paths / 5 operations. Key-gated via a `token` header.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=scim
-  baseURL: https://api.coorpacademy.com/scim
-  tags:
-  - SCIM
-  - User Provisioning
-  - Identity
-  - SSO
-  tags_raw:
-  - scim
-  - user-provisioning
-  - identity
-  - sso
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-scim-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=scim
-  - type: Overlay
-    url: overlays/coorpacademy-scim-overlay.yaml
   - type: Conformance
     url: conformance/coorpacademy-conformance.yml
-- name: Coorpacademy SCORM Content API
-  description: >-
-    Backing API for the Coorpacademy SCORM player — fetch slides, chapters, levels, exit nodes and
-    clue payloads, post answers and moves, mark resources as viewed, accept/refuse extra lives,
-    initialise player data, retrieve the LMS API file, resolve a SCORM launch URL, map a Go1
-    enrolment_id to a Coorpacademy progression, and mint a presigned S3 upload URL for bulk SCORM
-    packages. 16 paths / 16 operations. Key-gated via an `Authorization` header.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
-  baseURL: https://api.coorpacademy.com/content-scorm
-  tags:
-  - SCORM
-  - lms-interoperability
-  - Progression
-  - go1
-  tags_raw:
-  - scorm
-  - lms-interoperability
-  - progression
-  - go1
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-content-scorm-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
-  - type: Overlay
-    url: overlays/coorpacademy-content-scorm-overlay.yaml
-- name: Coorpacademy SCORM API
-  description: >-
-    SCORM package storage and delivery — mint presigned S3 URLs for single and bulk SCORM uploads and
-    serve root and nested files out of an unpacked SCORM resource. 4 paths / 4 operations. Key-gated
-    via an `Authorization` header.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-scorm
-  baseURL: https://api.coorpacademy.com/scorm
-  tags:
-  - SCORM
-  - File Upload
-  - Content Delivery
-  tags_raw:
-  - scorm
-  - file-upload
-  - content-delivery
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-scorm-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
-- name: Coorpacademy Email API
-  description: >-
-    Transactional email service backed by Mandrill, exposing one operation per templated message the
-    platform sends — onboarding, welcome, signup validation and self-validation, password reset,
-    first-login attempt, course finished, adaptive course finished, trending and recommended courses,
-    battle invitations and waiting-opponent notices, forum reply notifications, certification done,
-    coach unlocked, we-miss-you re-engagement, scoped export links, SAP notifications, assistance
-    requests, Go1 subscription requests and SCORM download links. 27 paths / 27 operations. Key-gated
-    via an `Authorization` header.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-mail
-  baseURL: https://api.coorpacademy.com/mail
-  tags:
-  - Transactional Email
-  - Notification
-  - mandrill
-  tags_raw:
-  - transactional-email
-  - notifications
-  - mandrill
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-mail-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-mail
-  - type: Overlay
-    url: overlays/coorpacademy-mail-overlay.yaml
-- name: Coorpacademy Mobile API
-  description: >-
-    Minimal-version gate for the Coorpacademy iOS and Android apps — read and update the minimum
-    installable app version per key, plus a send-email operation. 2 paths / 3 operations. Key-gated
-    via an `Api-Secret` header.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-mobile
-  baseURL: https://api.coorpacademy.com/mobile
-  tags:
-  - Mobile
-  - Versioning
-  tags_raw:
-  - mobile
-  - versioning
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-mobile-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
-- name: Coorpacademy Review API
-  description: >-
-    Adaptive review mode — list the skills a given learner has available to review and fetch the next
-    review slide for a learner and skill. 2 paths / 2 operations. Key-gated via an `authorization`
-    header.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-review
-  baseURL: https://api.coorpacademy.com/review
-  tags:
-  - Adaptive Learning
-  - Spaced Repetition
-  - Skills
-  tags_raw:
-  - adaptive-learning
-  - spaced-repetition
-  - skills
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-review-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-review
-  - type: Overlay
-    url: overlays/coorpacademy-review-overlay.yaml
-- name: Coorpacademy H5P API
-  description: >-
-    Serves files out of an unpacked H5P interactive-content resource, redirecting (301) to the stored
-    asset. 1 path / 1 operation. Key-gated via a `token` header.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-h5p
-  baseURL: https://api.coorpacademy.com/h5p
-  tags:
-  - h5p
-  - Interactive Content
-  - Content Delivery
-  tags_raw:
-  - h5p
-  - interactive-content
-  - content-delivery
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-h5p-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
-- name: Coorpacademy External Resources API
-  description: >-
-    Mints a presigned S3 URL for uploading external content of a given file extension. 1 path /
-    1 operation. The published spec declares no security scheme.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-external
-  baseURL: https://api.coorpacademy.com/external
-  tags:
-  - File Upload
-  - content-ingestion
-  tags_raw:
-  - file-upload
-  - content-ingestion
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-external-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-external
-  - type: Overlay
-    url: overlays/coorpacademy-external-overlay.yaml
-- name: Coorpacademy Media API
-  description: >-
-    Media upload and on-the-fly image resize. 1 path / 2 operations. The published spec declares no
-    security scheme.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-media
-  baseURL: https://api.coorpacademy.com/api-service
-  tags:
-  - Media
-  - Image Processing
-  - File Upload
-  tags_raw:
-  - media
-  - image-processing
-  - file-upload
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-media-openapi.json
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-media
-- name: Coorpacademy PDF API
-  description: >-
-    Renders a supplied URL to PDF — used to produce downloadable certificates and reports. 1 path /
-    1 operation. The published spec declares no security scheme.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-pdf
-  baseURL: https://api.coorpacademy.com/pdf
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-analytics-api
+  name: Coorpacademy Analytics API
+  description: The analytics API from Coorpacademy — 14 operation(s) for analytics.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
   tags:
-  - PDF
-  - Document Generation
-  - Certifications
-  tags_raw:
-  - pdf
-  - document-generation
+  - analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-analytics-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-answers-api
+  name: Coorpacademy Answers API
+  description: The answers API from Coorpacademy — 1 operation(s) for answers.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - answers
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-answers-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-brands-api
+  name: Coorpacademy Brands API
+  description: The Brands API from Coorpacademy — 6 operation(s) for brands.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Brands
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-brands-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-bulkexternalcontents-api
+  name: Coorpacademy Bulk External Contents API
+  description: >-
+    The bulkExternalContents API from Coorpacademy — 4 operation(s) for bulkexternalcontents.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - bulkExternalContents
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-bulkexternalcontents-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-certifications-api
+  name: Coorpacademy Certifications API
+  description: The certifications API from Coorpacademy — 4 operation(s) for certifications.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
   - certifications
   properties:
   - type: OpenAPI
-    url: openapi/coorpacademy-pdf-openapi.json
+    url: openapi/coorpacademy-certifications-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-certificationsconsommation-api
+  name: Coorpacademy Certifications Consommation API
+  description: >-
+    The certificationsConsommation API from Coorpacademy — 3 operation(s) for certificationsconsommation.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - certificationsConsommation
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-certificationsconsommation-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-client-mooc-api
+  name: Coorpacademy client / mooc API
+  description: The client / mooc API from Coorpacademy — 2 operation(s) for client / mooc.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - client / mooc
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-client-mooc-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-client-mooc-cockpit-api
+  name: Coorpacademy client / mooc & cockpit API
+  description: >-
+    The client / mooc & cockpit API from Coorpacademy — 1 operation(s) for client / mooc & cockpit.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - client / mooc & cockpit
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-client-mooc-cockpit-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-clues-api
+  name: Coorpacademy Clues API
+  description: The clues API from Coorpacademy — 1 operation(s) for clues.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - clues
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-clues-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-content-scorm-api
+  name: Coorpacademy Content Scorm API
+  description: The Content Scorm API from Coorpacademy — 1 operation(s) for content scorm.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Content Scorm
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-content-scorm-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-coorpmanager-api
+  name: Coorpacademy Coorpmanager API
+  description: The coorpmanager API from Coorpacademy — 1 operation(s) for coorpmanager.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - coorpmanager
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-coorpmanager-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-custom-playlists-api
+  name: Coorpacademy custom playlists API
+  description: The custom playlists API from Coorpacademy — 4 operation(s) for custom playlists.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - custom playlists
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-custom-playlists-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-customplaylistsconsommation-api
+  name: Coorpacademy Custom Playlists Consommation API
+  description: >-
+    The customPlaylistsConsommation API from Coorpacademy — 3 operation(s) for customplaylistsconsommation.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - customPlaylistsConsommation
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-customplaylistsconsommation-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-customskills-api
+  name: Coorpacademy Custom Skills API
+  description: The customSkills API from Coorpacademy — 3 operation(s) for customskills.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - customSkills
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-customskills-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-customskillsconsommation-api
+  name: Coorpacademy Custom Skills Consommation API
+  description: >-
+    The customSkillsConsommation API from Coorpacademy — 3 operation(s) for customskillsconsommation.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - customSkillsConsommation
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-customskillsconsommation-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-external-post-api
+  name: Coorpacademy External post API
+  description: The External post API from Coorpacademy — 1 operation(s) for external post.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - External post
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-external-post-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-externalcourses-api
+  name: Coorpacademy External Courses API
+  description: The externalCourses API from Coorpacademy — 5 operation(s) for externalcourses.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - externalCourses
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-externalcourses-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-extralifeaccepted-api
+  name: Coorpacademy Extra Life Accepted API
+  description: The extraLifeAccepted API from Coorpacademy — 1 operation(s) for extralifeaccepted.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - extraLifeAccepted
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-extralifeaccepted-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-extraliferefused-api
+  name: Coorpacademy Extra Life Refused API
+  description: The extraLifeRefused API from Coorpacademy — 1 operation(s) for extraliferefused.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - extraLifeRefused
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-extraliferefused-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-get-lms-api-api
+  name: Coorpacademy Get lms API
+  description: The Get lms api API from Coorpacademy — 1 operation(s) for get lms api.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Get lms api
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-get-lms-api-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-get-progressions-from-go1-enrolment-id-api
+  name: Coorpacademy Get Progressions from go1 enrolment_id API
+  description: >-
+    The Get Progressions from go1 enrolment_id API from Coorpacademy — 1 operation(s) for get progressions
+    from go1 enrolment_id.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Get Progressions from go1 enrolment_id
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-get-progressions-from-go1-enrolment-id-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-get-s3-signed-upload-url-api
+  name: Coorpacademy Get S3 Signed Upload URL API
+  description: >-
+    The Get S3 Signed Upload URL API from Coorpacademy — 1 operation(s) for get s3 signed upload url.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Get S3 Signed Upload URL
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-get-s3-signed-upload-url-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-get-scorm-launch-url-api
+  name: Coorpacademy Get Scorm Launch URL API
+  description: >-
+    The Get Scorm Launch URL API from Coorpacademy — 1 operation(s) for get scorm launch url.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Get Scorm Launch URL
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-get-scorm-launch-url-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-h5p-get-api
+  name: Coorpacademy H5P get API
+  description: The H5P get API from Coorpacademy — 1 operation(s) for h5p get.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - H5P get
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-h5p-get-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-jobs-api
+  name: Coorpacademy Jobs API
+  description: The jobs API from Coorpacademy — 1 operation(s) for jobs.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-jobs-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-learner-bricklane-api
+  name: Coorpacademy learner / bricklane API
+  description: The learner / bricklane API from Coorpacademy — 8 operation(s) for learner / bricklane.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - learner / bricklane
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-learner-bricklane-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-learner-mooc-api
+  name: Coorpacademy learner / mooc API
+  description: The learner / mooc API from Coorpacademy — 11 operation(s) for learner / mooc.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - learner / mooc
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-learner-mooc-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-minimalversion-api
+  name: Coorpacademy Minimal Version API
+  description: The minimalVersion API from Coorpacademy — 1 operation(s) for minimalversion.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - minimalVersion
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-minimalversion-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-mobile-api
+  name: Coorpacademy Mobile API
+  description: The mobile API from Coorpacademy — 1 operation(s) for mobile.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - mobile
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-mobile-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-move-api
+  name: Coorpacademy Move API
+  description: The move API from Coorpacademy — 1 operation(s) for move.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - move
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-move-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-notifications-api
+  name: Coorpacademy Notifications API
+  description: The notifications API from Coorpacademy — 2 operation(s) for notifications.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - notifications
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-notifications-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-pdf-api-api
+  name: Coorpacademy Pdf API
+  description: The Pdf API API from Coorpacademy — 1 operation(s) for pdf api.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Pdf API
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-pdf-api-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-personalhooks-api
+  name: Coorpacademy Personal Hooks API
+  description: The personalHooks API from Coorpacademy — 1 operation(s) for personalhooks.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - personalHooks
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-personalhooks-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-progressions-api
+  name: Coorpacademy Progressions API
+  description: The progressions API from Coorpacademy — 9 operation(s) for progressions.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - progressions
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-progressions-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-recommendations-api
+  name: Coorpacademy Recommendations API
+  description: The recommendations API from Coorpacademy — 1 operation(s) for recommendations.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - recommendations
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-recommendations-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-resize-api
+  name: Coorpacademy Resize API
+  description: The resize API from Coorpacademy — 1 operation(s) for resize.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - resize
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-resize-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-resources-api
+  name: Coorpacademy Resources API
+  description: The resources API from Coorpacademy — 1 operation(s) for resources.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - resources
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-resources-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-review-api
+  name: Coorpacademy Review API
+  description: The review API from Coorpacademy — 1 operation(s) for review.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - review
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-review-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scim-create-api
+  name: Coorpacademy Scim CREATE API
+  description: The Scim CREATE API from Coorpacademy — 1 operation(s) for scim create.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scim CREATE
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scim-create-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scim-find-api
+  name: Coorpacademy SCIM FIND API
+  description: The SCIM FIND API from Coorpacademy — 1 operation(s) for scim find.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - SCIM FIND
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scim-find-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scim-list-api
+  name: Coorpacademy Scim LIST API
+  description: The Scim LIST API from Coorpacademy — 1 operation(s) for scim list.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scim LIST
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scim-list-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scim-update-api
+  name: Coorpacademy SCIM UPDATE API
+  description: The SCIM UPDATE API from Coorpacademy — 1 operation(s) for scim update.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - SCIM UPDATE
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scim-update-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-answer-api
+  name: Coorpacademy Scorm Answer API
+  description: The Scorm Answer API from Coorpacademy — 2 operation(s) for scorm answer.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scorm Answer
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-answer-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-chapter-api
+  name: Coorpacademy Scorm Chapter API
+  description: The Scorm Chapter API from Coorpacademy — 1 operation(s) for scorm chapter.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scorm Chapter
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-chapter-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-clue-api
+  name: Coorpacademy Scorm Clue API
+  description: The Scorm Clue API from Coorpacademy — 1 operation(s) for scorm clue.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scorm Clue
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-clue-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-exitnode-api
+  name: Coorpacademy Scorm ExitNode API
+  description: The Scorm ExitNode API from Coorpacademy — 1 operation(s) for scorm exitnode.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scorm ExitNode
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-exitnode-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-extra-life-api
+  name: Coorpacademy Scorm extra life API
+  description: The Scorm extra life API from Coorpacademy — 1 operation(s) for scorm extra life.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scorm extra life
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-extra-life-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-file-get-api
+  name: Coorpacademy SCORM file get API
+  description: The SCORM file get API from Coorpacademy — 1 operation(s) for scorm file get.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - SCORM file get
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-file-get-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-init-player-data-progression-brand-api
+  name: Coorpacademy Scorm init player data (progression & brand) API
+  description: >-
+    The Scorm init player data (progression & brand) API from Coorpacademy — 1 operation(s) for scorm
+    init player data (progression & brand).
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scorm init player data (progression & brand)
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-init-player-data-progression-brand-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-level-api
+  name: Coorpacademy Scorm Level API
+  description: The Scorm Level API from Coorpacademy — 1 operation(s) for scorm level.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scorm Level
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-level-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-mark-resource-as-viewed-api
+  name: Coorpacademy Scorm Mark resource as viewed API
+  description: >-
+    The Scorm Mark resource as viewed API from Coorpacademy — 1 operation(s) for scorm mark resource as
+    viewed.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scorm Mark resource as viewed
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-mark-resource-as-viewed-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-request-clue-api
+  name: Coorpacademy Scorm Request Clue API
+  description: The Scorm Request Clue API from Coorpacademy — 1 operation(s) for scorm request clue.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scorm Request Clue
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-request-clue-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-root-file-get-api
+  name: Coorpacademy SCORM root file get API
+  description: The SCORM root file get API from Coorpacademy — 1 operation(s) for scorm root file get.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - SCORM root file get
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-root-file-get-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-slide-api
+  name: Coorpacademy Scorm Slide API
+  description: The Scorm Slide API from Coorpacademy — 1 operation(s) for scorm slide.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scorm Slide
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-slide-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scorm-slides-number-api
+  name: Coorpacademy Scorm slides number API
+  description: The Scorm slides number API from Coorpacademy — 1 operation(s) for scorm slides number.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Scorm slides number
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scorm-slides-number-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-scripts-api
+  name: Coorpacademy Scripts API
+  description: The scripts API from Coorpacademy — 5 operation(s) for scripts.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - scripts
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-scripts-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-sendemail-api
+  name: Coorpacademy Send Email API
+  description: The sendEmail API from Coorpacademy — 1 operation(s) for sendemail.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - sendEmail
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-sendemail-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-signed-s3-url-bulk-scorm-upload-api
+  name: Coorpacademy Signed S3 url BULK SCORM upload API
+  description: >-
+    The Signed S3 url BULK SCORM upload API from Coorpacademy — 1 operation(s) for signed s3 url bulk
+    scorm upload.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Signed S3 url BULK SCORM upload
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-signed-s3-url-bulk-scorm-upload-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-signed-s3-url-scorm-upload-api
+  name: Coorpacademy Signed S3 url/ SCORM upload API
+  description: >-
+    The Signed S3 url/ SCORM upload API from Coorpacademy — 1 operation(s) for signed s3 url/ scorm upload.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - Signed S3 url/ SCORM upload
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-signed-s3-url-scorm-upload-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-skills-api
+  name: Coorpacademy Skills API
+  description: The skills API from Coorpacademy — 3 operation(s) for skills.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - skills
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-skills-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-slides-api
+  name: Coorpacademy Slides API
+  description: The slides API from Coorpacademy — 1 operation(s) for slides.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - slides
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-slides-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-upload-api
+  name: Coorpacademy Upload API
+  description: The upload API from Coorpacademy — 1 operation(s) for upload.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - upload
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-upload-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
 maintainers:
@@ -384,6 +2976,20 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/coorpacademy-content-overlay.yaml
+- type: Overlay
+  url: overlays/coorpacademy-progression-overlay.yaml
+- type: Overlay
+  url: overlays/coorpacademy-scim-overlay.yaml
+- type: Overlay
+  url: overlays/coorpacademy-content-scorm-overlay.yaml
+- type: Overlay
+  url: overlays/coorpacademy-mail-overlay.yaml
+- type: Overlay
+  url: overlays/coorpacademy-review-overlay.yaml
+- type: Overlay
+  url: overlays/coorpacademy-external-overlay.yaml
 - type: DomainSecurity
   url: security/coorpacademy-domain-security.yml
 - type: Website
