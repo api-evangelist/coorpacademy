@@ -13,6 +13,17 @@ description: >-
   developer signup, no published pricing, and no partner developer portal, so the specifications are
   the only machine-readable public surface.
 url: https://raw.githubusercontent.com/api-evangelist/coorpacademy/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.coorpacademy.com/assets/uploads/2025/08/cropped-Coorpacademyby-Go1-Charcoal.png
 x-type: company
 x-source: serena-portfolio
