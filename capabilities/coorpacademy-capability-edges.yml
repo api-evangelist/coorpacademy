@@ -3,7 +3,7 @@ provider: Coorpacademy
 generated_by: planning/capability-mapping/scripts/classify_capabilities.py
 model: claude-opus-5
 frame:
-- Software & Technology
+- Education
 min_confidence: 0.7
 capability_model:
   source: https://github.com/vincentmakes/turbo-ea-capabilities
@@ -11,176 +11,25 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 16
+edge_count: 2
 edges:
 - tag: SCIM UPDATE
   spec_file: coorpacademy-scim-update-api-openapi.yml
   capability_id: BC-4230.50
   capability_id_l1: BC-4230
   capability_name: Tenant Identity Federation
-  confidence: 0.8
-  evidence: '"SCIM API to integrate identity Manager solution for a better Provisioning and deprovisioning
-    of users"; PUT /{brand}/Users/{userId} "scim update User (put)"; schema IDPUserBodyRequest'
-  reason: Brand/tenant-scoped SCIM write operations for user account lifecycle driven by the customer's
-    identity provider — squarely Tenant Identity Federation via SSO/SCIM in a multi-tenant SaaS.
-- tag: progressions
-  spec_file: coorpacademy-progressions-api-openapi.yml
-  capability_id: BC-300.40
-  capability_id_l1: BC-300
-  capability_name: Learning & Development Management
-  confidence: 0.8
-  evidence: POST /v1/progressions/{id}/answers  Save a new answer; POST /v1/progressions/{id}/resources  Mark
-    a resource as viewed; "API to manage CoorpAcademy progression"
-  reason: Full learner-progression surface (answers, clues, extra lives, resources viewed) on a corporate
-    learning platform — this is training delivery and learner progress tracking, realising Learning &
-    Development Management.
-- tag: Get Progressions from go1 enrolment_id
-  spec_file: coorpacademy-get-progressions-from-go1-enrolment-id-api-openapi.yml
-  capability_id: BC-300.40
-  capability_id_l1: BC-300
-  capability_name: Learning & Development Management
-  confidence: 0.75
-  evidence: POST /getProgressionFromEnrolment "Get Progression from enrolment_id"; schemas ScormProgress,
-    progression, progressionStateVariables
-  reason: Retrieves a learner's course progression against an enrolment, i.e. tracking of training completion
-    on a corporate learning platform. That is Learning & Development administration for whoever buys it;
-    some ambiguity remains as the surface is a single read endpoint.
-- tag: SCIM FIND
-  spec_file: coorpacademy-scim-find-api-openapi.yml
-  capability_id: BC-4230.50
-  capability_id_l1: BC-4230
-  capability_name: Tenant Identity Federation
-  confidence: 0.75
-  evidence: '"SCIM API to integrate identity Manager solution for a better Provisioning and deprovisioning
-    of users"; GET /{brand}/Users/{userId} "scim find User"'
-  reason: Tenant-scoped ({brand}) SCIM user endpoint exposed so customers can provision/deprovision their
-    user accounts from their own IdP — matches Tenant Identity Federation ("lifecycle of tenant user accounts
-    via single sign-on and SCIM"). Read-only lookup, hence moderate confidence on the sub-capability.
+  confidence: 0.7
+  evidence: PUT /{brand}/Users/{userId} — "scim update User (put)"; schema IDPUserBodyRequest; "Provisioning
+    and deprovisioning of users"
+  reason: Updates tenant user accounts via SCIM driven by the customer's IdP (IDPUserBodyRequest), matching
+    tenant identity federation and SCIM account lifecycle.
 - tag: Scim CREATE
   spec_file: coorpacademy-scim-create-api-openapi.yml
   capability_id: BC-4230.50
   capability_id_l1: BC-4230
   capability_name: Tenant Identity Federation
-  confidence: 0.75
-  evidence: '"SCIM API to integrate identity Manager solution for a better Provisioning and deprovisioning
-    of users"; POST /{brand}/Users "scim create User"'
-  reason: SCIM user provisioning endpoint scoped per brand (tenant) in a multi-tenant SaaS learning platform
-    — matches tenant identity federation / SCIM-driven tenant user account lifecycle rather than any learning-domain
-    capability.
-- tag: Scim LIST
-  spec_file: coorpacademy-scim-list-api-openapi.yml
-  capability_id: BC-4230.50
-  capability_id_l1: BC-4230
-  capability_name: Tenant Identity Federation
-  confidence: 0.75
-  evidence: '"SCIM API to integrate identity Manager solution for a better Provisioning and deprovisioning
-    of users"; GET /{brand}/Users "scim list User"'
-  reason: Listing tenant users via SCIM as part of identity-manager integration; this is tenant identity
-    federation / user account lifecycle via SCIM, not a learning capability.
-- tag: certifications
-  spec_file: coorpacademy-certifications-api-openapi.yml
-  capability_id: BC-300.40
-  capability_id_l1: BC-300
-  capability_name: Learning & Development Management
-  confidence: 0.75
-  evidence: POST /repository/{repository}/certifications/upsert — 'create a certification diff and upsert
-    a snapshot' ; schemas 'DiplomaRewards', 'CertificationRewards'
-  reason: Defines and maintains learning certifications with diploma and reward structures, which maps
-    directly to Learning & Development Management's explicit inclusion of certifications. Slight discount
-    for the repository/snapshot-versioning framing.
-- tag: externalCourses
-  spec_file: coorpacademy-externalcourses-api-openapi.yml
-  capability_id: BC-300.40
-  capability_id_l1: BC-300
-  capability_name: Learning & Development Management
-  confidence: 0.72
-  evidence: '"Create a external course", "Get a list of external content for the given external course"'
-  reason: Full CRUD over courses and their content items in the learning catalogue — training content
-    administration, i.e. Learning & Development Management.
-- tag: skills
-  spec_file: coorpacademy-skills-api-openapi.yml
-  capability_id: BC-300.40
-  capability_id_l1: BC-300
-  capability_name: Learning & Development Management
-  confidence: 0.72
-  evidence: POST /repository/{repository}/skills  skillsPOST  Create a new skills; GET /api/v1/review/users/{userId}/skills  getUserSkillsToReview  Get
-    skills available to be reviewed for the given user.
-  reason: Manages the skills taxonomy of the learning platform and the skills a learner has available
-    to review — capability building and skill development within corporate learning. Some ambiguity with
-    Talent Management (career development), hence 0.72.
-- tag: Brands
-  spec_file: coorpacademy-brands-api-openapi.yml
-  capability_id: BC-4230.10
-  capability_id_l1: BC-4230
-  capability_name: Tenant Provisioning & Lifecycle
   confidence: 0.7
-  evidence: POST /brands  brandsPOST  Create a new brand; POST /brands/{id}/metadatas  extract brand sso
-    config info from metadata.xml; POST /brands/{id}/migrate  Migrate an existing brand
-  reason: A 'brand' is the tenant unit of this B2B learning platform (brand-scoped portals); operations
-    create, update, delete and migrate brands and configure their SSO (SAMLPayload, OIDCPayload, BrandMigrationStatus),
-    matching tenant provisioning & lifecycle.
-- tag: Scorm Answer
-  spec_file: coorpacademy-scorm-answer-api-openapi.yml
-  capability_id: BC-300.40
-  capability_id_l1: BC-300
-  capability_name: Learning & Development Management
-  confidence: 0.7
-  evidence: 'POST /post-answer "return progression with answer action"; schemas: answer, progression,
-    progressionStateVariables'
-  reason: Records a learner's answer and returns updated learning progression in the course player — delivery
-    and tracking of training content, i.e. Learning & Development. Confidence moderated because the surface
-    is a low-level player mechanic.
-- tag: Scorm Mark resource as viewed
-  spec_file: coorpacademy-scorm-mark-resource-as-viewed-api-openapi.yml
-  capability_id: BC-300.40
-  capability_id_l1: BC-300
-  capability_name: Learning & Development Management
-  confidence: 0.7
-  evidence: 'POST /mark-resource-as-viewed "POST Mark resource as viewed"; schemas: progression, resource,
-    payloadMarkResourceAsViewed'
-  reason: Tracks that a learner consumed a learning resource and updates progression — learner progress
-    tracking within training delivery (Learning & Development).
-- tag: Scorm init player data (progression & brand)
-  spec_file: coorpacademy-scorm-init-player-data-progression-brand-api-openapi.yml
-  capability_id: BC-300.40
-  capability_id_l1: BC-300
-  capability_name: Learning & Development Management
-  confidence: 0.7
-  evidence: 'GET /init-player/{contentRef} "get Iniut Data for player (progression & brand)"; schemas:
-    content, progression'
-  reason: Initialises the learning content player with the learner's progression and brand context — training
-    content delivery and learner progress tracking (L&D).
-- tag: analytics
-  spec_file: coorpacademy-analytics-api-openapi.yml
-  capability_id: BC-300.40
-  capability_id_l1: BC-300
-  capability_name: Learning & Development Management
-  confidence: 0.7
-  evidence: GET /v1/users/{userId}/analytics/completion — 'Get user progression completion' ; GET /v2/analytics/review
-    — 'Get stars from review progressions by skill'
-  reason: These are learner-level training completion and skill-attainment analytics for a corporate learning
-    platform, i.e. reporting on learning progress rather than generic product telemetry. Some risk it
-    is read as usage analytics, hence 0.7.
-- tag: certificationsConsommation
-  spec_file: coorpacademy-certificationsconsommation-api-openapi.yml
-  capability_id: BC-300.40
-  capability_id_l1: BC-300
-  capability_name: Learning & Development Management
-  confidence: 0.7
-  evidence: GET /consommation/repository/{repository}/certifications — 'Get a list of certifications'
-    ; schema 'CertificationConsommation'
-  reason: Read/upsert surface over the consumable certification definitions (with diploma and stars rewards)
-    offered to learners, i.e. certification management within L&D. 0.7 given the 'consommation' variant
-    is a delivery-side projection of the same certification data.
-- tag: slides
-  spec_file: coorpacademy-slides-api-openapi.yml
-  capability_id: BC-300.40
-  capability_id_l1: BC-300
-  capability_name: Learning & Development Management
-  confidence: 0.7
-  evidence: GET /api/v1/review/users/{userId}/skills/{skillRef}/slide — 'Get slide available to be reviewed
-    for the given user and skill.'
-  reason: Vendor is a corporate digital-learning platform; the operation serves learning content (a slide)
-    to a learner scoped to a skill in 'Review Mode', i.e. delivery of training/learning material. That
-    realises Learning & Development Management. Confidence held at 0.7 because the single operation is
-    a thin content-retrieval surface.
+  evidence: POST /{brand}/Users — "scim create User"; "SCIM API to integrate identity Manager solution
+    for a better Provisioning and deprovisioning of users"
+  reason: Creates tenant learner accounts via SCIM from the customer identity provider — tenant identity
+    federation and SCIM-based user provisioning.
