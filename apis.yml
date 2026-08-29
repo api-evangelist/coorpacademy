@@ -2987,6 +2987,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/coorpacademy-capability-edges.yml
+  name: Coorpacademy Business Capability Map
 - type: Overlay
   url: overlays/coorpacademy-content-overlay.yaml
 - type: Overlay
