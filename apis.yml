@@ -32,22 +32,22 @@ created: '2026-08-17'
 modified: '2026-08-17'
 tags:
 - Company
-- Software-as-a-Service
-- Corporate Learning
-- LMS
-- Learning Experience Platform
-- EdTech
-- E-Learning
-- SCORM
+- Saas
+- corporate-learning
+- lms
+- learning-experience-platform
+- edtech
+- elearning
+- scorm
 - h5p
 - SCIM
-- User Provisioning
-- Learning Analytics
+- user-provisioning
+- learning-analytics
 - Skills
 - Certifications
-- Gamification
-- France
-- Switzerland
+- gamification
+- france
+- switzerland
 tags_raw:
 - Company
 - Saas
@@ -73,6 +73,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Actions
+  tags_raw:
   - actions
   properties:
   - type: OpenAPI
@@ -119,6 +121,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Analytics
+  tags_raw:
   - analytics
   properties:
   - type: OpenAPI
@@ -165,6 +169,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Answers
+  tags_raw:
   - answers
   properties:
   - type: OpenAPI
@@ -257,7 +263,8 @@ apis:
     The bulkExternalContents API from Coorpacademy — 4 operation(s) for bulkexternalcontents.
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
-  tags:
+  tags: []
+  tags_raw:
   - bulkExternalContents
   properties:
   - type: OpenAPI
@@ -304,6 +311,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Certifications
+  tags_raw:
   - certifications
   properties:
   - type: OpenAPI
@@ -350,7 +359,8 @@ apis:
     The certificationsConsommation API from Coorpacademy — 3 operation(s) for certificationsconsommation.
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
-  tags:
+  tags: []
+  tags_raw:
   - certificationsConsommation
   properties:
   - type: OpenAPI
@@ -490,6 +500,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Clues
+  tags_raw:
   - clues
   properties:
   - type: OpenAPI
@@ -674,7 +686,8 @@ apis:
     The customPlaylistsConsommation API from Coorpacademy — 3 operation(s) for customplaylistsconsommation.
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
-  tags:
+  tags: []
+  tags_raw:
   - customPlaylistsConsommation
   properties:
   - type: OpenAPI
@@ -721,6 +734,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Custom Skills
+  tags_raw:
   - customSkills
   properties:
   - type: OpenAPI
@@ -767,7 +782,8 @@ apis:
     The customSkillsConsommation API from Coorpacademy — 3 operation(s) for customskillsconsommation.
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
-  tags:
+  tags: []
+  tags_raw:
   - customSkillsConsommation
   properties:
   - type: OpenAPI
@@ -859,7 +875,8 @@ apis:
   description: The externalCourses API from Coorpacademy — 5 operation(s) for externalcourses.
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
-  tags:
+  tags: []
+  tags_raw:
   - externalCourses
   properties:
   - type: OpenAPI
@@ -905,7 +922,8 @@ apis:
   description: The extraLifeAccepted API from Coorpacademy — 1 operation(s) for extralifeaccepted.
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
-  tags:
+  tags: []
+  tags_raw:
   - extraLifeAccepted
   properties:
   - type: OpenAPI
@@ -951,7 +969,8 @@ apis:
   description: The extraLifeRefused API from Coorpacademy — 1 operation(s) for extraliferefused.
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
-  tags:
+  tags: []
+  tags_raw:
   - extraLifeRefused
   properties:
   - type: OpenAPI
@@ -1232,6 +1251,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Job
+  tags_raw:
   - jobs
   properties:
   - type: OpenAPI
@@ -1369,7 +1390,8 @@ apis:
   description: The minimalVersion API from Coorpacademy — 1 operation(s) for minimalversion.
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
-  tags:
+  tags: []
+  tags_raw:
   - minimalVersion
   properties:
   - type: OpenAPI
@@ -1416,6 +1438,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Mobile
+  tags_raw:
   - mobile
   properties:
   - type: OpenAPI
@@ -1462,6 +1486,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Move
+  tags_raw:
   - move
   properties:
   - type: OpenAPI
@@ -1508,6 +1534,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Notification
+  tags_raw:
   - notifications
   properties:
   - type: OpenAPI
@@ -1599,7 +1627,8 @@ apis:
   description: The personalHooks API from Coorpacademy — 1 operation(s) for personalhooks.
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
-  tags:
+  tags: []
+  tags_raw:
   - personalHooks
   properties:
   - type: OpenAPI
@@ -1646,6 +1675,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Progressions
+  tags_raw:
   - progressions
   properties:
   - type: OpenAPI
@@ -1692,6 +1723,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Recommendations
+  tags_raw:
   - recommendations
   properties:
   - type: OpenAPI
@@ -1784,6 +1817,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Resources
+  tags_raw:
   - resources
   properties:
   - type: OpenAPI
@@ -1830,6 +1865,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Review
+  tags_raw:
   - review
   properties:
   - type: OpenAPI
@@ -2337,7 +2374,8 @@ apis:
     init player data (progression & brand).
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
-  tags:
+  tags: []
+  tags_raw:
   - Scorm init player data (progression & brand)
   properties:
   - type: OpenAPI
@@ -2662,6 +2700,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Scripts
+  tags_raw:
   - scripts
   properties:
   - type: OpenAPI
@@ -2708,6 +2748,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - SEND EMAIL
+  tags_raw:
   - sendEmail
   properties:
   - type: OpenAPI
@@ -2849,6 +2891,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Skills
+  tags_raw:
   - skills
   properties:
   - type: OpenAPI
@@ -2895,6 +2939,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Slides
+  tags_raw:
   - slides
   properties:
   - type: OpenAPI
@@ -2941,6 +2987,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - Upload
+  tags_raw:
   - upload
   properties:
   - type: OpenAPI
