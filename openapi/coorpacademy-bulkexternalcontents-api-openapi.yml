@@ -1,0 +1,647 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy content
+  version: 2.276.0
+  title: Bulk External Contents API
+servers:
+- url: /api/v2
+- url: http://localhost:3700/api/v2
+- url: https://content-staging.coorpacademy.com/api/v2
+- url: https://content.coorpacademy.com/api/v2
+host: content.coorpacademy.com
+tags:
+- name: bulkExternalContents
+paths:
+  /repository/{repository}/bulk-external-contents:
+    get:
+      tags:
+      - bulkExternalContents
+      summary: get all bulk external contents
+      description: get all bulk external contents
+      operationId: bulkExternalContentsGETAll
+      security:
+      - token: []
+      x-exegesis-controller: bulk-external-content
+      parameters:
+      - name: repository
+        in: path
+        required: true
+        description: repository of the bulk external content
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: states
+        in: query
+        required: true
+        description: states of the the bulk external content
+        schema:
+          type: string
+        example: pending
+      - name: withExternalContent
+        in: query
+        required: false
+        description: return external content in the response
+        schema:
+          type: boolean
+      - name: withTotalFailedItems
+        in: query
+        required: false
+        description: return number of failed items in the response
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: get all bulk external contents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkExternalContent'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /repository/{repository}/bulk-external-contents/{ref}:
+    get:
+      tags:
+      - bulkExternalContents
+      summary: get one bulk external content
+      description: get one bulk external content
+      operationId: bulkExternalContentGET
+      security:
+      - token: []
+      x-exegesis-controller: bulk-external-content
+      parameters:
+      - name: repository
+        in: path
+        required: true
+        description: repository of the bulk external content
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        required: true
+        description: ref of the bulk external content
+        schema:
+          type: string
+        example: ref1
+      - name: withExternalContent
+        in: query
+        required: false
+        description: remove external content from the response
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: get one bulk external content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkExternalContent'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+      - bulkExternalContents
+      summary: delete one bulk external content
+      description: delete one bulk external content
+      operationId: bulkExternalContentDELETE
+      security:
+      - token: []
+      x-exegesis-controller: bulk-external-content
+      parameters:
+      - name: repository
+        in: path
+        required: true
+        description: repository of the bulk external content
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        required: true
+        description: ref of the the bulk external content
+        schema:
+          type: string
+        example: ref1
+      responses:
+        '200':
+          description: delete one bulk external content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkExternalContent'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /repository/{repository}/bulk-external-contents/{ref}/metadata-report:
+    get:
+      tags:
+      - bulkExternalContents
+      summary: Generate metadata report for a bulk external content
+      description: Generates a metadata report CSV file for the given bulk external content
+      operationId: generateMetadataReport
+      security:
+      - token: []
+      x-exegesis-controller: bulk-external-content
+      parameters:
+      - name: repository
+        in: path
+        required: true
+        description: The repository of the bulk external content
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        required: true
+        description: The reference of the bulk external content
+        schema:
+          type: string
+        example: ref1
+      responses:
+        '200':
+          description: Metadata report generated successfully
+          content:
+            text/csv:
+              schema:
+                type: string
+        '401':
+          description: User not identified by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /repository/{repository}/bulk-external-contents/upsert:
+    post:
+      tags:
+      - bulkExternalContents
+      summary: upsert a bulk external content
+      description: upsert a bulk external content
+      operationId: bulkExternalContentUPSERT
+      security:
+      - token: []
+      x-exegesis-controller: bulk-external-content
+      parameters:
+      - name: repository
+        in: path
+        required: true
+        description: repository of the bulk external content
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      requestBody:
+        description: bulk external content to be upserted
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/BulkExternalContentInitialUpsert'
+              - $ref: '#/components/schemas/BulkExternalContentUpsert'
+              - $ref: '#/components/schemas/BulkExternalContentStateUpsert'
+      responses:
+        '200':
+          description: upsert a bulk external content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkExternalContentUpsertResponse'
+        '400':
+          description: Data sent on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    BulkExternalContent:
+      type: object
+      properties:
+        ref:
+          type: string
+          description: ref of the bulk external content
+        repository:
+          type: string
+          description: repository of the bulk external content
+        states:
+          type: string
+          description: state of the bulk external content
+        progress:
+          type: number
+          description: progress of the bulk external content
+        metadata:
+          $ref: '#/components/schemas/BulkExternalContentMeta'
+        externalContentList:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ExternalContentForBulk'
+        resourceUrl:
+          type: string
+          description: resourceUrl of the bulk external content
+        metadataUrl:
+          type: string
+          description: metadataUrl of the bulk external content
+      example:
+        ref: ref
+        repository: content-core@cockpitRecette-core
+        states: pending
+        progress: 50
+        metadata:
+          createdAt: '2021-10-11T14:54:52.368Z'
+          updatedAt: '2021-10-11T14:54:52.368Z'
+          modifiedBy: ouiza
+          createdBy: ouiza
+          disableLocalesFallback: true
+        externalContentList:
+          key1:
+            duration: '10'
+            cover:
+              mimeType: image/jpeg
+              type: img
+              url: url
+            skills:
+            - skill0
+            - skill1
+            partners:
+            - partner0
+            - partner1
+            mode: mode
+            title: title
+            fileName: fileName
+            description: description
+            errorResource:
+              key1:
+                type: error1
+                fileName: fileName
+            errorCSV:
+              key1:
+                column: column
+                errorCode: errorCode
+                description: description
+        resourceUrl: ''
+        metadataUrl: ''
+    BulkExternalContentMeta:
+      type: object
+      required:
+      - modifiedBy
+      properties:
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        modifiedBy:
+          type: string
+        createdBy:
+          type: string
+        disableLocalesFallback:
+          type: boolean
+        taggedNewUntil:
+          type: string
+    BulkExternalContentInitialUpsert:
+      type: object
+      properties:
+        ref:
+          type: string
+          description: ref of the bulk external content
+        repository:
+          type: string
+          description: repository of the bulk external content
+        state:
+          type: string
+          enum:
+          - pending
+          description: state of the bulk external content
+        totalExpectedItems:
+          type: number
+          description: number of bulk items
+        bulkTitle:
+          type: string
+          description: title of the bulk
+        metadata:
+          $ref: '#/components/schemas/BulkExternalContentMeta'
+      required:
+      - ref
+      - repository
+      - state
+      - totalExpectedItems
+      example:
+        ref: extBulk_zIaDGjAXDA
+        repository: content-core@cockpitRecette-core
+        state: pending
+        totalExpectedItems: 15
+        bulkTitle: bulk title
+        metadata:
+          createdAt: '2021-10-11T14:54:52.368Z'
+          updatedAt: '2021-10-11T14:54:52.368Z'
+          modifiedBy: ouiza
+          createdBy: ouiza
+          disableLocalesFallback: true
+    BulkExternalContentUpsert:
+      type: object
+      properties:
+        ref:
+          type: string
+          description: ref of the bulk external content
+        repository:
+          type: string
+          description: repository of the bulk external content
+        metadata:
+          $ref: '#/components/schemas/BulkExternalContentMeta'
+        externalContentList:
+          $ref: '#/components/schemas/ExternalContentForBulk'
+        resourceUrl:
+          type: string
+          description: resourceUrl of the bulk external content
+        metadataUrl:
+          type: string
+          description: metadataUrl of the bulk external content
+      required:
+      - ref
+      - repository
+      - externalContentList
+      example:
+        ref: extBulk_zIaDGjAXDA
+        repository: content-core@cockpitRecette-core
+        metadata:
+          createdAt: '2021-10-11T14:54:52.368Z'
+          updatedAt: '2021-10-11T14:54:52.368Z'
+          modifiedBy: ouiza
+          createdBy: ouiza
+          disableLocalesFallback: true
+        externalContentList:
+          key1:
+            duration: 10
+            cover:
+              mimeType: image/jpeg
+              type: img
+              url: url
+            skills:
+            - skill0
+            - skill1
+            partners:
+            - partner0
+            - partner1
+            thematiques:
+            - thematique0
+            - thematique1
+            acquiredSkills: []
+            disableLocalesFallback: false
+            modifiedBy: ouiza
+            createdBy: ouiza
+            lang: fr
+            state: state
+            url: url
+            mode: mode
+            title: title
+            fileName: fileName
+            partnershipType: partnershipType
+            description: description
+            externalRef: externalRef
+            version: version
+            errorResource:
+              key1:
+                type: error1
+                fileName: fileName
+            errorCSV:
+              key1:
+                column: column
+                errorCode: errorCode
+                description: description
+        resourceUrl: ''
+        metadataUrl: ''
+    BulkExternalContentUpsertResponse:
+      type: object
+      properties:
+        ref:
+          type: string
+          description: ref of the bulk external content
+        repository:
+          type: string
+          description: repository of the bulk external content
+        state:
+          type: string
+          description: state of the bulk external content
+        totalExpectedItems:
+          type: number
+          description: number of bulk items
+        totalProcessedItems:
+          type: number
+          description: number of bulk items processed
+        bulkTitle:
+          type: string
+          description: title of the bulk
+        progress:
+          type: number
+          description: progress of the bulk external content
+        metadata:
+          $ref: '#/components/schemas/BulkExternalContentMeta'
+        externalContentList:
+          $ref: '#/components/schemas/ExternalContentForBulk'
+        resourceUrl:
+          type: string
+          description: resourceUrl of the bulk external content
+        metadataUrl:
+          type: string
+          description: metadataUrl of the bulk external content
+      example:
+        ref: extBulk_zIaDGjAXDA
+        repository: content-core@cockpitRecette-core
+        states: pending
+        progress: 50
+        metadata:
+          createdAt: '2021-10-11T14:54:52.368Z'
+          updatedAt: '2021-10-11T14:54:52.368Z'
+          modifiedBy: ouiza
+          createdBy: ouiza
+          disableLocalesFallback: true
+        externalContentList:
+          key1:
+            duration: 10
+            cover:
+              mimeType: image/jpeg
+              type: img
+              url: url
+            skills:
+            - skill0
+            - skill1
+            partners:
+            - partner0
+            - partner1
+            thematiques:
+            - thematique0
+            - thematique1
+            disableLocalesFallback: false
+            modifiedBy: ouiza
+            createdBy: ouiza
+            lang: fr
+            state: state
+            url: url
+            mode: mode
+            title: title
+            fileName: fileName
+            partnershipType: partnershipType
+            description: description
+            externalRef: externalRef
+            version: version
+            errorResource:
+              key1:
+                type: error1
+                fileName: fileName
+            errorCSV:
+              key1:
+                column: column
+                errorCode: errorCode
+                description: description
+        resourceUrl: ''
+        metadataUrl: ''
+    BulkExternalContentStateUpsert:
+      type: object
+      properties:
+        ref:
+          type: string
+          description: ref of the bulk external content
+        repository:
+          type: string
+          description: repository of the bulk external content
+        state:
+          type: string
+          enum:
+          - saved
+          - deleted
+          description: state of the bulk external content
+        metadata:
+          $ref: '#/components/schemas/BulkExternalContentMeta'
+      required:
+      - ref
+      - repository
+      - state
+      example:
+        ref: extBulk_zIaDGjAXDA
+        repository: content-core@cockpitRecette-core
+        states: saved
+        metadata:
+          modifiedBy: ouiza
+    ErrorCSV:
+      type: object
+      properties:
+        column:
+          type: string
+          description: column of the errorCSV
+        errorCode:
+          type: string
+          description: errorCode of the errorCSV
+        description:
+          type: string
+          description: description of the errorCSV
+    ErrorResource:
+      type: object
+      properties:
+        type:
+          type: string
+          description: type of the error resource
+        fileName:
+          type: string
+          description: name of the error resource
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    ExternalContentForBulk:
+      type: object
+      properties:
+        duration:
+          type: number
+          description: duration of the external content
+        cover:
+          type: object
+          properties:
+            mimeType:
+              type: string
+              description: mimeType of the cover
+            type:
+              type: string
+              description: type of the cover
+            url:
+              type: string
+              description: url of the cover
+        skills:
+          type: array
+          items:
+            type: string
+          description: skills of the external content
+        partners:
+          type: array
+          items:
+            type: string
+          description: partners of the external content
+        thematiques:
+          type: array
+          items:
+            type: string
+          description: thematiques of the external content
+        disableLocalesFallback:
+          type: boolean
+          description: disableLocalesFallback of the external content
+        lang:
+          type: string
+          description: language of the external content
+        state:
+          type: string
+          description: state of the external content
+        url:
+          type: string
+          description: url of the external content
+        externalRef:
+          type: string
+          description: external ref of the external content
+        mode:
+          type: string
+          description: mode of the external content
+        title:
+          type: string
+          description: title of the external content
+        fileName:
+          type: string
+          description: file name of the external content
+        description:
+          type: string
+          description: description of the external content
+        errorResource:
+          $ref: '#/components/schemas/ErrorResource'
+        errorCSV:
+          $ref: '#/components/schemas/ErrorCSV'
+  securitySchemes:
+    token:
+      type: apiKey
+      name: authorization
+      in: header

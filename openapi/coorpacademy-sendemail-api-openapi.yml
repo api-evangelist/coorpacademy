@@ -1,0 +1,54 @@
+openapi: 3.2.0
+info:
+  description: API to handle mobile minimal versions to be installed
+  version: 2.0.0
+  title: Coorpacademy Mobile Send Email API
+servers:
+- url: /mobile
+tags:
+- name: sendEmail
+paths:
+  /api/v1/send-email:
+    post:
+      tags:
+      - sendEmail
+      summary: Send an email
+      responses:
+        '204':
+          $ref: '#/components/responses/Success'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        description: an address mail
+        required: true
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: string
+    Success:
+      description: Version successfully set or retrieved
+      content:
+        application/json:
+          schema:
+            type: string
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Api-Secret
+      in: header

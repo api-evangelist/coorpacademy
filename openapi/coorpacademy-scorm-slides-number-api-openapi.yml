@@ -1,0 +1,89 @@
+openapi: 3.2.0
+info:
+  description: API for Coorp Scorm player content
+  version: 1.0.0
+  title: scorm content Scorm slides number API
+servers:
+- url: https://api.coorpacademy.com/content-scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/content-scorm
+  description: staging
+- url: http://localhost:13000
+  description: local
+schemes:
+- https
+tags:
+- name: Scorm slides number
+paths:
+  /slide/content/{contentRef}/engine/{engineRef}/version/{version}:
+    get:
+      tags:
+      - Scorm slides number
+      summary: Get slides number
+      description: Get slides number for scorm standalone app player
+      operationId: fetchSlidesNumberGET
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/contentRef'
+      - $ref: '#/components/parameters/engineRef'
+      - $ref: '#/components/parameters/version'
+      responses:
+        '200':
+          $ref: '#/components/responses/SlidesNumberSuccess'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    version:
+      name: version
+      in: path
+      description: the version
+      required: true
+      schema:
+        type: number
+    contentRef:
+      name: contentRef
+      in: path
+      description: ref of the content
+      required: true
+      schema:
+        type: string
+    engineRef:
+      name: engineRef
+      in: path
+      description: ref of the engine
+      required: true
+      schema:
+        type: string
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    SlidesNumberSuccess:
+      description: Fetch slides number
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              nbSlides:
+                type: number
+            example:
+              nbSlides: 4
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

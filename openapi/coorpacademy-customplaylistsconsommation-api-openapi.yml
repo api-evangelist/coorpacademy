@@ -1,0 +1,311 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy content
+  version: 2.276.0
+  title: Content Custom Playlists Consommation API
+servers:
+- url: /api/v2
+- url: http://localhost:3700/api/v2
+- url: https://content-staging.coorpacademy.com/api/v2
+- url: https://content.coorpacademy.com/api/v2
+host: content.coorpacademy.com
+tags:
+- name: customPlaylistsConsommation
+paths:
+  /consommation/repository/{repository}/custom-playlists:
+    get:
+      tags:
+      - customPlaylistsConsommation
+      summary: Get a list of custom playlists
+      description: Get a list of custom playlists
+      operationId: findCustomPlaylistsConsommation
+      security:
+      - token: []
+      x-exegesis-controller: custom-playlists-consommation
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: refs
+        in: query
+        schema:
+          type: string
+        description: list of custom playlist references, separated by comma
+      - name: contentRefs
+        in: query
+        schema:
+          type: string
+        description: customPlaylist should contains almost one of the contentRefs, separated by comma
+        example: dis_N12Qn2u8AA
+      - name: populations
+        in: query
+        schema:
+          type: string
+        description: list of custom playlist populations, separated by comma
+        example: ALL
+      - name: state
+        in: query
+        description: state of the content
+        schema:
+          type: string
+          enum:
+          - published
+          - deleted
+          - archived
+          - draft
+        example: published
+      - name: states
+        in: query
+        description: list of state of the content
+        schema:
+          type: string
+        example: published,archived,deleted
+      - name: source
+        in: query
+        description: source of the request (MOOC or CM)
+        schema:
+          type: string
+          enum:
+          - mooc
+          - cm
+      responses:
+        '200':
+          description: CustomPlaylists found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomPlaylistConsommation'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /consommation/repository/{repository}/custom-playlists/upsert:
+    post:
+      tags:
+      - customPlaylistsConsommation
+      summary: upsert a custom playlist
+      description: upsert a custom playlist
+      operationId: upsertCustomPlaylistConsommation
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      security:
+      - token: []
+      x-exegesis-controller: custom-playlists-consommation
+      requestBody:
+        description: Playlist
+        required: true
+        content:
+          application/json:
+            schema:
+              example:
+                ref: cplaylist_kIIm6bPa00
+                repository: content-core@cockpitRecette-core
+                meta:
+                  updatedAt: '2019-12-13T10:50:42.668Z'
+                  modifiedBy: silouone
+                state: published
+      responses:
+        '200':
+          description: Updated custom playlist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomPlaylistConsommation'
+        '201':
+          description: Created custom playlist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomPlaylistConsommation'
+        '400':
+          description: Given data on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested custom playlist does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The given document with the attributes repository, ref and version already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /consommation/repository/{repository}/custom-playlists/count:
+    get:
+      tags:
+      - customPlaylistsConsommation
+      summary: Get count of custom playlists consommation by state
+      description: Get count of custom playlists consommation by state published, archived and draft
+      operationId: countCustomPlaylistConsommation
+      security:
+      - token: []
+      x-exegesis-controller: custom-playlists-consommation
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-digital@cockpitRecette-digital
+      responses:
+        '200':
+          description: Custom playlists consommation count resumed by state
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConsommationContentCount'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    CustomPlaylistItemMap:
+      type: object
+      properties:
+        type:
+          type: string
+        engine:
+          type: string
+        ref:
+          type: string
+    CustomPlaylistStructureEdition:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        defaultLocale:
+          type: string
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CustomPlaylistItemMap'
+        populations:
+          type: array
+          items:
+            type: string
+    CustomPlaylistConsommation:
+      type: object
+      properties:
+        ongoing:
+          type: boolean
+        ref:
+          type: string
+        repository:
+          type: string
+        version:
+          type: number
+        payload:
+          $ref: '#/components/schemas/CustomPlaylistConsommationPayload'
+      example:
+        ref: cplaylist_kIIm6bPa00
+        repository: content-core@cockpitRecette-core
+        version: 1
+        state: draft
+        meta:
+          createdAt: '2016-02-09T10:31:57.702Z'
+          updatedAt: '2019-12-13T10:50:42.668Z'
+          modifiedBy: silouone
+          createdBy: stefano
+        defaultLocale: en
+        payload:
+          populations:
+          - pop1
+          - pop2
+          title: title
+          description: description
+          items:
+            dis_N12Qn2u8I:
+              engine: learner
+              ref: dis_N12Qn2u8I
+              type: level
+          locales:
+            en:
+              title: title
+              description: description
+            fr:
+              title: title
+              description: description
+            es:
+              title: title
+              description: description
+    CustomPlaylistLocales:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    CustomPlaylistConsommationPayload:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/CustomPlaylistStructureEdition'
+        locales:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomPlaylistLocales'
+    ConsommationContentCount:
+      type: object
+      properties:
+        _id:
+          type: string
+          enum:
+          - published
+          - archived
+          - draft
+        count:
+          type: number
+  securitySchemes:
+    token:
+      type: apiKey
+      name: authorization
+      in: header

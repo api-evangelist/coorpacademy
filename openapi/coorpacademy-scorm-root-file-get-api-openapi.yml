@@ -1,0 +1,81 @@
+openapi: 3.2.0
+info:
+  description: API to handle scorm resources
+  version: 1.0.0
+  title: SCORM root file get API
+servers:
+- url: https://api.coorpacademy.com/scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/scorm
+  description: staging
+- url: http://localhost:7004
+  description: local
+tags:
+- name: SCORM root file get
+paths:
+  /{scormFile}:
+    get:
+      tags:
+      - SCORM root file get
+      parameters:
+      - name: scormFile
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The SCORM zip
+        example: valid-scorm.zip
+      summary: Get Root file in scorm resource.
+      description: ''
+      operationId: scormRootFileGET
+      responses:
+        '301':
+          description: Get Root file in scorm resource.
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScormRootFileSuccess'
+        '400':
+          description: SCORM file error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScormFileError'
+        '404':
+          description: Undefined/ Internal errors.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/InvalidFileError'
+                - $ref: '#/components/schemas/NotFoundError'
+components:
+  schemas:
+    GetScormRootFileSuccess:
+      type: string
+      description: ''
+    ScormFileError:
+      description: ScormFileError
+      type: string
+      example: Unable to get presigned upload URL from S3
+    NotFoundError:
+      description: NotFoundError
+      type: string
+      example: Could not find this scorm file $scormFile
+    InvalidFileError:
+      description: InvalidFileError
+      type: string
+      example: Invalid scorm file $scormFile
+  headers:
+    Location:
+      schema:
+        type: string
+      example: /scorm/valid-scorm.zip/index_lms.html
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

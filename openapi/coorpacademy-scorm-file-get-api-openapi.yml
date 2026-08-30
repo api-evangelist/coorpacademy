@@ -1,0 +1,88 @@
+openapi: 3.2.0
+info:
+  description: API to handle scorm resources
+  version: 1.0.0
+  title: SCORM file get API
+servers:
+- url: https://api.coorpacademy.com/scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/scorm
+  description: staging
+- url: http://localhost:7004
+  description: local
+tags:
+- name: SCORM file get
+paths:
+  /{scormFile}/{path}:
+    get:
+      tags:
+      - SCORM file get
+      parameters:
+      - name: scormFile
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The SCORM zip
+        example: valid-scorm.zip
+      - name: path
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The SCORM zip
+        example: index_lms.html
+      summary: Get file in scorm resource.
+      description: ''
+      operationId: scormFileGET
+      responses:
+        '200':
+          description: Get file in scorm resource.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScormFileSuccess'
+        '400':
+          description: SCORM file error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScormFileError'
+        '404':
+          description: Undefined/ Internal errors.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/InvalidFileError'
+                - $ref: '#/components/schemas/NotFoundError'
+components:
+  schemas:
+    GetScormFileSuccess:
+      type: string
+      description: file in scorm zip, base64 encoded
+    ScormFileError:
+      description: ScormFileError
+      type: string
+      example: Unable to get presigned upload URL from S3
+    NotFoundError:
+      description: NotFoundError
+      type: string
+      example: Could not find this scorm file $scormFile
+    InvalidFileError:
+      description: InvalidFileError
+      type: string
+      example: Invalid scorm file $scormFile
+  headers:
+    Content-Type:
+      schema:
+        type: string
+      example: application/json
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

@@ -1,0 +1,47 @@
+openapi: 3.2.0
+info:
+  description: API to get pdf resources
+  version: 1.0.0
+  title: Pdf API
+servers:
+- url: https://api.coorpacademy.com/pdf
+  description: production
+- url: https://api-staging.coorpacademy.com/pdf
+  description: staging
+tags:
+- name: Pdf API
+paths:
+  /:
+    get:
+      parameters:
+      - name: url
+        in: query
+        required: true
+        schema:
+          type: string
+        description: The URL to process
+      - name: filename
+        in: query
+        required: true
+        schema:
+          type: string
+        example: filename.pdf
+      summary: Convert an URL to PDF
+      description: ''
+      operationId: pdfGET
+      responses:
+        '200':
+          description: A PDF file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: BadRequest error
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Pdf API

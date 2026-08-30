@@ -1,0 +1,56 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Media Upload API
+servers:
+- url: /api-service
+tags:
+- name: upload
+paths:
+  /medias:
+    post:
+      description: Upload a media to s3 (as multipart-encoded body)- eventually resize on fly & return s3 url
+      tags:
+      - upload
+      responses:
+        '200':
+          description: s3 url of newly uploaded media
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  upload:
+                    type: string
+                    description: S3 URL of the uploaded media
+        '500':
+          description: lambda error translates to API GW 500 error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    description: error code
+                  message:
+                    type: string
+                    description: error description
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                brand:
+                  type: string
+                  required: true
+                file:
+                  type: string
+                  format: binary
+                  required: true
+                preset:
+                  type: string
+                  required: false
+        description: File to upload
+        required: true

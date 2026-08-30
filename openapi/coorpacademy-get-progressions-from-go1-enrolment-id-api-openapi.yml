@@ -1,0 +1,277 @@
+openapi: 3.2.0
+info:
+  description: API for Coorp Scorm player content
+  version: 1.0.0
+  title: scorm content Get Progressions from go1 enrolment_id API
+servers:
+- url: https://api.coorpacademy.com/content-scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/content-scorm
+  description: staging
+- url: http://localhost:13000
+  description: local
+schemes:
+- https
+tags:
+- name: Get Progressions from go1 enrolment_id
+paths:
+  /getProgressionFromEnrolment:
+    post:
+      tags:
+      - Get Progressions from go1 enrolment_id
+      summary: Get Progression from enrolment_id
+      description: Proxy for api-progression to resolve progression based on enrollement id (go1)
+      operationId: getProgressionFromEnrolmentPOST
+      security:
+      - Authorization: []
+      requestBody:
+        description: required informations > enrolmentId / learnerId / loId
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/launchURLBody'
+            examples:
+              default:
+                value:
+                  enrolmentId: 1234
+                  loId: 1234
+                  learnerId: 1234
+      responses:
+        '200':
+          $ref: '#/components/responses/ProgressionFromEnrolmentSuccess'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  schemas:
+    content:
+      type: object
+      properties:
+        ref:
+          type: string
+        type:
+          type: string
+        version:
+          type: string
+    launchURLBody:
+      type: object
+      properties:
+        enrolmentId:
+          type: number
+        learnerId:
+          type: number
+        loId:
+          type: number
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
+    ScormProgress:
+      description: Content information related to the progression
+      type: object
+      properties:
+        completionStatus:
+          type: string
+          description: 'Scorm completion Status: complete || incomplete'
+        completionSuccess:
+          type: string
+          description: 'Completion success: passed || fail || unknown'
+        score:
+          type: number
+          description: Scorm Score (1/100)
+    progression:
+      type: object
+      properties:
+        _id:
+          type: string
+        engine:
+          type: object
+          properties:
+            ref:
+              type: string
+            version:
+              type: string
+        content:
+          $ref: '#/components/schemas/content'
+        engineOptions:
+          $ref: '#/components/schemas/EngineOptions'
+        state:
+          type: object
+          description: Actual state of the progression
+          properties:
+            requestedClues:
+              type: array
+              items:
+                type: string
+            slides:
+              type: array
+              items:
+                type: string
+            lives:
+              type: number
+            viewedResources:
+              type: array
+              items:
+                type: object
+                properties:
+                  ref:
+                    type: string
+                  resources:
+                    type: array
+                    items:
+                      type: string
+                  type:
+                    type: string
+                    enum:
+                    - discipline
+                    - chapter
+                    - level
+                    - slide
+                    - node
+                    - failure
+                    - success
+                    - audio
+                    - scorm
+                    - podcast
+                    - article
+                    - video
+                    - pdf
+                    - img
+            stars:
+              type: number
+            step:
+              type: object
+              required:
+              - current
+              properties:
+                current:
+                  type: number
+                total:
+                  type: number
+            remainingLifeRequests:
+              type: number
+            hasViewedAResourceAtThisStep:
+              type: boolean
+            allAnswers:
+              type: array
+              items:
+                type: object
+                properties:
+                  slideRef:
+                    type: string
+                  isCorrect:
+                    type:
+                    - string
+                    - 'null'
+                  answer:
+                    type: array
+                    items:
+                      type: string
+            variables:
+              $ref: '#/components/schemas/progressionStateVariables'
+            pendingSlides:
+              type: array
+              items:
+                type: string
+            content:
+              $ref: '#/components/schemas/content'
+            nextContent:
+              $ref: '#/components/schemas/content'
+            chapters:
+              type: array
+              items:
+                type: string
+            livesDisabled:
+              type: boolean
+            isCorrect:
+              type: boolean
+        meta:
+          type: object
+          properties:
+            source:
+              type: string
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            enrolmentId:
+              type: string
+    progressionStateVariables:
+      type: object
+      properties:
+        default:
+          type: string
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+  responses:
+    NotFoundError:
+      description: NotFoundError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 404
+              body: progression not found for go1 enrolmentId XXXXX
+    ProgressionFromEnrolmentSuccess:
+      description: Full progression response for the endpoint containing coorp Data, scormProgress, go1 LoId & go1 enrolmentId
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              progression:
+                $ref: '#/components/schemas/progression'
+              scormProgress:
+                $ref: '#/components/schemas/ScormProgress'
+              loId:
+                type: number
+                description: Id of the go1 learning Object
+              enrolmentId:
+                type: number
+                description: Id of the go1 enrolement identifying the coorp progression
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

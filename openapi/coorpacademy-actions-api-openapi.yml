@@ -1,0 +1,103 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy progression
+  version: 2.455.0
+  title: progression Actions API
+servers:
+- url: https://progression.coorpacademy.com/api
+tags:
+- name: actions
+paths:
+  /v1/progressions/{id}/actions:
+    get:
+      tags:
+      - actions
+      summary: Get progression's actions
+      description: Get progression's actions
+      operationId: actionsGET
+      security:
+      - authentication: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the progression
+        required: true
+        x-example: '000000000000000000000000'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get progression's actions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Action'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-swagger-router-controller: progressions
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Action:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+        payload:
+          type: object
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
+  securitySchemes:
+    authentication:
+      type: apiKey
+      name: authentication
+      in: header

@@ -1,0 +1,98 @@
+openapi: 3.2.0
+info:
+  description: API for Coorp Scorm player content
+  version: 1.0.0
+  title: scorm content Scorm ExitNode API
+servers:
+- url: https://api.coorpacademy.com/content-scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/content-scorm
+  description: staging
+- url: http://localhost:13000
+  description: local
+schemes:
+- https
+tags:
+- name: Scorm ExitNode
+paths:
+  /exit-node/{exitNodeRef}:
+    get:
+      tags:
+      - Scorm ExitNode
+      summary: Get ExitNode
+      description: ''
+      operationId: ExitNodeGET
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/exitNodeRef'
+      responses:
+        '200':
+          $ref: '#/components/responses/ExitNodeSuccess'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    exitNodeRef:
+      name: exitNodeRef
+      in: path
+      description: ref of the exitNode
+      required: true
+      schema:
+        type: string
+  responses:
+    ExitNodeSuccess:
+      description: Get exitNode
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ref:
+                type: string
+              title:
+                type: string
+              descritption:
+                type: string
+              type:
+                type: string
+              media:
+                $ref: '#/components/schemas/media'
+            example:
+              description: description
+              media:
+                mediaUrl: url
+                type: pdf
+              ref: biba-exit-node-C
+              title: title
+              type: success
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+  schemas:
+    media:
+      type: object
+      properties:
+        mediaUrl:
+          type: string
+        type:
+          type: string
+      example:
+        mediaUrl: //static.coorpacademy.com/content/CoorpAcademy/content-catalogue/cockpit-assessment/raw/teste.pdf
+        type: pdf
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

@@ -1,0 +1,162 @@
+openapi: 3.2.0
+info:
+  description: API to send emails with Mandrill
+  version: 1.0.0
+  title: email client / mooc & cockpit API
+servers:
+- url: /mail
+tags:
+- name: client / mooc & cockpit
+paths:
+  /api/v1/assistance:
+    post:
+      tags:
+      - client / mooc & cockpit
+      summary: send assistance email
+      description: ''
+      operationId: assistance
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/RecipientAddress'
+      - $ref: '#/components/parameters/UserId_'
+      - $ref: '#/components/parameters/SlideRef'
+      - $ref: '#/components/parameters/Url'
+      - $ref: '#/components/parameters/Object'
+      - $ref: '#/components/parameters/Message'
+      - $ref: '#/components/parameters/EngineRef'
+      - $ref: '#/components/parameters/UniversalRef'
+      - $ref: '#/components/parameters/ChapterId'
+      - $ref: '#/components/parameters/Module'
+      - $ref: '#/components/parameters/ExternalContentRef'
+      - $ref: '#/components/parameters/Repository'
+      - $ref: '#/components/parameters/Branch'
+      - $ref: '#/components/parameters/PlatformName'
+      - $ref: '#/components/parameters/UserName'
+      - $ref: '#/components/parameters/UserEmail'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    ExternalContentRef:
+      name: data[externalContentRef]
+      in: formData
+      required: false
+      type: string
+    UserName:
+      name: data[userName]
+      in: formData
+      required: false
+      type: string
+    Repository:
+      name: data[repository]
+      in: formData
+      required: false
+      type: string
+    ChapterId:
+      name: data[chapterId]
+      in: formData
+      required: false
+      type: string
+    UserEmail:
+      name: data[userEmail]
+      in: formData
+      required: false
+      type: string
+    UniversalRef:
+      name: data[universalRef]
+      in: formData
+      required: false
+      type: string
+    Branch:
+      name: data[branch]
+      in: formData
+      required: false
+      type: string
+    PlatformName:
+      name: data[platformName]
+      in: formData
+      required: false
+      type: string
+    Module:
+      name: data[module]
+      in: formData
+      required: false
+      type: string
+    RecipientAddress:
+      name: recipientAddress
+      in: formData
+      description: an address mail
+      required: true
+      type: string
+    UserId_:
+      name: data[userId]
+      in: formData
+      required: true
+      type: string
+    Object:
+      name: data[object]
+      in: formData
+      required: true
+      type: string
+    Message:
+      name: data[message]
+      in: formData
+      required: true
+      type: string
+    BrandId:
+      name: brandId
+      in: formData
+      description: digital, up, onboarding etc.
+      type: string
+      required: true
+    SlideRef:
+      name: data[slideRef]
+      in: formData
+      required: true
+      type: string
+    Url:
+      name: data[url]
+      in: formData
+      required: true
+      type: string
+    EngineRef:
+      name: data[engineRef]
+      in: formData
+      required: true
+      type: string
+  responses:
+    Success:
+      description: Email sent successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: object
+                properties:
+                  ResponseMetadata:
+                    type: object
+                    properties:
+                      RequestId:
+                        type: string
+                  MD5OfMessageBody:
+                    type: string
+                  MessageId:
+                    type: string
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

@@ -1,0 +1,69 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy content
+  version: 2.276.0
+  title: Content Jobs API
+servers:
+- url: /api/v2
+- url: http://localhost:3700/api/v2
+- url: https://content-staging.coorpacademy.com/api/v2
+- url: https://content.coorpacademy.com/api/v2
+host: content.coorpacademy.com
+tags:
+- name: jobs
+paths:
+  /repository/{repository}/jobs/add-locale:
+    post:
+      tags:
+      - jobs
+      summary: Add a new locale to repository resources
+      description: Add a new locale to repository resources
+      operationId: addLocale
+      security:
+      - token: []
+      x-exegesis-controller: jobs
+      requestBody:
+        description: parameters to copy the locales
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddLocaleBody'
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      responses:
+        '200':
+          description: Repository resources were updated.
+components:
+  schemas:
+    AddLocaleBody:
+      type: object
+      required:
+      - from
+      - to
+      - username
+      properties:
+        from:
+          type: string
+          description: source locale
+        to:
+          type: string
+          description: destination locale
+        username:
+          type: string
+          description: github user
+      example:
+        from: en
+        to: pt_BR
+        username: jomaora
+  securitySchemes:
+    token:
+      type: apiKey
+      name: authorization
+      in: header

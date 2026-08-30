@@ -1,0 +1,107 @@
+openapi: 3.2.0
+info:
+  description: API for Coorp Scorm player content
+  version: 1.0.0
+  title: scorm content Get Scorm Launch URL API
+servers:
+- url: https://api.coorpacademy.com/content-scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/content-scorm
+  description: staging
+- url: http://localhost:13000
+  description: local
+schemes:
+- https
+tags:
+- name: Get Scorm Launch URL
+paths:
+  /getLaunchUrl:
+    post:
+      tags:
+      - Get Scorm Launch URL
+      summary: Get Scorm Player Launch URL
+      description: 'Get Player Launch URL for GO1 : enrolment Id / Lo Id & learner ID'
+      operationId: getLaunchUrl
+      security:
+      - Authorization: []
+      requestBody:
+        description: required informations > enrolmentId / learnerId / loId
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/launchURLBody'
+            examples:
+              default:
+                value:
+                  enrolmentId: 1234
+                  loId: 1234
+                  learnerId: 1234
+      responses:
+        '200':
+          $ref: '#/components/responses/GetLaunchUrlSuccess'
+        '404':
+          $ref: '#/components/responses/LoNotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  responses:
+    GetLaunchUrlSuccess:
+      description: Response containe Launch Acces URL for the Coorp Scorm Player as well as progressionId and JWT
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              progressionId:
+                type: string
+                description: Id of the progression on Coorp Sidelinked to the enrolmentId given as input
+              launchUrl:
+                type: string
+                description: launch URL of the Coorp Scorm Player
+              JWT:
+                type: string
+                description: Jwt to grant access to the progression endpoint to check Scorm Progress
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    LoNotFoundError:
+      description: NotFoundError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 404
+              body: Given Learning Object not found or not bound to the enrolmentId/progressionId
+  schemas:
+    launchURLBody:
+      type: object
+      properties:
+        enrolmentId:
+          type: number
+        learnerId:
+          type: number
+        loId:
+          type: number
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

@@ -1,0 +1,390 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy content
+  version: 2.276.0
+  title: Content custom playlists API
+servers:
+- url: /api/v2
+- url: http://localhost:3700/api/v2
+- url: https://content-staging.coorpacademy.com/api/v2
+- url: https://content.coorpacademy.com/api/v2
+host: content.coorpacademy.com
+tags:
+- name: custom playlists
+paths:
+  /repository/{repository}/custom-playlists/{ref}:
+    get:
+      tags:
+      - custom playlists
+      summary: find one custom playlist snapshot
+      description: get one custom playlist snapshot by its ref & repository
+      operationId: findOneCustomPlaylist
+      security:
+      - token: []
+      x-exegesis-controller: custom-playlists
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Reference of the custom playlist
+        required: true
+        schema:
+          type: string
+        example: cplaylist_kIIm6bPa00
+      responses:
+        '200':
+          description: custom playlist matching the given conditions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomPlaylistEdition'
+        '400':
+          description: Given data on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested custom playlist does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /repository/{repository}/custom-playlists:
+    get:
+      tags:
+      - custom playlists
+      summary: Get a list of custom playlists snapshot
+      description: Get a list of custom playlists snapshot
+      operationId: findCustomPlaylists
+      security:
+      - token: []
+      x-exegesis-controller: custom-playlists
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: refs
+        in: query
+        schema:
+          type: string
+        description: list of custom playlists references, separated by comma
+      responses:
+        '200':
+          description: CustomPlaylists found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomPlaylistEdition'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /repository/{repository}/custom-playlists/{ref}/undo:
+    put:
+      tags:
+      - custom playlists
+      summary: Revert modification since the last publish
+      description: Revert modification since the last publish
+      operationId: undoCustomPlaylistChange
+      security:
+      - token: []
+      x-exegesis-controller: custom-playlists
+      requestBody:
+        description: partial custom playlist
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                meta:
+                  modifiedBy: userId
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Reference of the custom playlist
+        required: true
+        schema:
+          type: string
+        example: cplaylist_kIIm6bPa00
+      responses:
+        '200':
+          description: custom playlist matching the given conditions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomPlaylistEdition'
+        '400':
+          description: Given data on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested custom playlist does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /repository/{repository}/custom-playlists/upsert:
+    post:
+      tags:
+      - custom playlists
+      summary: create a custom playlist diff and upsert a snapshot
+      description: create a custom playlist diff and upsert a snapshot
+      operationId: upsertCustomPlaylist
+      security:
+      - token: []
+      x-exegesis-controller: custom-playlists
+      requestBody:
+        description: partial custom playlist
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomPlaylistEdition'
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      responses:
+        '201':
+          description: custom playlist snapshot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomPlaylistConsommation'
+        '400':
+          description: Given data on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    CustomPlaylistItemMap:
+      type: object
+      properties:
+        type:
+          type: string
+        engine:
+          type: string
+        ref:
+          type: string
+    CustomPlaylistStructureEdition:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        defaultLocale:
+          type: string
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CustomPlaylistItemMap'
+        populations:
+          type: array
+          items:
+            type: string
+    CustomPlaylistConsommation:
+      type: object
+      properties:
+        ongoing:
+          type: boolean
+        ref:
+          type: string
+        repository:
+          type: string
+        version:
+          type: number
+        payload:
+          $ref: '#/components/schemas/CustomPlaylistConsommationPayload'
+      example:
+        ref: cplaylist_kIIm6bPa00
+        repository: content-core@cockpitRecette-core
+        version: 1
+        state: draft
+        meta:
+          createdAt: '2016-02-09T10:31:57.702Z'
+          updatedAt: '2019-12-13T10:50:42.668Z'
+          modifiedBy: silouone
+          createdBy: stefano
+        defaultLocale: en
+        payload:
+          populations:
+          - pop1
+          - pop2
+          title: title
+          description: description
+          items:
+            dis_N12Qn2u8I:
+              engine: learner
+              ref: dis_N12Qn2u8I
+              type: level
+          locales:
+            en:
+              title: title
+              description: description
+            fr:
+              title: title
+              description: description
+            es:
+              title: title
+              description: description
+    CustomPlaylistLocales:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    CustomPlaylistMeta:
+      type: object
+      required:
+      - modifiedBy
+      properties:
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        modifiedBy:
+          type: string
+        createdBy:
+          type: string
+    CustomPlaylistConsommationPayload:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/CustomPlaylistStructureEdition'
+        locales:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomPlaylistLocales'
+    CustomPlaylistEdition:
+      type: object
+      required:
+      - ref
+      - repository
+      - version
+      - meta
+      properties:
+        repository:
+          type: string
+        ref:
+          type: string
+        version:
+          type: number
+        locales:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomPlaylistLocales'
+        meta:
+          $ref: '#/components/schemas/CustomPlaylistMeta'
+        state:
+          type: string
+        structure:
+          $ref: '#/components/schemas/CustomPlaylistStructureEdition'
+      example:
+        ref: cplaylist_kIIm6bPa00
+        repository: content-core@cockpitRecette-core
+        version: 1
+        meta:
+          createdAt: '2016-02-09T10:31:57.702Z'
+          updatedAt: '2019-12-13T10:50:42.668Z'
+          modifiedBy: silouone
+          createdBy: stefano
+        structure:
+          title: title
+          description: description
+          populations:
+          - pop1
+          - pop2
+          defaultLocale: en
+          items:
+            dis_N12Qn2u8I:
+              engine: learner
+              ref: dis_N12Qn2u8I
+              type: level
+              position: 1
+        locales:
+          en:
+            title: title
+            description: description
+          fr:
+            title: title
+            description: description
+          es:
+            title: title
+            description: description
+  securitySchemes:
+    token:
+      type: apiKey
+      name: authorization
+      in: header

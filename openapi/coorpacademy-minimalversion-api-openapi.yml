@@ -1,0 +1,78 @@
+openapi: 3.2.0
+info:
+  description: API to handle mobile minimal versions to be installed
+  version: 2.0.0
+  title: Coorpacademy Mobile Minimal Version API
+servers:
+- url: /mobile
+tags:
+- name: minimalVersion
+paths:
+  /api/v1/minimal-version/{key}:
+    parameters:
+    - name: key
+      in: path
+      description: Build type
+      required: true
+      schema:
+        type: string
+        enum:
+        - ios
+        - android
+    get:
+      tags:
+      - minimalVersion
+      summary: Return current version for key
+      security:
+      - Authorization: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    put:
+      tags:
+      - minimalVersion
+      summary: Return current version for key
+      security:
+      - Authorization: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        description: build version such as 1.0.0
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: string
+    Success:
+      description: Version successfully set or retrieved
+      content:
+        application/json:
+          schema:
+            type: string
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Api-Secret
+      in: header

@@ -1,0 +1,216 @@
+openapi: 3.2.0
+info:
+  description: API to send emails with Mandrill
+  version: 1.0.0
+  title: email learner / bricklane API
+servers:
+- url: /mail
+tags:
+- name: learner / bricklane
+paths:
+  /api/v1/trendingCourse:
+    post:
+      tags:
+      - learner / bricklane
+      summary: send trendingCourse email
+      description: ''
+      operationId: trendingCoursePOST
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/recommendedCourse:
+    post:
+      tags:
+      - learner / bricklane
+      summary: send recommendedCourse email
+      description: ''
+      operationId: recommendedCoursePOST
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/onboarding:
+    post:
+      tags:
+      - learner / bricklane
+      summary: send onboarding email
+      description: ''
+      operationId: onboardingPOST
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/finishCourse:
+    post:
+      tags:
+      - learner / bricklane
+      summary: send finishCourse email
+      description: ''
+      operationId: finishCoursePOST
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/CourseRef'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/doBattle:
+    post:
+      tags:
+      - learner / bricklane
+      summary: send doBattle email
+      description: ''
+      operationId: doBattlePOST
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/doBattleOnCourse:
+    post:
+      tags:
+      - learner / bricklane
+      summary: send doBattleOnCourse email
+      description: ''
+      operationId: doBattleOnCoursePOST
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/CourseRef'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/othersProgress:
+    post:
+      tags:
+      - learner / bricklane
+      summary: send othersProgress email
+      description: ''
+      operationId: othersProgressPOST
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/AnsweredQuestions'
+      - $ref: '#/components/parameters/ConnectedUsers'
+      - $ref: '#/components/parameters/ViewedLessons'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/weMissYou:
+    post:
+      tags:
+      - learner / bricklane
+      summary: send weMissYou email
+      description: ''
+      operationId: weMissYouPOST
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    ViewedLessons:
+      name: data[viewedLessons]
+      in: formData
+      required: true
+      type: number
+    CourseRef:
+      name: data[courseRef]
+      in: formData
+      required: true
+      type: string
+    AnsweredQuestions:
+      name: data[answeredQuestions]
+      in: formData
+      required: true
+      type: number
+    ConnectedUsers:
+      name: data[connectedUsers]
+      in: formData
+      required: true
+      type: number
+    UserId:
+      name: userId
+      in: formData
+      description: id from /api/v1/users/me
+      required: true
+      type: string
+    BrandId:
+      name: brandId
+      in: formData
+      description: digital, up, onboarding etc.
+      type: string
+      required: true
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
+    Success:
+      description: Email sent successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: object
+                properties:
+                  ResponseMetadata:
+                    type: object
+                    properties:
+                      RequestId:
+                        type: string
+                  MD5OfMessageBody:
+                    type: string
+                  MessageId:
+                    type: string
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

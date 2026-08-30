@@ -1,0 +1,138 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy progression
+  version: 2.455.0
+  title: progression Recommendations API
+servers:
+- url: https://progression.coorpacademy.com/api
+tags:
+- name: recommendations
+paths:
+  /v2/recommendations/hero:
+    get:
+      tags:
+      - recommendations
+      summary: Get Hero recommendation
+      description: Get Hero recommendation
+      operationId: heroRecommendationFromDynamodbGET
+      security:
+      - authentication: []
+      parameters:
+      - name: minNbSlides
+        in: query
+        required: false
+        schema:
+          type: number
+      - name: success
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: from[sortKey]
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from[partitionKey]
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: from[updatedAt]
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Get Hero recommendation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                - hits
+                properties:
+                  hits:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/HeroRecommendation'
+                  lastEvaluatedKey:
+                    type: number
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: recommendations
+components:
+  schemas:
+    HeroRecommendation:
+      type: object
+      required:
+      - success
+      - content
+      - nbSlides
+      - updatedAt
+      - progressionId
+      properties:
+        success:
+          type: boolean
+        content:
+          $ref: '#/components/schemas/Content'
+        nbSlides:
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
+        progressionId:
+          type: string
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    authentication:
+      type: apiKey
+      name: authentication
+      in: header

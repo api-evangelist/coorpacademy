@@ -1,0 +1,75 @@
+openapi: 3.2.0
+info:
+  description: API to handle scorm resources
+  version: 1.0.0
+  title: Signed S3 url/ SCORM upload API
+servers:
+- url: https://api.coorpacademy.com/scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/scorm
+  description: staging
+- url: http://localhost:7004
+  description: local
+tags:
+- name: Signed S3 url/ SCORM upload
+paths:
+  /presignedUrl:
+    post:
+      tags:
+      - Signed S3 url/ SCORM upload
+      summary: Get signed s3 url for scorm upload.
+      description: ''
+      operationId: presignedUrlPOST
+      responses:
+        '200':
+          description: Get signed s3 url for scorm upload.
+          headers:
+            Access-Control-Allow-Origin:
+              $ref: '#/components/headers/Access-Control-Allow-Origin'
+            Cache-Control:
+              $ref: '#/components/headers/Cache-Control'
+            Content-Type:
+              $ref: '#/components/headers/Content-Type'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetScormFileSuccess'
+        '400':
+          description: Undefined/ Internal errors.
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/NotDefinedError'
+                - $ref: '#/components/schemas/ScormFileError'
+components:
+  schemas:
+    GetScormFileSuccess:
+      type: string
+      description: file in scorm zip, base64 encoded
+    ScormFileError:
+      description: ScormFileError
+      type: string
+      example: Unable to get presigned upload URL from S3
+    NotDefinedError:
+      description: NotDefinedError
+      type: string
+      example: The Host header is not defined
+  headers:
+    Cache-Control:
+      schema:
+        type: string
+      example: no-cache, no-store, must-revalidate
+    Access-Control-Allow-Origin:
+      schema:
+        type: string
+      example: '*'
+    Content-Type:
+      schema:
+        type: string
+      example: application/json
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

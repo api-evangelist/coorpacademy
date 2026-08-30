@@ -1,0 +1,345 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy content
+  version: 2.276.0
+  title: Content Custom Skills API
+servers:
+- url: /api/v2
+- url: http://localhost:3700/api/v2
+- url: https://content-staging.coorpacademy.com/api/v2
+- url: https://content.coorpacademy.com/api/v2
+host: content.coorpacademy.com
+tags:
+- name: customSkills
+paths:
+  /repository/{repository}/custom-skills:
+    get:
+      tags:
+      - customSkills
+      summary: Get a list of custom skills snapshot
+      description: Get a list of custom skills snapshot
+      operationId: findCustomSkillSnapshots
+      security:
+      - token: []
+      x-exegesis-controller: custom-skills
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: state
+        in: query
+        description: state of the custom skill
+        schema:
+          type: string
+      - name: states
+        in: query
+        description: list of state of the custom skill
+        schema:
+          type: string
+      - name: ref
+        in: query
+        schema:
+          type: string
+        description: ref of the custom skill
+      - name: refs
+        in: query
+        schema:
+          type: string
+        description: list of custom skills ref, separated by comma
+      - name: contentRefs
+        in: query
+        schema:
+          type: string
+        description: refs of the items in the custom skill
+      responses:
+        '200':
+          description: CustomSkills found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomSkillEdition'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+      - customSkills
+      summary: Upsert a custom skill snapshot
+      description: Upsert a custom skill snapshot
+      operationId: upsertCustomSkillSnapshot
+      security:
+      - token: []
+      x-exegesis-controller: custom-skills
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      requestBody:
+        description: Custom skill
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomSkillEdition'
+      responses:
+        '200':
+          description: Custom skill snapshot updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomSkillEdition'
+        '201':
+          description: Custom skill snapshot created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomSkillEdition'
+        '400':
+          description: Given data on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The given document with the attributes repository, ref and version already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /repository/{repository}/custom-skills/{ref}:
+    get:
+      tags:
+      - customSkills
+      summary: Get a single custom skill snapshot by ref
+      description: Get a single custom skill snapshot by ref
+      operationId: findOneCustomSkillSnapshot
+      security:
+      - token: []
+      x-exegesis-controller: custom-skills
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ref of the custom skill
+      responses:
+        '200':
+          description: CustomSkills found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomSkillEdition'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Custom skill snapshot not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomSkillEdition'
+  /repository/{repository}/custom-skills/{ref}/undo:
+    put:
+      tags:
+      - customSkills
+      summary: Revert modification since the last publish
+      description: Revert modification since the last publish
+      operationId: undoCustomSkillsChange
+      security:
+      - token: []
+      x-exegesis-controller: custom-skills
+      requestBody:
+        description: partial custom skill
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                meta:
+                  modifiedBy: userId
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Reference of the custom skill
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: custom skill matching the given conditions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomSkillEdition'
+        '400':
+          description: Given data on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Logged in user is not allowed to modify to the given repository skill.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested custom skill does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    CustomSkillMeta:
+      type: object
+      required:
+      - modifiedBy
+      properties:
+        modifiedBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+    CustomSkillLocalesMap:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+    CustomSkillStructureEdition:
+      type: object
+      properties:
+        title:
+          type: string
+          example: title
+        description:
+          type: string
+          example: description
+        defaultLocale:
+          type: string
+          example: en
+        icon:
+          type: object
+          $ref: '#/components/schemas/CustomSkillIcon'
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CustomSkillItemMap'
+    CustomSkillEdition:
+      type: object
+      required:
+      - repository
+      - version
+      properties:
+        repository:
+          type: string
+        ref:
+          type: string
+        version:
+          type: number
+        locales:
+          type: object
+          properties:
+            lang:
+              $ref: '#/components/schemas/CustomSkillLocalesMap'
+        meta:
+          $ref: '#/components/schemas/CustomSkillMeta'
+        state:
+          type: string
+        structure:
+          $ref: '#/components/schemas/CustomSkillStructureEdition'
+    CustomSkillItemMap:
+      type: object
+      properties:
+        type:
+          type: string
+          example: type
+        ref:
+          type: string
+          example: ref
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    CustomSkillIcon:
+      type: object
+      properties:
+        color:
+          type: string
+          example: '#FFFFFF'
+        name:
+          type: string
+          example: white
+  securitySchemes:
+    token:
+      type: apiKey
+      name: authorization
+      in: header

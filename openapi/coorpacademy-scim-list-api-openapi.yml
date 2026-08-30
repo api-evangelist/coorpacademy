@@ -1,0 +1,75 @@
+openapi: 3.2.0
+info:
+  description: SCIM API to integrate identity Manager solution for a better Provisioning and deprovisioning of users
+  version: 1.0.0
+  title: Scim LIST API
+servers:
+- url: https://api.coorpacademy.com
+schemes:
+- https
+tags:
+- name: Scim LIST
+paths:
+  /{brand}/Users:
+    get:
+      tags:
+      - Scim LIST
+      summary: scim list User
+      description: ''
+      operationId: listUsers
+      security:
+      - token: []
+      parameters:
+      - $ref: '#/components/parameters/brand'
+      - $ref: '#/components/parameters/externalId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    brand:
+      name: brand
+      in: path
+      description: brandName
+      required: true
+      schema:
+        type: string
+    externalId:
+      name: externalId
+      in: query
+      description: id of the user (IDP Side)
+      schema:
+        type: string
+  responses:
+    Success:
+      description: User created successfully
+      content:
+        '*/*':
+          schema:
+            type: object
+            properties:
+              success:
+                type: object
+                properties:
+                  ResponseMetadata:
+                    type: object
+                    properties:
+                      RequestId:
+                        type: string
+                  MD5OfMessageBody:
+                    type: string
+                  MessageId:
+                    type: string
+    InternalError:
+      description: InternalError
+      content:
+        '*/*':
+          schema:
+            type: string
+  securitySchemes:
+    token:
+      type: apiKey
+      name: token
+      in: header

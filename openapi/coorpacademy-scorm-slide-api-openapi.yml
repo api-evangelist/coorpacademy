@@ -1,0 +1,237 @@
+openapi: 3.2.0
+info:
+  description: API for Coorp Scorm player content
+  version: 1.0.0
+  title: scorm content Scorm Slide API
+servers:
+- url: https://api.coorpacademy.com/content-scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/content-scorm
+  description: staging
+- url: http://localhost:13000
+  description: local
+schemes:
+- https
+tags:
+- name: Scorm Slide
+paths:
+  /slide/{slideRef}:
+    get:
+      tags:
+      - Scorm Slide
+      summary: Get Slide by ref
+      description: ''
+      operationId: getSlideGET
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/slideRef'
+      responses:
+        '200':
+          $ref: '#/components/responses/SlideSuccess'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    slideRef:
+      name: slideRef
+      in: path
+      description: id of the slide
+      required: true
+      schema:
+        type: string
+  schemas:
+    slide:
+      type: object
+      properties:
+        _id:
+          type: string
+        chapter_id:
+          type: string
+        clue:
+          type: string
+        eligibleForReview:
+          type: boolean
+        klf:
+          type: string
+        lessons:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              description:
+                type: string
+              mediaRef:
+                type: string
+              mimeType:
+                type: string
+              poster:
+                type: string
+              posters:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    width:
+                      type: number
+                    height:
+                      type: number
+                    url:
+                      type: string
+              ref:
+                type: string
+              src:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    mimeType:
+                      type: string
+                    url:
+                      type: string
+              subtitles:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    language:
+                      type: string
+                    url:
+                      type: string
+                    hls_url:
+                      type: string
+                    name:
+                      type: string
+                    default:
+                      type: boolean
+              type:
+                type: string
+              videoId:
+                type: string
+        meta:
+          type: object
+          properties:
+            createdt:
+              type: string
+            updatedAt:
+              type: string
+        question:
+          type: object
+          properties:
+            type:
+              type: string
+            header:
+              type: string
+            explanation:
+              type: string
+            content:
+              type: object
+              properties:
+                choices:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      media:
+                        type: object
+                        properties:
+                          src:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                _id:
+                                  type: string
+                                mimeType:
+                                  type: string
+                                url:
+                                  type: string
+                          posters:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                width:
+                                  type: number
+                                height:
+                                  type: number
+                                url:
+                                  type: string
+                          subtitles:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                language:
+                                  type: string
+                                url:
+                                  type: string
+                                hls_url:
+                                  type: string
+                                name:
+                                  type: string
+                                default:
+                                  type: boolean
+                      _id:
+                        type: string
+                      label:
+                        type: string
+                      value:
+                        type: string
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            text:
+                              type: string
+                            value:
+                              type: string
+                            selected:
+                              type: boolean
+                answers:
+                  type: array
+                  items:
+                    type: array
+                    items:
+                      type: string
+        tips:
+          type: string
+        authors:
+          type: array
+          items:
+            type: string
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    SlideSuccess:
+      description: Get slide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/slide'
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

@@ -1,0 +1,73 @@
+openapi: 3.2.0
+info:
+  description: API for Coorp Scorm player content
+  version: 1.0.0
+  title: scorm content Scorm Chapter API
+servers:
+- url: https://api.coorpacademy.com/content-scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/content-scorm
+  description: staging
+- url: http://localhost:13000
+  description: local
+schemes:
+- https
+tags:
+- name: Scorm Chapter
+paths:
+  /chapter/{chapterRef}:
+    get:
+      tags:
+      - Scorm Chapter
+      summary: Get Chapter
+      description: Get Chapter for scorm standalone app player
+      operationId: getChapterGET
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/chapterRef'
+      responses:
+        '200':
+          $ref: '#/components/responses/ChapterSuccess'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  responses:
+    ChapterSuccess:
+      description: Get chapter
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ref:
+                type: string
+            example:
+              universalRef: cha_1234567890
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+  parameters:
+    chapterRef:
+      name: chapterRef
+      in: path
+      description: ref of the chapter
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

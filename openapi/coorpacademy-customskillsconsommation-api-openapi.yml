@@ -1,0 +1,319 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy content
+  version: 2.276.0
+  title: Content Custom Skills Consommation API
+servers:
+- url: /api/v2
+- url: http://localhost:3700/api/v2
+- url: https://content-staging.coorpacademy.com/api/v2
+- url: https://content.coorpacademy.com/api/v2
+host: content.coorpacademy.com
+tags:
+- name: customSkillsConsommation
+paths:
+  /consommation/repository/{repository}/custom-skills:
+    get:
+      tags:
+      - customSkillsConsommation
+      summary: Get a list of custom skills consommation
+      description: Get a list of custom skills consommation
+      operationId: findCustomSkillConsommation
+      security:
+      - token: []
+      x-exegesis-controller: custom-skills-consommation
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: state
+        in: query
+        description: state of the custom skill
+        schema:
+          type: string
+      - name: states
+        in: query
+        description: states of the custom skills
+        schema:
+          type: string
+      - name: ref
+        in: query
+        schema:
+          type: string
+        description: ref of the custom skill
+      - name: refs
+        in: query
+        schema:
+          type: string
+        description: list of custom skills ref, separated by comma
+      - name: contentRefs
+        in: query
+        schema:
+          type: string
+        description: refs of contents in the custom skill
+      - name: source
+        in: query
+        description: source of the request (MOOC or CM)
+        schema:
+          type: string
+          enum:
+          - mooc
+          - cm
+      - name: custom
+        in: query
+        description: is the skill coorpacademy or not
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: CustomSkills found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomSkillConsommation'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Logged in user is not allowed to modify to the given repository skill.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /consommation/repository/{repository}/custom-skills/update:
+    post:
+      tags:
+      - customSkillsConsommation
+      summary: Upsert a custom skill consommation
+      description: Upsert a custom skill consommation
+      operationId: updateCustomSkillConsommation
+      security:
+      - token: []
+      x-exegesis-controller: custom-skills-consommation
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      requestBody:
+        description: Custom skill request Body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomSkillConsommationBodyUpsert'
+      responses:
+        '200':
+          description: Custom skill consommation updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomSkillConsommation'
+        '400':
+          description: Given data on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested custom skill not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomSkillConsommation'
+  /consommation/repository/{repository}/custom-skills/count:
+    get:
+      tags:
+      - customSkillsConsommation
+      summary: Get a count of custom skills consommation
+      description: Get a count of custom skills consommation by state published, archived and draft
+      operationId: countCustomSkillConsommation
+      security:
+      - token: []
+      x-exegesis-controller: custom-skills-consommation
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-digital@cockpitRecette-digital
+      responses:
+        '200':
+          description: Custom skills consommation count resumed by state
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConsommationContentCount'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    CustomSkillMeta:
+      type: object
+      required:
+      - modifiedBy
+      properties:
+        modifiedBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+    CustomSkillConsommation:
+      type: object
+      required:
+      - ref
+      - repository
+      - version
+      - meta
+      - state
+      - defaultLocale
+      - payload
+      properties:
+        repository:
+          type: string
+        ref:
+          type: string
+        version:
+          type: number
+        state:
+          enum:
+          - published
+          - deleted
+          - archived
+          - draft
+        defaultLocale:
+          type: string
+          example: en
+        meta:
+          $ref: '#/components/schemas/CustomSkillMeta'
+        payload:
+          $ref: '#/components/schemas/CustomSkillConsommationPayload'
+    CustomSkillConsommationPayload:
+      type: object
+      required:
+      - title
+      - description
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        items:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomSkillItems'
+        icon:
+          type: object
+          properties:
+            color:
+              type: string
+            name:
+              type: string
+        locales:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              title:
+                type: string
+              description:
+                type: string
+    CustomSkillConsommationBodyUpsert:
+      type: object
+      required:
+      - ref
+      - repository
+      - meta
+      - state
+      properties:
+        repository:
+          type: string
+        ref:
+          type: string
+        version:
+          type: number
+        state:
+          enum:
+          - published
+          - deleted
+          - archived
+          - draft
+        defaultLocale:
+          type: string
+          example: en
+        meta:
+          $ref: '#/components/schemas/CustomSkillMeta'
+        payload:
+          $ref: '#/components/schemas/CustomSkillConsommationPayload'
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    CustomSkillItems:
+      type: object
+      properties:
+        type:
+          type: string
+        ref:
+          type: string
+    ConsommationContentCount:
+      type: object
+      properties:
+        _id:
+          type: string
+          enum:
+          - published
+          - archived
+          - draft
+        count:
+          type: number
+  securitySchemes:
+    token:
+      type: apiKey
+      name: authorization
+      in: header

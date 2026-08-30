@@ -1,0 +1,76 @@
+openapi: 3.2.0
+info:
+  description: SCIM API to integrate identity Manager solution for a better Provisioning and deprovisioning of users
+  version: 1.0.0
+  title: SCIM FIND API
+servers:
+- url: https://api.coorpacademy.com
+schemes:
+- https
+tags:
+- name: SCIM FIND
+paths:
+  /{brand}/Users/{userId}:
+    get:
+      tags:
+      - SCIM FIND
+      summary: scim find User
+      description: ''
+      operationId: recommendedCoursePOST
+      security:
+      - token: []
+      parameters:
+      - $ref: '#/components/parameters/brand'
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    brand:
+      name: brand
+      in: path
+      description: brandName
+      required: true
+      schema:
+        type: string
+    userId:
+      name: userId
+      in: path
+      description: id of the user (Coorp Side)
+      required: true
+      schema:
+        type: string
+  responses:
+    Success:
+      description: User created successfully
+      content:
+        '*/*':
+          schema:
+            type: object
+            properties:
+              success:
+                type: object
+                properties:
+                  ResponseMetadata:
+                    type: object
+                    properties:
+                      RequestId:
+                        type: string
+                  MD5OfMessageBody:
+                    type: string
+                  MessageId:
+                    type: string
+    InternalError:
+      description: InternalError
+      content:
+        '*/*':
+          schema:
+            type: string
+  securitySchemes:
+    token:
+      type: apiKey
+      name: token
+      in: header

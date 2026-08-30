@@ -1,0 +1,79 @@
+openapi: 3.2.0
+info:
+  description: API to send emails with Mandrill
+  version: 1.0.0
+  title: email Coorpmanager API
+servers:
+- url: /mail
+tags:
+- name: coorpmanager
+paths:
+  /api/v1/go1Subscription:
+    post:
+      tags:
+      - coorpmanager
+      summary: send go1 subscription request
+      description: ''
+      operationId: go1Subscription
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/RecipientAddress'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    UserId:
+      name: userId
+      in: formData
+      description: id from /api/v1/users/me
+      required: true
+      type: string
+    RecipientAddress:
+      name: recipientAddress
+      in: formData
+      description: an address mail
+      required: true
+      type: string
+    BrandId:
+      name: brandId
+      in: formData
+      description: digital, up, onboarding etc.
+      type: string
+      required: true
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
+    Success:
+      description: Email sent successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: object
+                properties:
+                  ResponseMetadata:
+                    type: object
+                    properties:
+                      RequestId:
+                        type: string
+                  MD5OfMessageBody:
+                    type: string
+                  MessageId:
+                    type: string
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

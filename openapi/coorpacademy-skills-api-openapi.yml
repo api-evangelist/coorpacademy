@@ -1,0 +1,354 @@
+openapi: 3.2.0
+info:
+  title: Coorpacademy Skills API
+  version: '1.0'
+  description: 'Operations tagged skills across 2 of this provider''s published API definitions: coorpacademy-content-openapi.json, coorpacademy-review-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: /api/v2
+- url: http://localhost:3700/api/v2
+- url: https://content-staging.coorpacademy.com/api/v2
+- url: https://content.coorpacademy.com/api/v2
+- url: /review
+host: content.coorpacademy.com
+tags:
+- name: skills
+paths:
+  /repository/{repository}/skills:
+    get:
+      tags:
+      - skills
+      summary: Get some skills
+      description: Get some skills
+      operationId: skillsGET
+      security:
+      - token: []
+      x-exegesis-controller: skills
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: filter
+        in: query
+        schema:
+          type: string
+        description: name to match skills
+      - name: refs
+        in: query
+        schema:
+          type: string
+        description: list of skill references
+      responses:
+        '200':
+          description: List of skills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SkillResponse'
+    post:
+      tags:
+      - skills
+      summary: Create a new skills
+      description: Create a new skill
+      operationId: skillsPOST
+      security:
+      - token: []
+      x-exegesis-controller: skills
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      requestBody:
+        description: given skill
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillBodyRequest'
+      responses:
+        '201':
+          description: Created skill
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillResponse'
+        '400':
+          description: Skill on request is does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Logged in user is not allowed to create skill on the given repository.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Probably one or several of the skill names already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    servers:
+    - url: /api/v2
+    - url: http://localhost:3700/api/v2
+    - url: https://content-staging.coorpacademy.com/api/v2
+    - url: https://content.coorpacademy.com/api/v2
+  /repository/{repository}/skills/{ref}:
+    put:
+      tags:
+      - skills
+      summary: Update a skill
+      description: Update a skill
+      operationId: skillsPUT
+      security:
+      - token: []
+      x-exegesis-controller: skills
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Ref of the skill
+        required: true
+        schema:
+          type: string
+        example: skill_001
+      requestBody:
+        description: given skill
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillLocales'
+      responses:
+        '200':
+          description: Updated skill
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillResponse'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Logged in user is not allowed to modify to the given repository skill.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested skill does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Probably one or several of the skill names already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+      - skills
+      summary: Delete a skill
+      description: Delete a skill
+      operationId: skillsDELETE
+      security:
+      - token: []
+      x-exegesis-controller: skills
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Ref of the skill
+        required: true
+        schema:
+          type: string
+        example: skill_001
+      responses:
+        '200':
+          description: Deleted skill
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Logged in user is not allowed to delete the given repository's skill.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    servers:
+    - url: /api/v2
+    - url: http://localhost:3700/api/v2
+    - url: https://content-staging.coorpacademy.com/api/v2
+    - url: https://content.coorpacademy.com/api/v2
+  /api/v1/review/users/{userId}/skills:
+    get:
+      tags:
+      - skills
+      summary: Get skills available to be reviewed for the given user.
+      description: Get skills available to be reviewed for the given user.
+      operationId: getUserSkillsToReview
+      security:
+      - token: []
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: User identifier
+        example: 5931704711aa953900e32d43
+      responses:
+        '200':
+          description: List of available skills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example:
+                - skill_E1mUIKFir
+                - skill_Ek7p3ttjB
+    servers:
+    - url: /review
+components:
+  schemas:
+    Meta:
+      type: object
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
+    SkillResponse:
+      type: object
+      required:
+      - structure
+      - locales
+      properties:
+        structure:
+          $ref: '#/components/schemas/SkillStructure'
+        type:
+          type: string
+        locales:
+          type: object
+      example:
+        structure:
+          ref: skill_001
+          type: skill
+          name: name
+        type: skill
+        locales:
+          en:
+            name: Communication
+          es:
+            name: Communicación
+          fr:
+            name: Communication
+    SkillBodyRequest:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/SkillStructure'
+        locales:
+          $ref: '#/components/schemas/SkillLocales'
+      example:
+        structure:
+          ref: skill_001
+          name: name
+        locales:
+          fr:
+            name: Communication
+          en:
+            name: Communication
+          es:
+            name: Comunicación
+    SkillStructure:
+      type: object
+      required:
+      - ref
+      - name
+      properties:
+        ref:
+          type: string
+          description: Object structure
+        type:
+          type: string
+          description: Type object. In this case is skill
+        name:
+          type: string
+          description: Translation key for name
+        meta:
+          $ref: '#/components/schemas/Meta'
+    SkillLocales:
+      type: object
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+  securitySchemes:
+    token:
+      type: apiKey
+      name: authorization
+      in: header
+x-refined-from:
+- coorpacademy-content-openapi.json
+- coorpacademy-review-openapi.json

@@ -1,0 +1,73 @@
+openapi: 3.2.0
+info:
+  description: API for Coorp Scorm player content
+  version: 1.0.0
+  title: scorm content Scorm Level API
+servers:
+- url: https://api.coorpacademy.com/content-scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/content-scorm
+  description: staging
+- url: http://localhost:13000
+  description: local
+schemes:
+- https
+tags:
+- name: Scorm Level
+paths:
+  /level/{levelRef}:
+    get:
+      tags:
+      - Scorm Level
+      summary: Get Level
+      description: Get Level for scorm standalone app player
+      operationId: fetchLevelGET
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/levelRef'
+      responses:
+        '200':
+          $ref: '#/components/responses/LevelSuccess'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    LevelSuccess:
+      description: Fetch level
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              universalRef:
+                type: string
+            example:
+              universalRef: mod_NJVc3JLJr
+  parameters:
+    levelRef:
+      name: levelRef
+      in: path
+      description: ref of the level
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

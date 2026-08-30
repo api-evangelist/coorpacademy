@@ -1,0 +1,704 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy content
+  version: 2.276.0
+  title: Content External Courses API
+servers:
+- url: /api/v2
+- url: http://localhost:3700/api/v2
+- url: https://content-staging.coorpacademy.com/api/v2
+- url: https://content.coorpacademy.com/api/v2
+host: content.coorpacademy.com
+tags:
+- name: externalCourses
+paths:
+  /repository/{repository}/external-courses:
+    get:
+      tags:
+      - externalCourses
+      summary: Get a list of external course
+      description: Get a list of external course
+      operationId: findExternalCourses
+      security:
+      - token: []
+      x-exegesis-controller: external-course
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: refs
+        in: query
+        schema:
+          type: string
+        description: list of external course references, separated by comma
+      - name: includeDeleted
+        in: query
+        schema:
+          type: boolean
+        description: Include deleted external courses on the list
+      responses:
+        '200':
+          description: External courses found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalCourse'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+      - externalCourses
+      summary: Create a external course
+      description: Create a external course
+      operationId: createExternalCourse
+      security:
+      - token: []
+      x-exegesis-controller: external-course
+      requestBody:
+        description: External course in cockpit github format
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalCourse'
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      responses:
+        '201':
+          description: Created external course
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalCourse'
+        '400':
+          description: Given data on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The given document with the attributes repository, ref and version already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /repository/{repository}/external-courses/{ref}:
+    get:
+      tags:
+      - externalCourses
+      operationId: findOneExternalCourses
+      security:
+      - token: []
+      x-exegesis-controller: external-course
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Reference of the external course
+        required: true
+        schema:
+          type: string
+        example: ext_dis_003
+      responses:
+        '200':
+          description: Requested external course
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalCourse'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: External course not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalCourse'
+        '409':
+          description: The given document with the attributes repository, ref and version already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+      - externalCourses
+      operationId: updateExternalCourse
+      security:
+      - token: []
+      x-exegesis-controller: external-course
+      requestBody:
+        description: Modifications to be applied to the external courses
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Reference of the external course
+        required: true
+        schema:
+          type: string
+        example: ext_dis_003
+      responses:
+        '201':
+          description: External course new version
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalCourse'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+      - externalCourses
+      operationId: removeExternalCourses
+      security:
+      - token: []
+      x-exegesis-controller: external-course
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Reference of the external course
+        required: true
+        schema:
+          type: string
+        example: ext_dis_003
+      responses:
+        '204':
+          description: External course deleted
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /repository/{repository}/external-courses/external-contents:
+    get:
+      tags:
+      - externalCourses
+      summary: Get a list of external content for the given external course
+      description: Get a list of external content for the given external course
+      operationId: findExternalContentsByRefs
+      security:
+      - token: []
+      x-exegesis-controller: external-content
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: externalCoursesRefs
+        in: query
+        schema:
+          type: string
+        description: list of external course references, separated by comma
+      - name: includeDeleted
+        in: query
+        schema:
+          type: boolean
+        description: Include deleted external courses on the list
+      responses:
+        '200':
+          description: External content found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalContent'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /repository/{repository}/external-courses/{ref}/external-contents:
+    get:
+      tags:
+      - externalCourses
+      summary: Get a list of external content for the given external course
+      description: Get a list of external content for the given external course
+      operationId: findExternalContents
+      security:
+      - token: []
+      x-exegesis-controller: external-content
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Reference of the external course
+        required: true
+        schema:
+          type: string
+        example: ext_dis_003
+      responses:
+        '200':
+          description: External content found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalContent'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+      - externalCourses
+      summary: Create a external content related to an external course
+      description: Create a external content related to an external course
+      operationId: createExternalContent
+      security:
+      - token: []
+      x-exegesis-controller: external-content
+      requestBody:
+        description: given notification
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalContent'
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Reference of the external course
+        required: true
+        schema:
+          type: string
+        example: ext_dis_003
+      responses:
+        '201':
+          description: Created external content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalContent'
+        '400':
+          description: Given data on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The given document with the attributes repository, ref and version already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /repository/{repository}/external-courses/{ref}/external-contents/{externalContentRef}:
+    put:
+      tags:
+      - externalCourses
+      summary: Updates an exitsing external content related to an external course
+      description: Updates an exitsing external content related to an external course
+      operationId: updateExternalContent
+      security:
+      - token: []
+      x-exegesis-controller: external-content
+      requestBody:
+        description: Modifications to be applied to the external content
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Reference of the external course
+        required: true
+        schema:
+          type: string
+        example: ext_dis_003
+      - name: externalContentRef
+        in: path
+        description: Reference of the external content
+        required: true
+        schema:
+          type: string
+        example: ext_cont_003
+      responses:
+        '201':
+          description: External content updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalContent'
+        '400':
+          description: Given data on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The given document with the attributes repository, ref and version already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+      - externalCourses
+      summary: Deletes an exitsing external content related to an external course
+      description: Deletes an exitsing external content related to an external course
+      operationId: removeExternalContent
+      security:
+      - token: []
+      x-exegesis-controller: external-content
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: ref
+        in: path
+        description: Reference of the external course
+        required: true
+        schema:
+          type: string
+        example: ext_dis_003
+      - name: externalContentRef
+        in: path
+        description: Reference of the external content
+        required: true
+        schema:
+          type: string
+        example: ext_cont_003
+      responses:
+        '204':
+          description: External content deleted
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    MetaVersion:
+      type: object
+      required:
+      - createdBy
+      - modifiedBy
+      properties:
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        modifiedBy:
+          type: string
+        createdBy:
+          type: string
+        taggedNewUntil:
+          type: string
+          format: date-time
+        isoCore:
+          type: boolean
+        coreBranch:
+          type: string
+          description: External Course's reference that belongs the current external content
+    ExternalContent:
+      type: object
+      properties:
+        parent:
+          type: string
+          description: External Course's reference that belongs the current external content
+        structure:
+          type: object
+          properties:
+            meta:
+              $ref: '#/components/schemas/MetaVersion'
+            ref:
+              type: string
+              description: identifier
+            universalRef:
+              type: string
+              description: identifier
+            externalRef:
+              type: string
+              description: identifier on external partner
+            app_token:
+              type: string
+              description: app token (for 7shape courses)
+            hideCompleteButton:
+              type: boolean
+            type:
+              type: string
+            order:
+              type: number
+            stars:
+              type: number
+            duration:
+              type: number
+            src:
+              type: object
+              properties:
+                mimeType:
+                  type: string
+                url:
+                  type: string
+        version:
+          type: string
+        locales:
+          type: object
+      example:
+        structure:
+          meta:
+            createdAt: '2016-02-09T10:31:57.702Z'
+            updatedAt: '2019-12-13T10:50:42.668Z'
+            isoCore: false
+            modifiedBy: silouone
+            createdBy: LaurenceMD
+            externalCourses:
+            - ext_dis_41LQRYbi
+          hideCompleteButton: false
+          app_token: 86fb63f94a2615b40c8fa0a7bc1c40c2
+          ref: ext_cont_41-G-7RtWo
+          universalRef: ext_cont_41-G-7RtWo
+          type: scorm
+          order: 1
+          stars: 10
+          duration: 20
+          src:
+            mimeType: application/zip
+            url: url
+          version: '1'
+        locales:
+          en:
+            url: https://s3-eu-west-1.amazonaws.com/scorm/solar_system_en.zip
+          fr:
+            url: https://s3-eu-west-1.amazonaws.com/scorm/solar_system_fr.zip
+    ExternalCourse:
+      type: object
+      properties:
+        _deleted:
+          type: boolean
+        structure:
+          type: object
+          properties:
+            meta:
+              $ref: '#/components/schemas/MetaVersion'
+            ref:
+              type: string
+              description: course identifier
+            universalRef:
+              type: string
+              description: identifier
+            hidden:
+              type: boolean
+            name:
+              type: string
+            position:
+              type: number
+            partners:
+              type: array
+              items:
+                type: string
+            skills:
+              type: array
+              items:
+                type: string
+            thematiques:
+              type: array
+              items:
+                type: string
+            version:
+              type: string
+            cover:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: Course desription
+                poster:
+                  type:
+                  - string
+                  - 'null'
+                resource:
+                  type:
+                  - string
+                  - 'null'
+                  description: Course video
+                media:
+                  type:
+                  - object
+                  - 'null'
+                  properties:
+                    mediaUrl:
+                      type: string
+                      description: Media url
+                    mimeType:
+                      type: string
+                      description: Media mimeType
+                    type:
+                      type: string
+                      description: Media type
+            disableLocalesFallback:
+              type: boolean
+        locales:
+          type: object
+      example:
+        structure:
+          ref: ext_dis_41LQRYbi
+          universalRef: ext_dis_41LQRYbi
+          hidden: false
+          name: name
+          position: 0
+          partners: []
+          acquiredSkills:
+          - skill_VyP8vXl5We
+          - skill_Ey6Iw7lqZg
+          - skill_4JePwQgcbe
+          skills:
+          - skill_Ekp8mtR3H
+          thematiques: []
+          partnershipType: custom
+          disableLocalesFallback: false
+          states:
+            fr:
+              edition: draft
+            en:
+              edition: validate
+          meta:
+            createdAt: '2016-02-09T10:31:57.702Z'
+            updatedAt: '2019-12-13T10:50:42.668Z'
+            isoCore: false
+            coreBranch: null
+            modifiedBy: silouone
+            createdBy: LaurenceMD
+          version: '1'
+          cover:
+            description: description
+            poster: med_413YKSsqQ
+            resource: 'med_413YKSsqQ '
+        locales:
+          en:
+            name: Solar System
+            description: Course description
+            skill_4JePwQgcbe: Explain what are the key missions of data scientists and data engineers
+            skill_Ey6Iw7lqZg: Describe how data science empowers businesses
+            skill_VyP8vXl5We: List the differences between data scientists and data engineers
+          fr:
+            name: Système solaire
+            description: Description de cours
+            skill_4JePwQgcbe: Expliquer quelles sont les missions clés des data scientists et des data engineers
+            skill_Ey6Iw7lqZg: Saisir l'importance de la science des données pour les entreprises
+            skill_VyP8vXl5We: Citer les différences entre les data scientists et les data engineers
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+  securitySchemes:
+    token:
+      type: apiKey
+      name: authorization
+      in: header

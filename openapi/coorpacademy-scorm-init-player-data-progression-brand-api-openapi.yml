@@ -1,0 +1,221 @@
+openapi: 3.2.0
+info:
+  description: API for Coorp Scorm player content
+  version: 1.0.0
+  title: scorm content Scorm init player data (progression & brand) API
+servers:
+- url: https://api.coorpacademy.com/content-scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/content-scorm
+  description: staging
+- url: http://localhost:13000
+  description: local
+schemes:
+- https
+tags:
+- name: Scorm init player data (progression & brand)
+paths:
+  /init-player/{contentRef}:
+    get:
+      tags:
+      - Scorm init player data (progression & brand)
+      summary: get Iniut Data for player (progression & brand)
+      description: GET init data for scorm standalone app player
+      operationId: getInitPlayer
+      security:
+      - Authorization: []
+      parameters:
+      - in: path
+        name: contentRef
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/InitPlayerSuccess'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  schemas:
+    content:
+      type: object
+      properties:
+        ref:
+          type: string
+        type:
+          type: string
+        version:
+          type: string
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
+    progression:
+      type: object
+      properties:
+        _id:
+          type: string
+        engine:
+          type: object
+          properties:
+            ref:
+              type: string
+            version:
+              type: string
+        content:
+          $ref: '#/components/schemas/content'
+        engineOptions:
+          $ref: '#/components/schemas/EngineOptions'
+        state:
+          type: object
+          description: Actual state of the progression
+          properties:
+            requestedClues:
+              type: array
+              items:
+                type: string
+            slides:
+              type: array
+              items:
+                type: string
+            lives:
+              type: number
+            viewedResources:
+              type: array
+              items:
+                type: object
+                properties:
+                  ref:
+                    type: string
+                  resources:
+                    type: array
+                    items:
+                      type: string
+                  type:
+                    type: string
+                    enum:
+                    - discipline
+                    - chapter
+                    - level
+                    - slide
+                    - node
+                    - failure
+                    - success
+                    - audio
+                    - scorm
+                    - podcast
+                    - article
+                    - video
+                    - pdf
+                    - img
+            stars:
+              type: number
+            step:
+              type: object
+              required:
+              - current
+              properties:
+                current:
+                  type: number
+                total:
+                  type: number
+            remainingLifeRequests:
+              type: number
+            hasViewedAResourceAtThisStep:
+              type: boolean
+            allAnswers:
+              type: array
+              items:
+                type: object
+                properties:
+                  slideRef:
+                    type: string
+                  isCorrect:
+                    type:
+                    - string
+                    - 'null'
+                  answer:
+                    type: array
+                    items:
+                      type: string
+            variables:
+              $ref: '#/components/schemas/progressionStateVariables'
+            pendingSlides:
+              type: array
+              items:
+                type: string
+            content:
+              $ref: '#/components/schemas/content'
+            nextContent:
+              $ref: '#/components/schemas/content'
+            chapters:
+              type: array
+              items:
+                type: string
+            livesDisabled:
+              type: boolean
+            isCorrect:
+              type: boolean
+        meta:
+          type: object
+          properties:
+            source:
+              type: string
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            enrolmentId:
+              type: string
+    progressionStateVariables:
+      type: object
+      properties:
+        default:
+          type: string
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+  responses:
+    InitPlayerSuccess:
+      description: Get init Player data (progression & brand)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/progression'
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

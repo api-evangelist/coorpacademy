@@ -1,0 +1,546 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy content
+  version: 2.276.0
+  title: Content Scripts API
+servers:
+- url: /api/v2
+- url: http://localhost:3700/api/v2
+- url: https://content-staging.coorpacademy.com/api/v2
+- url: https://content.coorpacademy.com/api/v2
+host: content.coorpacademy.com
+tags:
+- name: scripts
+paths:
+  /scripts:
+    get:
+      tags:
+      - scripts
+      summary: get all script
+      description: get all script
+      operationId: scriptsGETAll
+      security:
+      - token: []
+      x-exegesis-controller: scripts
+      parameters:
+      - name: videoId
+        in: query
+        required: false
+        description: id of the video
+        schema:
+          type: string
+        example: videoId
+      - name: ref
+        in: query
+        required: false
+        description: Ref of the script
+        schema:
+          type: string
+        example: ref_subtitle_01
+      - name: count
+        in: query
+        schema:
+          type: boolean
+      - name: repository
+        in: query
+        description: search script based on repository
+        schema:
+          type: string
+        example: repo@core
+      - name: skip
+        in: query
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: get a script
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptResponse'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /scripts/video:
+    post:
+      tags:
+      - scripts
+      summary: post a script
+      description: post a script
+      operationId: scriptsPOST
+      security:
+      - token: []
+      x-exegesis-controller: scripts
+      requestBody:
+        description: given script object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScriptBodyRequest'
+      responses:
+        '201':
+          description: post a script
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptResponse'
+        '400':
+          description: Script on request is not well formatted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Probably one or several of the script names already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /scripts/video/{videoId}:
+    get:
+      tags:
+      - scripts
+      summary: get a script
+      description: get a script
+      operationId: scriptsGET
+      security:
+      - token: []
+      x-exegesis-controller: scripts
+      parameters:
+      - name: videoId
+        in: path
+        description: id of the video
+        required: true
+        schema:
+          type: string
+        example: videoId
+      responses:
+        '200':
+          description: get a script
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptResponse'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested script does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+      - scripts
+      summary: Delete a script object
+      description: Delete a script
+      operationId: scriptsCLEAN
+      security:
+      - token: []
+      x-exegesis-controller: scripts
+      parameters:
+      - name: videoId
+        in: path
+        description: id of the video
+        required: true
+        schema:
+          type: string
+        example: videoId
+      responses:
+        '200':
+          description: The script for the given videoId was deleted
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /scripts/video/{videoId}/lang/{lang}:
+    put:
+      tags:
+      - scripts
+      summary: update a script
+      description: update a script
+      operationId: scriptsPUT
+      security:
+      - token: []
+      x-exegesis-controller: scripts
+      parameters:
+      - name: videoId
+        in: path
+        description: Ref of the media
+        required: true
+        schema:
+          type: string
+        example: rfnl6OCB
+      - name: lang
+        in: path
+        required: true
+        description: lang of the scriptUrl
+        schema:
+          type: string
+        example: en
+      requestBody:
+        description: given script url
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScriptBodyRequestPut'
+      responses:
+        '200':
+          description: update a script
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptResponse'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested script does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+      - scripts
+      summary: Delete the script information for the given language
+      description: Delete the script information for the given language
+      operationId: scriptsLangDELETE
+      security:
+      - token: []
+      x-exegesis-controller: scripts
+      parameters:
+      - name: videoId
+        in: path
+        description: id of the video
+        required: true
+        schema:
+          type: string
+        example: videoId
+      - name: lang
+        in: path
+        description: lang of the locales to delete
+        required: true
+        schema:
+          type: string
+        example: en
+      responses:
+        '200':
+          description: The script updated after cleaning.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptResponse'
+        '204':
+          description: Nothing when no script left for any language after clean.
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested script does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /scripts/video/{videoId}/lang/{lang}/upsert:
+    post:
+      tags:
+      - scripts
+      summary: Creates a script or updates it if it exists already.
+      description: Creates a script or updates it if it exists already.
+      operationId: scriptsUPSERT
+      security:
+      - token: []
+      x-exegesis-controller: scripts
+      parameters:
+      - name: videoId
+        in: path
+        description: jwplayer id of the media
+        required: true
+        schema:
+          type: string
+        example: rfnl6OCB
+      - name: lang
+        in: path
+        required: true
+        description: lang of the scriptUrl
+        schema:
+          type: string
+        example: en
+      requestBody:
+        description: given script object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScriptBodyRequest'
+      responses:
+        '200':
+          description: When the script was already in the database and was updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptResponse'
+        '201':
+          description: When the script is new and was created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptResponse'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested script does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Probably one or several of the script names already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ScriptLocales:
+      type: object
+      properties:
+        scriptUrl:
+          type: string
+          description: Script url on aws s3
+        srtUrl:
+          type: string
+          description: Srt url on aws s3
+        jwTrackId:
+          type: string
+          description: Track key on jw player
+    ScriptResponse:
+      type: object
+      required:
+      - structure
+      - locales
+      - videoId
+      - repository
+      properties:
+        structure:
+          $ref: '#/components/schemas/ScriptStructure'
+        locales:
+          $ref: '#/components/schemas/ScriptLocales'
+        videoId:
+          type: string
+          description: id of the video
+        repository:
+          type: string
+          description: repository of the video
+      example:
+        structure:
+          ref: sub_123
+          states:
+            en:
+              edition: validate
+              published: true
+              original: true
+              authot:
+                state: success
+                progression: 100
+            fr:
+              edition: validate
+              published: true
+              original: true
+              authot:
+                state: success
+                progression: 100
+        videoId: videoId
+        repository: repo-core
+        locales:
+          en:
+            scriptUrl: srtUrl
+            srtUrl: strUrl
+            jwTrackId: id_track_en
+          es:
+            scriptUrl: srtUrl
+            srtUrl: strUrl
+            jwTrackId: id_track_es
+          fr:
+            scriptUrl: srtUrl
+            srtUrl: strUrl
+            jwTrackId: id_track_fr
+    Meta:
+      type: object
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
+    ScriptBodyRequest:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/ScriptStructure'
+        locales:
+          $ref: '#/components/schemas/ScriptLocales'
+        videoId:
+          type: string
+          description: id of the video
+        repository:
+          type: string
+          description: repository of the script
+      example:
+        structure:
+          ref: ref_subtitle_01
+          states:
+            fr:
+              published: false
+              edition: validate
+              original: true
+              authot:
+                state: success
+                progression: 100
+            en:
+              published: true
+              edition: validate
+              original: true
+              authot:
+                state: success
+                progression: 100
+            es:
+              published: false
+              edition: validate
+              original: true
+              authot:
+                state: success
+                progression: 100
+        videoId: videoId
+        repository: repo-core
+        locales:
+          fr:
+            scriptUrl: url1
+            srtUrl: srtUrl
+            jwTrackId: id_track_fr
+          en:
+            scriptUrl: url2
+            srtUrl: srtUrl
+            jwTrackId: id_track_en
+          es:
+            scriptUrl: url3
+            srtUrl: srtUrl
+            jwTrackId: id_track_es
+    ScriptStructure:
+      type: object
+      properties:
+        ref:
+          type: string
+          description: subtitleRef
+        states:
+          type: object
+          description: States of publication, transcription, progression transcription and edition by lang
+          additionalProperties:
+            type: object
+            properties:
+              published:
+                type: boolean
+                description: 'States of the publication : true or false'
+              original:
+                type: boolean
+                description: 'Authenticity criteria of the script (original if created by uploading a file on cockpit): true or false'
+              edition:
+                type: string
+                description: 'States of the edition value : draft or validate'
+              state:
+                type: string
+                description: 'state of the generation of subtitle : Success, Error, Pending'
+              progression:
+                type: number
+                description: '% of progression of the generation of the subtitle'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    ScriptBodyRequestPut:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/ScriptStructure'
+        locales:
+          $ref: '#/components/schemas/ScriptLocales'
+        videoId:
+          type: string
+          description: id of the video
+        repository:
+          type: string
+          description: repository of the video
+      example:
+        locales:
+          en:
+            scriptUrl: string
+            srtUrl: string
+            jwTrackId: id_track_en
+        structure:
+          states:
+            en:
+              edition: validate
+              published: true
+              orignal: true
+              authot:
+                state: success
+                progression: 100
+  securitySchemes:
+    token:
+      type: apiKey
+      name: authorization
+      in: header

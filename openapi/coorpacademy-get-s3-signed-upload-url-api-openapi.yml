@@ -1,0 +1,97 @@
+openapi: 3.2.0
+info:
+  description: API for Coorp Scorm player content
+  version: 1.0.0
+  title: scorm content Get S3 Signed Upload URL API
+servers:
+- url: https://api.coorpacademy.com/content-scorm
+  description: production
+- url: https://api-staging.coorpacademy.com/content-scorm
+  description: staging
+- url: http://localhost:13000
+  description: local
+schemes:
+- https
+tags:
+- name: Get S3 Signed Upload URL
+paths:
+  /presignedS3Url:
+    post:
+      tags:
+      - Get S3 Signed Upload URL
+      summary: Get Signed S3 Link to Upload Scorm Bulk File to s3 Bucket
+      description: Get S3 Link to Upload Scorm Bulk File to s3 Bucket
+      operationId: presignedS3UrlPOST
+      security:
+      - Authorization: []
+      requestBody:
+        description: Information to get s3 Url (in case of source = CM) // for go1 input are not required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/presignedS3UrlBody'
+            examples:
+              default:
+                value:
+                  repository: content-repo@cockpit-repo
+      responses:
+        '200':
+          $ref: '#/components/responses/GetSignedS3Link'
+        '500':
+          $ref: '#/components/responses/S3LinkUploadError'
+        '501':
+          $ref: '#/components/responses/NotDefinedError'
+components:
+  schemas:
+    presignedS3UrlBody:
+      description: get S3 Signed Url to upload scorm & CSV metadata
+      type: object
+      properties:
+        repository:
+          type: string
+          description: repository associated to the bulk
+  responses:
+    S3LinkUploadError:
+      description: S3LinkUploadError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: Issue while getting the S3 signed Link
+    GetSignedS3Link:
+      description: Response contain a S3 Signed Link URL to upload Scorm File and Csv Metadata File URL
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uploadZipUrl:
+                type: string
+            example:
+              uploadZipUrl: https://uploadZipUrl.com
+    NotDefinedError:
+      description: NotDefinedError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 501
+              body: InternalError because something (like host in header) was not correctly defined
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

@@ -1,0 +1,343 @@
+openapi: 3.2.0
+info:
+  description: API to send emails with Mandrill
+  version: 1.0.0
+  title: email learner / mooc API
+servers:
+- url: /mail
+tags:
+- name: learner / mooc
+paths:
+  /api/v1/finishAdaptiveCourse:
+    post:
+      tags:
+      - learner / mooc
+      summary: send finishAdaptiveCourse email
+      description: ''
+      operationId: finishAdaptiveCoursePOST
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/ProgressionId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/passwordReset:
+    post:
+      tags:
+      - learner / mooc
+      summary: send passwordReset email
+      description: ''
+      operationId: passwordResetPOST
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/ResetLink'
+      - $ref: '#/components/parameters/Expires'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/firstLoginAttempt:
+    post:
+      tags:
+      - learner / mooc
+      summary: send firstLoginAttempt email
+      description: ''
+      operationId: firstLoginAttemptPOST
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/Expires'
+      - $ref: '#/components/parameters/LoginUrl'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/scopedExportLink:
+    post:
+      tags:
+      - learner / mooc
+      summary: send scopedExportLink email
+      description: ''
+      operationId: scopedExportLinkPost
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/ExportType'
+      - $ref: '#/components/parameters/ExportFormat'
+      - $ref: '#/components/parameters/ExportDate'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/battleWaitingOpponent:
+    post:
+      tags:
+      - learner / mooc
+      summary: send battleWaitingOpponent email
+      description: ''
+      operationId: battleWaitingOpponentPost
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/BattleId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/sendBattle:
+    post:
+      tags:
+      - learner / mooc
+      summary: send sendBattle email
+      description: ''
+      operationId: sendBattle
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/BattleId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/coachUnlocked:
+    post:
+      tags:
+      - learner / mooc
+      summary: send coachUnlocked email
+      description: ''
+      operationId: coachUnlocked
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/CourseRef'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/certificationDone:
+    post:
+      tags:
+      - learner / mooc
+      summary: send certificationDone email
+      description: ''
+      operationId: certificationDone
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/GoalLabel'
+      - $ref: '#/components/parameters/Rewards'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/signupComplete:
+    post:
+      tags:
+      - learner / mooc
+      summary: send signupComplete email
+      description: ''
+      operationId: signupComplete
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/welcome:
+    post:
+      tags:
+      - learner / mooc
+      summary: send welcome email
+      description: ''
+      operationId: welcome
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/Source'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/notifyAnswerOnForum:
+    post:
+      tags:
+      - learner / mooc
+      summary: send email notifying a reply on a forum post
+      description: ''
+      operationId: notifyAnswerOnForum
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/UserId'
+      - $ref: '#/components/parameters/ParentPost'
+      - $ref: '#/components/parameters/Post'
+      - $ref: '#/components/parameters/Url'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    ExportDate:
+      name: data[date]
+      in: formData
+      required: true
+      type: string
+    Expires:
+      name: data[expires]
+      in: formData
+      required: true
+      type: string
+    BattleId:
+      name: data[battleId]
+      in: formData
+      required: true
+      type: string
+    ExportType:
+      name: data[type]
+      in: formData
+      required: true
+      type: string
+    LoginUrl:
+      name: data[loginUrl]
+      in: formData
+      required: true
+      type: string
+    GoalLabel:
+      name: data[goalLabel]
+      in: formData
+      required: true
+      type: string
+    CourseRef:
+      name: data[courseRef]
+      in: formData
+      required: true
+      type: string
+    ExportFormat:
+      name: data[format]
+      in: formData
+      required: true
+      type: string
+    ResetLink:
+      name: data[resetLink]
+      in: formData
+      required: true
+      type: string
+    Source:
+      name: data[source]
+      in: formData
+      required: false
+      type: string
+      enum:
+      - import
+      - sso
+      - signup
+    ProgressionId:
+      name: data[progressionId]
+      in: formData
+      required: true
+      type: string
+    Rewards:
+      description: Labels of rewards. ["str1", "str2", "str3"]
+      name: data[rewards]
+      in: formData
+      required: true
+      type: array
+      items:
+        type: string
+    UserId:
+      name: userId
+      in: formData
+      description: id from /api/v1/users/me
+      required: true
+      type: string
+    Post:
+      name: data[post]
+      in: formData
+      description: Id of the post containing the reply
+      required: true
+      type: string
+    BrandId:
+      name: brandId
+      in: formData
+      description: digital, up, onboarding etc.
+      type: string
+      required: true
+    ParentPost:
+      name: data[parentPost]
+      in: formData
+      description: Original post id on the forum
+      required: true
+      type: string
+    Url:
+      name: data[url]
+      in: formData
+      required: true
+      type: string
+  responses:
+    Success:
+      description: Email sent successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: object
+                properties:
+                  ResponseMetadata:
+                    type: object
+                    properties:
+                      RequestId:
+                        type: string
+                  MD5OfMessageBody:
+                    type: string
+                  MessageId:
+                    type: string
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

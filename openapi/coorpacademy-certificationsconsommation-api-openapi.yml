@@ -1,0 +1,401 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy content
+  version: 2.276.0
+  title: Content Certifications Consommation API
+servers:
+- url: /api/v2
+- url: http://localhost:3700/api/v2
+- url: https://content-staging.coorpacademy.com/api/v2
+- url: https://content.coorpacademy.com/api/v2
+host: content.coorpacademy.com
+tags:
+- name: certificationsConsommation
+paths:
+  /consommation/repository/{repository}/certifications:
+    get:
+      tags:
+      - certificationsConsommation
+      summary: Get a list of certifications
+      description: Get a list of certifications
+      operationId: findCertificationsConsommation
+      security:
+      - token: []
+      x-exegesis-controller: certifications-consommation
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-digital@cockpitRecette-digital
+      - name: refs
+        in: query
+        schema:
+          type: string
+        description: list of certification references, separated by comma
+      - name: state
+        in: query
+        description: state of the content
+        schema:
+          type: string
+          enum:
+          - published
+          - deleted
+          - archived
+          - draft
+        example: published
+      - name: states
+        in: query
+        description: list of state of the content
+        schema:
+          type: string
+        example: published,archived,deleted
+      - name: populations
+        in: query
+        schema:
+          type: string
+        description: list of certification populations, separated by comma
+        example: ALL
+      - name: contentRefs
+        in: query
+        schema:
+          type: string
+        description: list of certification contentRef (moduleRef, ExternalContentRef, chapter Ref), separated by comma
+        example: ALL
+      - name: count
+        in: query
+        description: return count of certifications
+        schema:
+          type: boolean
+        example: true,false
+      - name: from
+        in: query
+        description: first updated date
+        schema:
+          type: string
+        example: '2023-02-17T10:43:46.538Z'
+      - name: to
+        in: query
+        description: last updated date
+        schema:
+          type: string
+        example: '2023-02-17T11:43:46.538Z'
+      - name: sendSvg
+        in: query
+        description: Boolean to send the svg
+        schema:
+          type: boolean
+        example: true
+      responses:
+        '200':
+          description: Certifications found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CertificationConsommation'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /consommation/repository/{repository}/certifications/upsert:
+    post:
+      tags:
+      - certificationsConsommation
+      summary: upsert a certification
+      description: upsert a certification
+      operationId: upsertCertificationConsommation
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-core@cockpitRecette-core
+      - name: updateOrder
+        in: query
+        schema:
+          type: boolean
+        description: boolean indicating that it is a drag and drop upsert
+      security:
+      - token: []
+      x-exegesis-controller: certifications-consommation
+      requestBody:
+        description: Certification
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificationConsommation'
+      responses:
+        '200':
+          description: Updated certification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificationConsommation'
+        '201':
+          description: Created certification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificationConsommation'
+        '400':
+          description: Given data on body request does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested certification does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The given document with the attributes repository, ref and version already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /consommation/repository/{repository}/certifications/count:
+    get:
+      tags:
+      - certificationsConsommation
+      summary: Get a count of certifications
+      description: Get a count of certifications consommation by state published, archived and draft
+      operationId: countCertificationConsommation
+      security:
+      - token: []
+      x-exegesis-controller: certifications-consommation
+      parameters:
+      - name: repository
+        in: path
+        description: Ref of the repository
+        required: true
+        schema:
+          type: string
+        example: content-digital@cockpitRecette-digital
+      responses:
+        '200':
+          description: Certifications consommation count resumed by state
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConsommationContentCount'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    CertificationConditionItemsDecoder:
+      type: object
+      properties:
+        type:
+          type: string
+        engine:
+          type: string
+        ref:
+          type: string
+    StarsRewards:
+      type:
+      - 'null'
+      - object
+      required:
+      - value
+      - groups
+      properties:
+        value:
+          type: number
+        groups:
+          type: array
+          items:
+            type: string
+    CertificationStructureSnapshot:
+      type: object
+      required:
+      - title
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        defaultLocale:
+          type: string
+        condition:
+          $ref: '#/components/schemas/CertificationCondition'
+        rewards:
+          $ref: '#/components/schemas/CertificationRewards'
+        groups:
+          type: array
+          items:
+            type: string
+        populations:
+          type: array
+          items:
+            type: string
+        svg:
+          type: string
+        updated:
+          type: boolean
+    CertificationConsommationPayload:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/CertificationStructureSnapshot'
+        locales:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CertificationLocales'
+    CertificationRewards:
+      type: object
+      properties:
+        diploma:
+          $ref: '#/components/schemas/DiplomaRewards'
+        resource:
+          $ref: '#/components/schemas/ResourceRewards'
+        stars:
+          $ref: '#/components/schemas/StarsRewards'
+    DiplomaRewards:
+      type:
+      - 'null'
+      - object
+      properties:
+        logo_url:
+          type:
+          - string
+          - 'null'
+        signature_url:
+          type:
+          - string
+          - 'null'
+    ResourceRewards:
+      type:
+      - 'null'
+      - object
+      required:
+      - label
+      - file_uri
+      properties:
+        label:
+          type: string
+        file_uri:
+          type: string
+    CertificationConsommation:
+      type: object
+      properties:
+        ongoing:
+          type: boolean
+        ref:
+          type: string
+        repository:
+          type: string
+        version:
+          type: number
+        payload:
+          $ref: '#/components/schemas/CertificationConsommationPayload'
+        order_:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CertificationConsommationOrderMap'
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    CertificationLocales:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        rewards:
+          type: object
+          properties:
+            diploma:
+              type: object
+              properties:
+                signature_url:
+                  type: string
+                logo_url:
+                  type: string
+            resource:
+              type: object
+              properties:
+                label:
+                  type: string
+                file_uri:
+                  type: string
+            stars:
+              type: object
+              properties:
+                value:
+                  type: number
+                groups:
+                  type: array
+                  items:
+                    type: string
+    CertificationConsommationOrderMap:
+      type: number
+    CertificationCondition:
+      type: object
+      properties:
+        type:
+          type: string
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CertificationConditionItemsDecoder'
+        nbDone:
+          type: number
+        badge:
+          type: string
+        level:
+          type: string
+    ConsommationContentCount:
+      type: object
+      properties:
+        _id:
+          type: string
+          enum:
+          - published
+          - archived
+          - draft
+        count:
+          type: number
+  securitySchemes:
+    token:
+      type: apiKey
+      name: authorization
+      in: header

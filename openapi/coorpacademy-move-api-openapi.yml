@@ -1,0 +1,310 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy progression
+  version: 2.455.0
+  title: progression Move API
+servers:
+- url: https://progression.coorpacademy.com/api
+tags:
+- name: move
+paths:
+  /v1/progressions/{id}/move:
+    post:
+      tags:
+      - move
+      summary: Save a new move
+      description: Save a new move
+      operationId: movePOST
+      security:
+      - authentication: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the progression
+        required: true
+        x-example: '000000000000000000000000'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Updated progression
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatedProgression'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflit'
+      x-swagger-router-controller: move
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveBody'
+        required: true
+components:
+  responses:
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflit:
+      description: Conflit
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    EngineOptions:
+      type: object
+      additionalProperties: false
+      description: ''
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
+    State:
+      type: object
+      additionalProperties: false
+      required:
+      - nextContent
+      properties:
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+        isCorrect:
+          type:
+          - boolean
+          - 'null'
+        lives:
+          type: number
+        livesDisabled:
+          type: boolean
+          default: false
+        slides:
+          type: array
+          items:
+            type: string
+        pendingSlides:
+          type: array
+          items:
+            type: string
+        step:
+          type: object
+          additionalProperties: false
+          properties:
+            total:
+              type: number
+            current:
+              type: number
+        stars:
+          type: number
+        requestedClues:
+          type: array
+          items:
+            type: string
+        hasViewedAResourceAtThisStep:
+          type: boolean
+          default: false
+        viewedResources:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              type:
+                type: string
+              ref:
+                type: string
+              resources:
+                type: array
+                items:
+                  type: string
+        variables:
+          type: object
+        remainingLifeRequests:
+          type: integer
+        allAnswers:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              slideRef:
+                type: string
+              answer:
+                type: array
+                items:
+                  type: string
+              isCorrect:
+                type: boolean
+    Meta:
+      type: object
+      additionalProperties: false
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+          description: progression source
+    Engine:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
+          type: string
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
+        version:
+          type: string
+          description: Engine version
+    Instruction:
+      type: object
+      additionalProperties: false
+      required:
+      - field
+      - type
+      - value
+      properties:
+        field:
+          type: string
+        type:
+          type: string
+          enum:
+          - add
+          - set
+        value:
+          type:
+          - number
+          - boolean
+          - string
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
+    UpdatedProgression:
+      type: object
+      additionalProperties: false
+      required:
+      - _id
+      - userId
+      - content
+      - state
+      - meta
+      - engine
+      properties:
+        _id:
+          type: string
+          description: Progression identifier
+        userId:
+          type: string
+          description: User identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        state:
+          $ref: '#/components/schemas/State'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        engine:
+          $ref: '#/components/schemas/Engine'
+        engineOptions:
+          $ref: '#/components/schemas/EngineOptions'
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
+    MoveBody:
+      type: object
+      additionalProperties: false
+      required:
+      - nextContent
+      properties:
+        nextContent:
+          $ref: '#/components/schemas/Content'
+        instructions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Instruction'
+          default: null
+      example:
+        nextContent:
+          ref: 1.A1.1
+          type: slide
+  securitySchemes:
+    authentication:
+      type: apiKey
+      name: authentication
+      in: header

@@ -1,0 +1,107 @@
+openapi: 3.2.0
+info:
+  description: API to send emails with Mandrill
+  version: 1.0.0
+  title: email client / mooc API
+servers:
+- url: /mail
+tags:
+- name: client / mooc
+paths:
+  /api/v1/sapNotification:
+    post:
+      tags:
+      - client / mooc
+      summary: send sapNotification email
+      description: ''
+      operationId: sapNotification
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/RecipientAddress'
+      - $ref: '#/components/parameters/Csv'
+      - $ref: '#/components/parameters/LmsEndpoint'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+  /api/v1/signupValidation:
+    post:
+      tags:
+      - client / mooc
+      summary: send signupValidation email
+      description: ''
+      operationId: signupValidation
+      security:
+      - Authorization: []
+      parameters:
+      - $ref: '#/components/parameters/BrandId'
+      - $ref: '#/components/parameters/RecipientAddress'
+      - $ref: '#/components/parameters/UserId_'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    UserId_:
+      name: data[userId]
+      in: formData
+      required: true
+      type: string
+    RecipientAddress:
+      name: recipientAddress
+      in: formData
+      description: an address mail
+      required: true
+      type: string
+    Csv:
+      name: data[csv]
+      in: formData
+      required: false
+      type: string
+    BrandId:
+      name: brandId
+      in: formData
+      description: digital, up, onboarding etc.
+      type: string
+      required: true
+    LmsEndpoint:
+      name: data[lmsEndpoint]
+      in: formData
+      required: false
+      type: string
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
+    Success:
+      description: Email sent successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: object
+                properties:
+                  ResponseMetadata:
+                    type: object
+                    properties:
+                      RequestId:
+                        type: string
+                  MD5OfMessageBody:
+                    type: string
+                  MessageId:
+                    type: string
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      name: Authorization
+      in: header

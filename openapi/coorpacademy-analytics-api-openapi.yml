@@ -1,0 +1,882 @@
+openapi: 3.2.0
+info:
+  title: Coorpacademy Analytics API
+  version: '1.0'
+  description: 'Operations tagged analytics across 2 of this provider''s published API definitions: coorpacademy-progression-aggregations-openapi.json, coorpacademy-progression-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://aggregation-progression.coorpacademy.com/api
+- url: https://progression.coorpacademy.com/api
+host: content.coorpacademy.com
+tags:
+- name: analytics
+paths:
+  /v1/analytics/slides/{slideId}:
+    get:
+      tags:
+      - analytics
+      summary: Get slide's analytics
+      description: Get slide's analytics
+      operationId: slideAnalyticsFromDynamodbGET
+      security:
+      - authentication: []
+      parameters:
+      - name: slideId
+        in: path
+        description: Id of the slide
+        required: true
+        x-example: sli_XXXXXXXXX
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Slide's analytics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsSlide'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: analytics
+    servers:
+    - url: https://aggregation-progression.coorpacademy.com/api
+  /v1/users/{userId}/analytics/completion:
+    get:
+      tags:
+      - analytics
+      summary: Get user progression completion
+      description: Get user progression completion
+      operationId: completionFromDynamodbForUserGET
+      security:
+      - authentication: []
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user
+        required: true
+        x-example: '222222222222222222222222'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Post user progression completion
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsProgression'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-swagger-router-controller: analytics
+    post:
+      tags:
+      - analytics
+      summary: Post user progression completion
+      description: Post user progression completion
+      operationId: completionFromDynamodbForUserPOST
+      security:
+      - authentication: []
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user
+        required: true
+        x-example: '222222222222222222222222'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Post user progression completion
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsProgression'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-swagger-router-controller: analytics
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        description: 'format: engine@type@ref,engine@type@ref (ex: microlearning@chapter@cha_111,microlearning@chapter@cha_222,learner@level@mod_444)'
+    servers:
+    - url: https://aggregation-progression.coorpacademy.com/api
+  /v1/users/{userId}/analytics/slide-count:
+    get:
+      tags:
+      - analytics
+      summary: Get content's slide count
+      description: Get content's slide count
+      operationId: slideCountFromDynamodbForUserGET
+      security:
+      - authentication: []
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user
+        required: true
+        x-example: '222222222222222222222222'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Post content's slide count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsSlideCount'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-swagger-router-controller: analytics
+    post:
+      tags:
+      - analytics
+      summary: Post content's slide count
+      description: Post content's slide count
+      operationId: slideCountFromDynamodbForUserPOST
+      security:
+      - authentication: []
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user
+        required: true
+        x-example: '222222222222222222222222'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Post content's slide count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsSlideCount'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-swagger-router-controller: analytics
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        description: 'format: engine@type@ref,engine@type@ref (ex: microlearning@chapter@cha_111,microlearning@chapter@cha_222,learner@level@mod_444)'
+    servers:
+    - url: https://aggregation-progression.coorpacademy.com/api
+  /v2/analytics/completion:
+    get:
+      tags:
+      - analytics
+      summary: Get user progression completion
+      description: Get user progression completion
+      operationId: completionFromDynamodbGET
+      security:
+      - authentication: []
+      responses:
+        '200':
+          description: Get user progression completion
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsProgression'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: analytics
+    post:
+      tags:
+      - analytics
+      summary: Post user progression completion
+      description: Post user progression completion
+      operationId: completionFromDynamodbPOST
+      security:
+      - authentication: []
+      responses:
+        '200':
+          description: Post user progression completion
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsProgression'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: analytics
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        description: 'format: engine@type@ref,engine@type@ref (ex: microlearning@chapter@cha_111,microlearning@chapter@cha_222,learner@level@mod_444)'
+    servers:
+    - url: https://progression.coorpacademy.com/api
+  /v2/analytics/completion/review:
+    get:
+      tags:
+      - analytics
+      summary: Get user review progression completion
+      description: Get user review progression completion
+      operationId: reviewCompletionFromDynamodbGET
+      security:
+      - authentication: []
+      responses:
+        '200':
+          description: Get user review progression completion
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewCompletions'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: analytics
+    servers:
+    - url: https://progression.coorpacademy.com/api
+  /v2/analytics/review:
+    get:
+      tags:
+      - analytics
+      summary: Get stars from review progressions by skill
+      description: Get stars from review progressions by skill
+      operationId: starsBySkillGET
+      security:
+      - authentication: []
+      responses:
+        '200':
+          description: user stars from review progressions by skill
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsersStarsReviewBySkill'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: analytics
+    servers:
+    - url: https://progression.coorpacademy.com/api
+  /v2/analytics/slide-count:
+    get:
+      tags:
+      - analytics
+      summary: Get content's slide count
+      description: Get content's slide count
+      operationId: slideCountFromDynamodbGET
+      security:
+      - authentication: []
+      responses:
+        '200':
+          description: Post content's slide count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsSlideCount_2'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: analytics
+    post:
+      tags:
+      - analytics
+      summary: Post content's slide count
+      description: Post content's slide count
+      operationId: slideCountFromDynamodbPOST
+      security:
+      - authentication: []
+      responses:
+        '200':
+          description: Post content's slide count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsSlideCount_2'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: analytics
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        description: 'format: engine@type@ref,engine@type@ref (ex: microlearning@chapter@cha_111,microlearning@chapter@cha_222,learner@level@mod_444)'
+    servers:
+    - url: https://progression.coorpacademy.com/api
+  /v2/analytics/progression/current:
+    post:
+      tags:
+      - analytics
+      summary: Post user current state on his progressions according to the given content
+      description: Post user current state on his progressions
+      operationId: currentFromDynamodbPOST
+      security:
+      - authentication: []
+      responses:
+        '200':
+          description: Post user current state on his progressions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrentProgression'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: analytics
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        description: 'format: engine@type@ref@version,engine@type@ref (ex: microlearning@chapter@cha_111@1,microlearning@chapter@cha_222,learner@level@mod_444@2). @version is optional'
+    servers:
+    - url: https://progression.coorpacademy.com/api
+  /v2/analytics/slides/{slideId}:
+    get:
+      tags:
+      - analytics
+      summary: Get slide's analytics
+      description: Get slide's analytics
+      operationId: slideAnalyticsFromDynamodbGET
+      security:
+      - authentication: []
+      parameters:
+      - name: slideId
+        in: path
+        description: Id of the slide
+        required: true
+        x-example: sli_XXXXXXXXX
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Slide's analytics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsSlide'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: analytics
+    servers:
+    - url: https://progression.coorpacademy.com/api
+  /v2/users/{userId}/analytics/completion:
+    get:
+      tags:
+      - analytics
+      summary: Get user progression completion
+      description: Get user progression completion
+      operationId: completionFromDynamodbForUserGET
+      security:
+      - authentication: []
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user
+        required: true
+        x-example: '111111111111111111111111'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get user progression completion
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsProgression'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-swagger-router-controller: analytics
+    post:
+      tags:
+      - analytics
+      summary: Post user progression completion
+      description: Post user progression completion
+      operationId: completionFromDynamodbForUserPOST
+      security:
+      - authentication: []
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user
+        required: true
+        x-example: '111111111111111111111111'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Post user progression completion
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsProgression'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-swagger-router-controller: analytics
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        description: 'format: engine@type@ref,engine@type@ref (ex: microlearning@chapter@cha_111,microlearning@chapter@cha_222,learner@level@mod_444)'
+    servers:
+    - url: https://progression.coorpacademy.com/api
+  /v2/users/{userId}/analytics/completion/review:
+    get:
+      tags:
+      - analytics
+      summary: Get user review progression completion
+      description: Get user review progression completion
+      operationId: reviewCompletionFromDynamodbForUserGET
+      security:
+      - authentication: []
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user
+        required: true
+        x-example: '111111111111111111111111'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get user review progression completion
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewCompletions'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-swagger-router-controller: analytics
+    servers:
+    - url: https://progression.coorpacademy.com/api
+  /v2/users/{userId}/analytics/review:
+    get:
+      tags:
+      - analytics
+      summary: Get stars from review progressions by skill
+      description: Get stars from review progressions by skill
+      operationId: starsBySkillIForUserGET
+      security:
+      - authentication: []
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user
+        required: true
+        x-example: '111111111111111111111111'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User stars on review progression by skills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsersStarsReviewBySkill'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-swagger-router-controller: analytics
+    servers:
+    - url: https://progression.coorpacademy.com/api
+  /v2/users/{userId}/analytics/slide-count:
+    get:
+      tags:
+      - analytics
+      summary: Get content's slide count
+      description: Get content's slide count
+      operationId: slideCountFromDynamodbForUserGET
+      security:
+      - authentication: []
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user
+        required: true
+        x-example: '111111111111111111111111'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Post content's slide count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsSlideCount_2'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-swagger-router-controller: analytics
+    post:
+      tags:
+      - analytics
+      summary: Post content's slide count
+      description: Post content's slide count
+      operationId: slideCountFromDynamodbForUserPOST
+      security:
+      - authentication: []
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user
+        required: true
+        x-example: '111111111111111111111111'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Post content's slide count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsSlideCount_2'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-swagger-router-controller: analytics
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        description: 'format: engine@type@ref,engine@type@ref (ex: microlearning@chapter@cha_111,microlearning@chapter@cha_222,learner@level@mod_444)'
+    servers:
+    - url: https://progression.coorpacademy.com/api
+  /v2/users/{userId}/analytics/progression/current:
+    post:
+      tags:
+      - analytics
+      summary: Post user current state on his progressions according to the given content
+      description: Post user current state on his progressions
+      operationId: currentFromDynamodbForUserPOST
+      security:
+      - authentication: []
+      parameters:
+      - name: userId
+        in: path
+        description: Id of the user
+        required: true
+        x-example: '111111111111111111111111'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Post user current state on his progressions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CurrentProgression'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      x-swagger-router-controller: analytics
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        description: 'format: engine@type@ref@version,engine@type@ref (ex: microlearning@chapter@cha_111@1,microlearning@chapter@cha_222,learner@level@mod_444@2). @version is optional'
+    servers:
+    - url: https://progression.coorpacademy.com/api
+components:
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    AnalyticsSlide:
+      type: object
+      additionalProperties: false
+      properties:
+        rate:
+          type: integer
+        success:
+          type: integer
+        total:
+          type: integer
+    AnalyticsProgression:
+      type: object
+      additionalProperties: false
+      required:
+      - engine
+      - userId
+      - content
+      - current
+      - lastProgressionId
+      - success
+      - stars
+      - lives
+      - remainingLifeRequests
+      - createdAt
+      - updatedAt
+      properties:
+        engine:
+          $ref: '#/components/schemas/Engine'
+        userId:
+          type: string
+          description: User identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        current:
+          type: integer
+        lastProgressionId:
+          type: string
+          description: Progression identifier
+        success:
+          type: boolean
+        stars:
+          type: integer
+        lives:
+          type: integer
+        remainingLifeRequests:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        firstCompletionDate:
+          type: string
+          format: date-time
+        lastCompletionDate:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Engine:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
+          type: string
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+        version:
+          type: string
+          description: Engine version
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
+    AnalyticsSlideCount:
+      type: object
+      required:
+      - ref
+      - best
+      - total
+      - nbAttempts
+      properties:
+        ref:
+          type: string
+        best:
+          type: integer
+        total:
+          type: integer
+        nbAttempts:
+          type: integer
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
+    UsersStarsReviewBySkill:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - stars
+      properties:
+        content:
+          type: string
+          description: a ref to the Skill
+        stars:
+          type: integer
+          description: Number of stars earned by the User on that review
+    ReviewCompletions:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: User identifier
+        user_content:
+          type: string
+          description: user Id and content reference
+        stars:
+          type: integer
+        progressionId:
+          type: string
+          description: progression identifier
+        isDone:
+          type: boolean
+        content:
+          type: string
+        nbSlide:
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
+    Engine_2:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
+          type: string
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
+        version:
+          type: string
+          description: Engine version
+    AnalyticsSlideCount_2:
+      type: object
+      required:
+      - ref
+      - best
+      - total
+      - nbAttempts
+      - nbDone
+      properties:
+        ref:
+          type: string
+        best:
+          type: integer
+        total:
+          type: integer
+        nbAttempts:
+          type: integer
+        nbDone:
+          type: integer
+    CurrentProgression:
+      type: object
+      additionalProperties: false
+      required:
+      - engine
+      - userId
+      - content
+      - currentProgressionId
+      - inProgress
+      - createdAt
+      - updatedAt
+      properties:
+        engine:
+          $ref: '#/components/schemas/Engine_2'
+        userId:
+          type: string
+          description: User identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        currentProgressionId:
+          type: string
+          description: Progression identifier
+        inProgress:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+  securitySchemes:
+    authentication:
+      type: apiKey
+      name: authentication
+      in: header
+x-refined-from:
+- coorpacademy-progression-aggregations-openapi.json
+- coorpacademy-progression-openapi.json

@@ -1,0 +1,333 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy content
+  version: 2.276.0
+  title: Content Notifications API
+servers:
+- url: /api/v2
+- url: http://localhost:3700/api/v2
+- url: https://content-staging.coorpacademy.com/api/v2
+- url: https://content.coorpacademy.com/api/v2
+host: content.coorpacademy.com
+tags:
+- name: notifications
+paths:
+  /notifications:
+    get:
+      tags:
+      - notifications
+      summary: get all notifications
+      description: get all notifications
+      operationId: getNotifications
+      security:
+      - token: []
+      x-exegesis-controller: notifications
+      parameters:
+      - name: name
+        in: query
+        required: false
+        description: name of the notification
+        schema:
+          type: string
+        example: new_feature
+      - name: type
+        in: query
+        required: false
+        description: Ref of the notification
+        schema:
+          type: string
+          enum:
+          - feature
+          - maintenance
+          - survey
+        example: feature
+      - name: active
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: List of Notifications matching the given conditions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+      - notifications
+      summary: Create a new notification
+      description: Create a new notification
+      operationId: createNotification
+      security:
+      - token: []
+      x-exegesis-controller: notifications
+      requestBody:
+        description: given notification
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NotificationBodyRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationBodyRequest'
+      responses:
+        '201':
+          description: Created notifications
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+        '400':
+          description: Notification on request is does not match with model definition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Probably one or several of the notification names already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /notifications/{name}:
+    get:
+      tags:
+      - notifications
+      summary: get one notifications
+      description: get one notifications by its name
+      operationId: getOneNotification
+      security:
+      - token: []
+      x-exegesis-controller: notifications
+      parameters:
+      - name: name
+        in: path
+        required: true
+        description: name of the notification
+        schema:
+          type: string
+        example: new_feature
+      responses:
+        '200':
+          description: Notification matching with the given conditions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested notification does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+      - notifications
+      summary: delete one notifications
+      description: delete one notifications by its name
+      operationId: deleteNotification
+      security:
+      - token: []
+      x-exegesis-controller: notifications
+      parameters:
+      - name: name
+        in: path
+        required: true
+        description: name of the notification
+        schema:
+          type: string
+        example: new_feature
+      responses:
+        '200':
+          description: List of Notifications matching the given conditions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested notification does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+      - notifications
+      summary: update one notification
+      description: update one notification by its name
+      operationId: updateNotification
+      security:
+      - token: []
+      x-exegesis-controller: notifications
+      parameters:
+      - name: name
+        in: path
+        required: true
+        description: name of the notification
+        schema:
+          type: string
+        example: new_feature
+      requestBody:
+        description: given notification
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NotificationBodyRequestPut'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationBodyRequestPut'
+      responses:
+        '200':
+          description: The updated notification
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/Notification'
+        '401':
+          description: User not identified by the server.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Requested notification does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: The notification name already exists in the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    NotificationBodyRequestPut:
+      type: object
+      properties:
+        type:
+          type: string
+          description: type of notification
+        active:
+          type: boolean
+          description: whether the notification is active or not
+        message:
+          type: string
+          description: message of notification
+        link:
+          type: string
+          description: link to be used as CTA of the notification
+      example:
+        type: feature
+        active: true
+        message: New feature subtitles online. Click on button to see the demo!
+        link: https://video.com/feature/new
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    NotificationBodyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: name of the notifications. This name will be used as cookie name
+        type:
+          type: string
+          description: type of notification
+        active:
+          type: boolean
+          description: whether the notification is active or not
+        message:
+          type: string
+          description: message of notification
+        link:
+          type: string
+          description: link to be used as CTA of the notification
+      example:
+        name: new_feature_subtitles
+        type: feature
+        active: true
+        message: New feature subtitles online. Click on button to see the demo!
+        link: https://video.com/feature/new
+    Notification:
+      type: object
+      required:
+      - name
+      - type
+      - active
+      - message
+      properties:
+        name:
+          type: string
+          description: name (id) of the notifications. This name will be used as cookie name
+        type:
+          type: string
+          description: type of notification
+        active:
+          type: boolean
+          description: whether the notification is active or not
+        message:
+          type: string
+          description: message of notification
+        link:
+          type: string
+          description: link to be used as CTA of the notification
+      example:
+        name: new_feature_subtitles
+        type: feature
+        active: true
+        message: New feature subtitles online. Click on button to see the demo!
+        link: https://video.com/feature/new
+  securitySchemes:
+    token:
+      type: apiKey
+      name: authorization
+      in: header

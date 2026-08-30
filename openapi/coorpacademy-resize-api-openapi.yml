@@ -1,0 +1,36 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Media Resize API
+servers:
+- url: /api-service
+tags:
+- name: resize
+paths:
+  /medias:
+    get:
+      description: Get an s3 media by s3 url, eventually resized on fly
+      tags:
+      - resize
+      parameters:
+      - name: url
+        in: query
+        description: media's s3 url
+        required: true
+        schema:
+          type: string
+      - name: preset
+        in: query
+        description: predefined preset name
+        required: false
+        schema:
+          type: string
+          default: default
+      responses:
+        '200':
+          description: Media file content (binary)
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary

@@ -1,0 +1,844 @@
+openapi: 3.2.0
+info:
+  description: API to manage CoorpAcademy progression
+  version: 2.455.0
+  title: Progressions API
+servers:
+- url: https://progression.coorpacademy.com/api
+tags:
+- name: progressions
+paths:
+  /v1/progressions:
+    get:
+      tags:
+      - progressions
+      summary: Get some progressions
+      description: Get some progressions
+      operationId: progressionsGET
+      security:
+      - authentication: []
+      parameters:
+      - name: engine.ref
+        in: query
+        schema:
+          type: string
+          enum:
+          - microlearning
+          - learner
+      - name: content.ref
+        in: query
+        schema:
+          type: string
+      - name: meta.enrolmentId
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Get some progressions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Progression'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: progressions
+    post:
+      tags:
+      - progressions
+      summary: Create a new progression
+      description: Create a new progression
+      operationId: progressionsPOST
+      security:
+      - authentication: []
+      responses:
+        '201':
+          description: Created progression
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progression'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      x-swagger-router-controller: progressions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProgressionBody'
+        required: true
+  /v1/progressions/{id}:
+    get:
+      tags:
+      - progressions
+      summary: Get progression
+      description: Get progression
+      operationId: progressionGET
+      security:
+      - authentication: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the progression
+        required: true
+        x-example: '000000000000000000000000'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get progression
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progression'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-swagger-router-controller: progressions
+  /v1/progressions/{id}/actions:
+    get:
+      tags:
+      - progressions
+      summary: Get progression's actions
+      description: Get progression's actions
+      operationId: actionsGET
+      security:
+      - authentication: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the progression
+        required: true
+        x-example: '000000000000000000000000'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get progression's actions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Action'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      x-swagger-router-controller: progressions
+  /v1/progressions/{id}/move:
+    post:
+      tags:
+      - progressions
+      summary: Save a new move
+      description: Save a new move
+      operationId: movePOST
+      security:
+      - authentication: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the progression
+        required: true
+        x-example: '000000000000000000000000'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Updated progression
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatedProgression'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflit'
+      x-swagger-router-controller: move
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveBody'
+        required: true
+  /v1/progressions/{id}/answers:
+    post:
+      tags:
+      - progressions
+      summary: Save a new answer
+      description: Save a new answer
+      operationId: answersPOST
+      security:
+      - authentication: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the progression
+        required: true
+        x-example: '000000000000000000000000'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Updated progression
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatedProgression'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflit'
+      x-swagger-router-controller: answers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnswerBody'
+        required: true
+  /v1/progressions/{id}/extraLifeAccepted:
+    post:
+      tags:
+      - progressions
+      summary: Accept the extraLife
+      description: Accept the extraLife
+      operationId: extraLifeAcceptedPOST
+      security:
+      - authentication: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the progression
+        required: true
+        x-example: '000000000000000000000000'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Updated progression
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatedProgression'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflit'
+      x-swagger-router-controller: extraLifeAccepted
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtraLifeAccepted'
+        required: true
+  /v1/progressions/{id}/extraLifeRefused:
+    post:
+      tags:
+      - progressions
+      summary: Refuse the extraLife
+      description: Refuse the extraLife
+      operationId: extraLifeRefusedPOST
+      security:
+      - authentication: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the progression
+        required: true
+        x-example: '000000000000000000000000'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Updated progression
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatedProgression'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflit'
+      x-swagger-router-controller: extraLifeRefused
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtraLifeRefused'
+        required: true
+  /v1/progressions/{id}/clues:
+    post:
+      tags:
+      - progressions
+      summary: Save a clue request
+      description: Save a clue request
+      operationId: askCluePOST
+      security:
+      - authentication: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the progression
+        required: true
+        x-example: '000000000000000000000000'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Updated progression
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatedProgression'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflit'
+      x-swagger-router-controller: clues
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - content
+              properties:
+                content:
+                  $ref: '#/components/schemas/Content'
+              example:
+                content:
+                  ref: 1.A1.2
+                  type: slide
+        required: true
+  /v1/progressions/{id}/resources:
+    post:
+      tags:
+      - progressions
+      summary: Mark a resource as viewed
+      description: Mark a resource as viewed
+      operationId: viewResourcePOST
+      security:
+      - authentication: []
+      parameters:
+      - name: id
+        in: path
+        description: Id of the progression
+        required: true
+        x-example: '000000000000000000000000'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Updated progression
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatedProgression'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflit'
+      x-swagger-router-controller: resources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+              - resource
+              - content
+              properties:
+                resource:
+                  $ref: '#/components/schemas/Content'
+                content:
+                  $ref: '#/components/schemas/Content'
+              example:
+                resource:
+                  ref: video1234
+                  type: video
+                  version: '1'
+                content:
+                  ref: 1.A1
+                  type: chapter
+                  version: '1'
+        required: true
+components:
+  schemas:
+    AnswerBody:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - nextContent
+      - answer
+      properties:
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+        answer:
+          type: array
+          items:
+            type: string
+        isCorrect:
+          type:
+          - boolean
+          - 'null'
+        godMode:
+          type: boolean
+          default: false
+        instructions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Instruction'
+          default: null
+      example:
+        content:
+          ref: 1.A1.2
+          type: slide
+        nextContent:
+          ref: 1.A1.1
+          type: slide
+        isCorrect: false
+        answer:
+        - foo
+        - bar
+    Instruction:
+      type: object
+      additionalProperties: false
+      required:
+      - field
+      - type
+      - value
+      properties:
+        field:
+          type: string
+        type:
+          type: string
+          enum:
+          - add
+          - set
+        value:
+          type:
+          - number
+          - boolean
+          - string
+    EngineOptions:
+      type: object
+      additionalProperties: false
+      description: ''
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
+    ProgressionBody:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - engine
+      properties:
+        _id:
+          type: string
+          description: Progression identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        engine:
+          $ref: '#/components/schemas/Engine'
+        meta:
+          $ref: '#/components/schemas/MetaBody'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        engineOptions:
+          $ref: '#/components/schemas/EngineOptions'
+      example:
+        content:
+          ref: 1.A1
+          type: chapter
+        engine:
+          ref: microlearning
+          version: '1'
+        engineOptions:
+          livesDisabled: false
+        actions:
+        - type: move
+          payload:
+            nextContent:
+              ref: 1.A1.2
+              type: slide
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
+    MetaBody:
+      type: object
+      additionalProperties: false
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+          description: progression source
+        enrolmentId:
+          type: string
+          description: id of the go1 enrolment
+    ExtraLifeAccepted:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - nextContent
+      properties:
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+      example:
+        content:
+          ref: extraLife
+          type: node
+        nextContent:
+          ref: 1.A1.1
+          type: slide
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
+    Progression:
+      type: object
+      additionalProperties: false
+      required:
+      - _id
+      - userId
+      - content
+      - engine
+      - meta
+      - state
+      properties:
+        _id:
+          type: string
+          description: Progression identifier
+        userId:
+          type: string
+          description: User identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        engine:
+          $ref: '#/components/schemas/Engine'
+        engineOptions:
+          $ref: '#/components/schemas/EngineOptions'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        state:
+          $ref: '#/components/schemas/State'
+    ExtraLifeRefused:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - nextContent
+      properties:
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+      example:
+        content:
+          ref: extraLife
+          type: node
+        nextContent:
+          ref: failExitNode
+          type: failure
+    UpdatedProgression:
+      type: object
+      additionalProperties: false
+      required:
+      - _id
+      - userId
+      - content
+      - state
+      - meta
+      - engine
+      properties:
+        _id:
+          type: string
+          description: Progression identifier
+        userId:
+          type: string
+          description: User identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        state:
+          $ref: '#/components/schemas/State'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        engine:
+          $ref: '#/components/schemas/Engine'
+        engineOptions:
+          $ref: '#/components/schemas/EngineOptions'
+    State:
+      type: object
+      additionalProperties: false
+      required:
+      - nextContent
+      properties:
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+        isCorrect:
+          type:
+          - boolean
+          - 'null'
+        lives:
+          type: number
+        livesDisabled:
+          type: boolean
+          default: false
+        slides:
+          type: array
+          items:
+            type: string
+        pendingSlides:
+          type: array
+          items:
+            type: string
+        step:
+          type: object
+          additionalProperties: false
+          properties:
+            total:
+              type: number
+            current:
+              type: number
+        stars:
+          type: number
+        requestedClues:
+          type: array
+          items:
+            type: string
+        hasViewedAResourceAtThisStep:
+          type: boolean
+          default: false
+        viewedResources:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              type:
+                type: string
+              ref:
+                type: string
+              resources:
+                type: array
+                items:
+                  type: string
+        variables:
+          type: object
+        remainingLifeRequests:
+          type: integer
+        allAnswers:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              slideRef:
+                type: string
+              answer:
+                type: array
+                items:
+                  type: string
+              isCorrect:
+                type: boolean
+    Action:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+        payload:
+          type: object
+    Meta:
+      type: object
+      additionalProperties: false
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+          description: progression source
+    Engine:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
+          type: string
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
+        version:
+          type: string
+          description: Engine version
+    MoveBody:
+      type: object
+      additionalProperties: false
+      required:
+      - nextContent
+      properties:
+        nextContent:
+          $ref: '#/components/schemas/Content'
+        instructions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Instruction'
+          default: null
+      example:
+        nextContent:
+          ref: 1.A1.1
+          type: slide
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflit:
+      description: Conflit
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    authentication:
+      type: apiKey
+      name: authentication
+      in: header

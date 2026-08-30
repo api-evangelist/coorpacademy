@@ -1,0 +1,115 @@
+openapi: 3.2.0
+info:
+  description: SCIM API to integrate identity Manager solution for a better Provisioning and deprovisioning of users
+  version: 1.0.0
+  title: SCIM UPDATE API
+servers:
+- url: https://api.coorpacademy.com
+schemes:
+- https
+tags:
+- name: SCIM UPDATE
+paths:
+  /{brand}/Users/{userId}:
+    put:
+      tags:
+      - SCIM UPDATE
+      summary: scim update User (put)
+      description: ''
+      operationId: putUser
+      security:
+      - token: []
+      parameters:
+      - $ref: '#/components/parameters/brand'
+      - $ref: '#/components/parameters/userId'
+      requestBody:
+        description: User Body (IDP side)
+        required: true
+        content:
+          application/json+scim:
+            schema:
+              $ref: '#/components/schemas/IDPUserBodyRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    patch:
+      tags:
+      - SCIM UPDATE
+      summary: scim update User (patch)
+      description: ''
+      operationId: patchUser
+      security:
+      - token: []
+      parameters:
+      - $ref: '#/components/parameters/brand'
+      - $ref: '#/components/parameters/userId'
+      requestBody:
+        description: User Body (IDP side)
+        required: true
+        content:
+          application/json+scim:
+            schema:
+              $ref: '#/components/schemas/IDPUserBodyRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  parameters:
+    userId:
+      name: userId
+      in: path
+      description: id of the user (Coorp Side)
+      required: true
+      schema:
+        type: string
+    brand:
+      name: brand
+      in: path
+      description: brandName
+      required: true
+      schema:
+        type: string
+  schemas:
+    IDPUserBodyRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: userId
+      example:
+        id: '1234'
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        '*/*':
+          schema:
+            type: string
+    Success:
+      description: User created successfully
+      content:
+        '*/*':
+          schema:
+            type: object
+            properties:
+              success:
+                type: object
+                properties:
+                  ResponseMetadata:
+                    type: object
+                    properties:
+                      RequestId:
+                        type: string
+                  MD5OfMessageBody:
+                    type: string
+                  MessageId:
+                    type: string
+  securitySchemes:
+    token:
+      type: apiKey
+      name: token
+      in: header
