@@ -24,6 +24,20 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source:
+  - authentication
+  - rate-limits
+  - security
+  generated: '2026-09-03'
+  method: derived
 image: https://www.coorpacademy.com/assets/uploads/2025/08/cropped-Coorpacademyby-Go1-Charcoal.png
 x-type: company
 x-source: serena-portfolio
