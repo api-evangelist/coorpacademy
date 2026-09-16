@@ -1596,6 +1596,8 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
+  - PDF API
+  tags_raw:
   - Pdf API
   properties:
   - type: OpenAPI
