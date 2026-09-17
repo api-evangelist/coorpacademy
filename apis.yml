@@ -2758,54 +2758,6 @@ apis:
     url: https://api.coorpacademy.com/?urls.primaryName=api-media
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
-- aid: coorpacademy:coorpacademy-sendemail-api
-  name: Coorpacademy Send Email API
-  description: The sendEmail API from Coorpacademy — 1 operation(s) for sendemail.
-  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
-  baseURL: https://content.coorpacademy.com/api/v2
-  tags:
-  - SEND EMAIL
-  tags_raw:
-  - sendEmail
-  properties:
-  - type: OpenAPI
-    url: openapi/coorpacademy-sendemail-api-openapi.yml
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-content
-  - type: DataModel
-    url: data-model/coorpacademy-data-model.yml
-  - type: ErrorCatalog
-    url: errors/coorpacademy-problem-types.yml
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
-  - type: Authentication
-    url: authentication/coorpacademy-authentication.yml
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=scim
-  - type: Conformance
-    url: conformance/coorpacademy-conformance.yml
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-review
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-external
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-media
-  - type: APIReference
-    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
 - aid: coorpacademy:coorpacademy-signed-s3-url-bulk-scorm-upload-api
   name: Coorpacademy Signed S3 url BULK SCORM upload API
   description: >-
@@ -3009,6 +2961,52 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/coorpacademy-upload-api-openapi.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content
+  - type: DataModel
+    url: data-model/coorpacademy-data-model.yml
+  - type: ErrorCatalog
+    url: errors/coorpacademy-problem-types.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-platform
+  - type: Authentication
+    url: authentication/coorpacademy-authentication.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-progression-aggregations
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=scim
+  - type: Conformance
+    url: conformance/coorpacademy-conformance.yml
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-content-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-scorm
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mail
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-mobile
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-review
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-h5p
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-external
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-media
+  - type: APIReference
+    url: https://api.coorpacademy.com/?urls.primaryName=api-pdf
+- aid: coorpacademy:coorpacademy-send-email-api
+  name: Coorpacademy SEND EMAIL API
+  description: The SEND EMAIL API from Coorpacademy — 1 operation(s) for send email.
+  humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
+  baseURL: https://content.coorpacademy.com/api/v2
+  tags:
+  - SEND EMAIL
+  properties:
+  - type: OpenAPI
+    url: openapi/coorpacademy-send-email-api-openapi.yml
   - type: APIReference
     url: https://api.coorpacademy.com/?urls.primaryName=api-content
   - type: DataModel
