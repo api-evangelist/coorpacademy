@@ -58,7 +58,7 @@ tags:
 - User Provisioning
 - Learning Analytics
 - Skills
-- Certifications
+- Certification
 - Gamification
 - France
 - Switzerland
@@ -325,7 +325,7 @@ apis:
   humanURL: https://api.coorpacademy.com/?urls.primaryName=api-content
   baseURL: https://content.coorpacademy.com/api/v2
   tags:
-  - Certifications
+  - Certification
   tags_raw:
   - certifications
   properties:
