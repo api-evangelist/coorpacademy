@@ -6,12 +6,12 @@ info:
 servers:
 - url: /mail
 tags:
-- name: mobile
+- name: Mobile
 paths:
   /api/v1/mobileConnection:
     post:
       tags:
-      - mobile
+      - Mobile
       summary: send mobileConnection email
       description: ''
       security:
@@ -23,15 +23,16 @@ paths:
           $ref: '#/components/responses/Success'
         '500':
           $ref: '#/components/responses/InternalError'
+      operationId: postApiV1MobileConnection
+      x-operation-id-source: derived
 components:
-  parameters:
-    RecipientAddress:
-      name: recipientAddress
-      in: formData
-      description: an address mail
-      required: true
-      type: string
   responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
     Success:
       description: Email sent successfully
       content:
@@ -51,12 +52,13 @@ components:
                     type: string
                   MessageId:
                     type: string
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: string
+  parameters:
+    RecipientAddress:
+      name: recipientAddress
+      in: formData
+      description: an address mail
+      required: true
+      type: string
   securitySchemes:
     Authorization:
       type: apiKey

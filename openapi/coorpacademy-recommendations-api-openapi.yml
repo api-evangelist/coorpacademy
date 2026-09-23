@@ -6,14 +6,13 @@ info:
 servers:
 - url: https://progression.coorpacademy.com/api
 tags:
-- name: recommendations
+- name: Recommendations
 paths:
   /v2/recommendations/hero:
     get:
       tags:
-      - recommendations
+      - Recommendations
       summary: Get Hero recommendation
-      description: Get Hero recommendation
       operationId: heroRecommendationFromDynamodbGET
       security:
       - authentication: []
@@ -70,6 +69,23 @@ paths:
       x-swagger-router-controller: recommendations
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
     HeroRecommendation:
       type: object
       required:
@@ -107,23 +123,6 @@ components:
         version:
           type: string
           description: Version of the given content
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-        message:
-          type: string
   responses:
     Unauthorized:
       description: Unauthorized

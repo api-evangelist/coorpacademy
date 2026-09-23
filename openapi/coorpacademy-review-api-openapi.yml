@@ -6,14 +6,13 @@ info:
 servers:
 - url: /mail
 tags:
-- name: review
+- name: Review
 paths:
   /api/v1/skillToReview:
     post:
       tags:
-      - review
+      - Review
       summary: send skill to review email
-      description: send skill to review email
       security:
       - Authorization: []
       parameters:
@@ -24,20 +23,16 @@ paths:
           $ref: '#/components/responses/Success'
         '500':
           $ref: '#/components/responses/InternalError'
+      operationId: postApiV1SkillToReview
+      x-operation-id-source: derived
 components:
-  parameters:
-    SkillRef:
-      name: data[skillRef]
-      in: formData
-      required: true
-      type: string
-    UserId:
-      name: userId
-      in: formData
-      description: id from /api/v1/users/me
-      required: true
-      type: string
   responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
     Success:
       description: Email sent successfully
       content:
@@ -57,12 +52,18 @@ components:
                     type: string
                   MessageId:
                     type: string
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: string
+  parameters:
+    SkillRef:
+      name: data[skillRef]
+      in: formData
+      required: true
+      type: string
+    UserId:
+      name: userId
+      in: formData
+      description: id from /api/v1/users/me
+      required: true
+      type: string
   securitySchemes:
     Authorization:
       type: apiKey

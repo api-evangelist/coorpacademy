@@ -34,3 +34,7 @@ paths:
               schema:
                 type: string
                 format: binary
+      summary: Get medias
+      x-summary-source: derived
+      operationId: getMedias
+      x-operation-id-source: derived

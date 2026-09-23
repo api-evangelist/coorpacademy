@@ -33,17 +33,6 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   responses:
-    ChapterSuccess:
-      description: Get chapter
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              ref:
-                type: string
-            example:
-              universalRef: cha_1234567890
     InternalError:
       description: InternalError
       content:
@@ -58,6 +47,17 @@ components:
             example:
               statusCode: 500
               body: internal Error while resolving request
+    ChapterSuccess:
+      description: Get chapter
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ref:
+                type: string
+            example:
+              universalRef: cha_1234567890
   parameters:
     chapterRef:
       name: chapterRef

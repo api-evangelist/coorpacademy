@@ -32,15 +32,21 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  parameters:
-    exitNodeRef:
-      name: exitNodeRef
-      in: path
-      description: ref of the exitNode
-      required: true
-      schema:
-        type: string
   responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
     ExitNodeSuccess:
       description: Get exitNode
       content:
@@ -66,20 +72,6 @@ components:
               ref: biba-exit-node-C
               title: title
               type: success
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
   schemas:
     media:
       type: object
@@ -91,6 +83,14 @@ components:
       example:
         mediaUrl: //static.coorpacademy.com/content/CoorpAcademy/content-catalogue/cockpit-assessment/raw/teste.pdf
         type: pdf
+  parameters:
+    exitNodeRef:
+      name: exitNodeRef
+      in: path
+      description: ref of the exitNode
+      required: true
+      schema:
+        type: string
   securitySchemes:
     Authorization:
       type: apiKey

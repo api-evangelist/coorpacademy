@@ -17,7 +17,7 @@ paths:
     post:
       tags:
       - Signed S3 url BULK SCORM upload
-      summary: Get signed s3 url for bulk scorm upload.
+      summary: Get signed s3 url for bulk scorm upload
       description: ''
       operationId: presignedBulkUrlPOST
       security:
@@ -56,9 +56,6 @@ paths:
                 - $ref: '#/components/schemas/ScormFileError'
 components:
   schemas:
-    GetScormFileSuccess:
-      type: string
-      description: file in scorm zip, base64 encoded
     ScormFileError:
       description: ScormFileError
       type: string
@@ -67,6 +64,9 @@ components:
       description: NotDefinedError
       type: string
       example: The Host header is not defined
+    GetScormFileSuccess:
+      type: string
+      description: file in scorm zip, base64 encoded
     PresignedBulkUrlBody:
       description: InvalidMimeTypeError
       type: object
@@ -84,14 +84,14 @@ components:
           type: string
           description: file type
   headers:
-    Cache-Control:
-      schema:
-        type: string
-      example: no-cache, no-store, must-revalidate
     Access-Control-Allow-Origin:
       schema:
         type: string
       example: '*'
+    Cache-Control:
+      schema:
+        type: string
+      example: no-cache, no-store, must-revalidate
     Content-Type:
       schema:
         type: string

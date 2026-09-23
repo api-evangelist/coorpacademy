@@ -17,7 +17,6 @@ paths:
       tags:
       - customSkillsConsommation
       summary: Get a list of custom skills consommation
-      description: Get a list of custom skills consommation
       operationId: findCustomSkillConsommation
       security:
       - token: []
@@ -94,7 +93,6 @@ paths:
       tags:
       - customSkillsConsommation
       summary: Upsert a custom skill consommation
-      description: Upsert a custom skill consommation
       operationId: updateCustomSkillConsommation
       security:
       - token: []
@@ -174,6 +172,24 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     CustomSkillMeta:
       type: object
       required:
@@ -199,6 +215,51 @@ components:
       - state
       - defaultLocale
       - payload
+      properties:
+        repository:
+          type: string
+        ref:
+          type: string
+        version:
+          type: number
+        state:
+          enum:
+          - published
+          - deleted
+          - archived
+          - draft
+        defaultLocale:
+          type: string
+          example: en
+        meta:
+          $ref: '#/components/schemas/CustomSkillMeta'
+        payload:
+          $ref: '#/components/schemas/CustomSkillConsommationPayload'
+    ConsommationContentCount:
+      type: object
+      properties:
+        _id:
+          type: string
+          enum:
+          - published
+          - archived
+          - draft
+        count:
+          type: number
+    CustomSkillItems:
+      type: object
+      properties:
+        type:
+          type: string
+        ref:
+          type: string
+    CustomSkillConsommationBodyUpsert:
+      type: object
+      required:
+      - ref
+      - repository
+      - meta
+      - state
       properties:
         repository:
           type: string
@@ -249,69 +310,6 @@ components:
                 type: string
               description:
                 type: string
-    CustomSkillConsommationBodyUpsert:
-      type: object
-      required:
-      - ref
-      - repository
-      - meta
-      - state
-      properties:
-        repository:
-          type: string
-        ref:
-          type: string
-        version:
-          type: number
-        state:
-          enum:
-          - published
-          - deleted
-          - archived
-          - draft
-        defaultLocale:
-          type: string
-          example: en
-        meta:
-          $ref: '#/components/schemas/CustomSkillMeta'
-        payload:
-          $ref: '#/components/schemas/CustomSkillConsommationPayload'
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    CustomSkillItems:
-      type: object
-      properties:
-        type:
-          type: string
-        ref:
-          type: string
-    ConsommationContentCount:
-      type: object
-      properties:
-        _id:
-          type: string
-          enum:
-          - published
-          - archived
-          - draft
-        count:
-          type: number
   securitySchemes:
     token:
       type: apiKey

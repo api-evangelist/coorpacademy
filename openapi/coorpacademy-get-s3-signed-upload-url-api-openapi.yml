@@ -42,14 +42,6 @@ paths:
         '501':
           $ref: '#/components/responses/NotDefinedError'
 components:
-  schemas:
-    presignedS3UrlBody:
-      description: get S3 Signed Url to upload scorm & CSV metadata
-      type: object
-      properties:
-        repository:
-          type: string
-          description: repository associated to the bulk
   responses:
     S3LinkUploadError:
       description: S3LinkUploadError
@@ -65,17 +57,6 @@ components:
             example:
               statusCode: 500
               body: Issue while getting the S3 signed Link
-    GetSignedS3Link:
-      description: Response contain a S3 Signed Link URL to upload Scorm File and Csv Metadata File URL
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              uploadZipUrl:
-                type: string
-            example:
-              uploadZipUrl: https://uploadZipUrl.com
     NotDefinedError:
       description: NotDefinedError
       content:
@@ -90,6 +71,25 @@ components:
             example:
               statusCode: 501
               body: InternalError because something (like host in header) was not correctly defined
+    GetSignedS3Link:
+      description: Response contain a S3 Signed Link URL to upload Scorm File and Csv Metadata File URL
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uploadZipUrl:
+                type: string
+            example:
+              uploadZipUrl: https://uploadZipUrl.com
+  schemas:
+    presignedS3UrlBody:
+      description: get S3 Signed Url to upload scorm & CSV metadata
+      type: object
+      properties:
+        repository:
+          type: string
+          description: repository associated to the bulk
   securitySchemes:
     Authorization:
       type: apiKey

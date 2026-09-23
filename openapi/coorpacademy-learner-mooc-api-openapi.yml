@@ -219,13 +219,18 @@ components:
       in: formData
       required: true
       type: string
-    Expires:
-      name: data[expires]
+    GoalLabel:
+      name: data[goalLabel]
       in: formData
       required: true
       type: string
-    BattleId:
-      name: data[battleId]
+    ResetLink:
+      name: data[resetLink]
+      in: formData
+      required: true
+      type: string
+    Expires:
+      name: data[expires]
       in: formData
       required: true
       type: string
@@ -234,29 +239,32 @@ components:
       in: formData
       required: true
       type: string
-    LoginUrl:
-      name: data[loginUrl]
+    UserId:
+      name: userId
+      in: formData
+      description: id from /api/v1/users/me
+      required: true
+      type: string
+    BattleId:
+      name: data[battleId]
       in: formData
       required: true
       type: string
-    GoalLabel:
-      name: data[goalLabel]
+    BrandId:
+      name: brandId
       in: formData
-      required: true
+      description: digital, up, onboarding etc.
       type: string
-    CourseRef:
-      name: data[courseRef]
-      in: formData
       required: true
-      type: string
     ExportFormat:
       name: data[format]
       in: formData
       required: true
       type: string
-    ResetLink:
-      name: data[resetLink]
+    ParentPost:
+      name: data[parentPost]
       in: formData
+      description: Original post id on the forum
       required: true
       type: string
     Source:
@@ -268,8 +276,8 @@ components:
       - import
       - sso
       - signup
-    ProgressionId:
-      name: data[progressionId]
+    CourseRef:
+      name: data[courseRef]
       in: formData
       required: true
       type: string
@@ -281,32 +289,24 @@ components:
       type: array
       items:
         type: string
-    UserId:
-      name: userId
-      in: formData
-      description: id from /api/v1/users/me
-      required: true
-      type: string
     Post:
       name: data[post]
       in: formData
       description: Id of the post containing the reply
       required: true
       type: string
-    BrandId:
-      name: brandId
+    ProgressionId:
+      name: data[progressionId]
       in: formData
-      description: digital, up, onboarding etc.
-      type: string
-      required: true
-    ParentPost:
-      name: data[parentPost]
-      in: formData
-      description: Original post id on the forum
       required: true
       type: string
     Url:
       name: data[url]
+      in: formData
+      required: true
+      type: string
+    LoginUrl:
+      name: data[loginUrl]
       in: formData
       required: true
       type: string

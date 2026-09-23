@@ -17,7 +17,6 @@ paths:
       tags:
       - externalCourses
       summary: Get a list of external course
-      description: Get a list of external course
       operationId: findExternalCourses
       security:
       - token: []
@@ -59,7 +58,6 @@ paths:
       tags:
       - externalCourses
       summary: Create a external course
-      description: Create a external course
       operationId: createExternalCourse
       security:
       - token: []
@@ -152,6 +150,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      summary: Find one external courses
+      x-summary-source: derived
     put:
       tags:
       - externalCourses
@@ -194,6 +194,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      summary: Update external course
+      x-summary-source: derived
     delete:
       tags:
       - externalCourses
@@ -225,12 +227,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+      summary: Remove external courses
+      x-summary-source: derived
   /repository/{repository}/external-courses/external-contents:
     get:
       tags:
       - externalCourses
       summary: Get a list of external content for the given external course
-      description: Get a list of external content for the given external course
       operationId: findExternalContentsByRefs
       security:
       - token: []
@@ -273,7 +276,6 @@ paths:
       tags:
       - externalCourses
       summary: Get a list of external content for the given external course
-      description: Get a list of external content for the given external course
       operationId: findExternalContents
       security:
       - token: []
@@ -312,7 +314,6 @@ paths:
       tags:
       - externalCourses
       summary: Create a external content related to an external course
-      description: Create a external content related to an external course
       operationId: createExternalContent
       security:
       - token: []
@@ -369,7 +370,6 @@ paths:
       tags:
       - externalCourses
       summary: Updates an exitsing external content related to an external course
-      description: Updates an exitsing external content related to an external course
       operationId: updateExternalContent
       security:
       - token: []
@@ -432,7 +432,6 @@ paths:
       tags:
       - externalCourses
       summary: Deletes an exitsing external content related to an external course
-      description: Deletes an exitsing external content related to an external course
       operationId: removeExternalContent
       security:
       - token: []
@@ -470,28 +469,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    MetaVersion:
-      type: object
-      required:
-      - createdBy
-      - modifiedBy
-      properties:
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-        modifiedBy:
-          type: string
-        createdBy:
-          type: string
-        taggedNewUntil:
-          type: string
-          format: date-time
-        isoCore:
-          type: boolean
-        coreBranch:
-          type: string
-          description: External Course's reference that belongs the current external content
     ExternalContent:
       type: object
       properties:
@@ -563,6 +540,46 @@ components:
             url: https://s3-eu-west-1.amazonaws.com/scorm/solar_system_en.zip
           fr:
             url: https://s3-eu-west-1.amazonaws.com/scorm/solar_system_fr.zip
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    MetaVersion:
+      type: object
+      required:
+      - createdBy
+      - modifiedBy
+      properties:
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        modifiedBy:
+          type: string
+        createdBy:
+          type: string
+        taggedNewUntil:
+          type: string
+          format: date-time
+        isoCore:
+          type: boolean
+        coreBranch:
+          type: string
+          description: External Course's reference that belongs the current external content
     ExternalCourse:
       type: object
       properties:
@@ -679,24 +696,6 @@ components:
             skill_4JePwQgcbe: Expliquer quelles sont les missions clés des data scientists et des data engineers
             skill_Ey6Iw7lqZg: Saisir l'importance de la science des données pour les entreprises
             skill_VyP8vXl5We: Citer les différences entre les data scientists et les data engineers
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
   securitySchemes:
     token:
       type: apiKey

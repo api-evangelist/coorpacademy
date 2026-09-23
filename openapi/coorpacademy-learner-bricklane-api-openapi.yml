@@ -151,6 +151,12 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   parameters:
+    BrandId:
+      name: brandId
+      in: formData
+      description: digital, up, onboarding etc.
+      type: string
+      required: true
     ViewedLessons:
       name: data[viewedLessons]
       in: formData
@@ -166,23 +172,17 @@ components:
       in: formData
       required: true
       type: number
-    ConnectedUsers:
-      name: data[connectedUsers]
-      in: formData
-      required: true
-      type: number
     UserId:
       name: userId
       in: formData
       description: id from /api/v1/users/me
       required: true
       type: string
-    BrandId:
-      name: brandId
+    ConnectedUsers:
+      name: data[connectedUsers]
       in: formData
-      description: digital, up, onboarding etc.
-      type: string
       required: true
+      type: number
   responses:
     InternalError:
       description: InternalError

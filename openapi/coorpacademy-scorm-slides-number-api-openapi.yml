@@ -34,28 +34,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  parameters:
-    version:
-      name: version
-      in: path
-      description: the version
-      required: true
-      schema:
-        type: number
-    contentRef:
-      name: contentRef
-      in: path
-      description: ref of the content
-      required: true
-      schema:
-        type: string
-    engineRef:
-      name: engineRef
-      in: path
-      description: ref of the engine
-      required: true
-      schema:
-        type: string
   responses:
     InternalError:
       description: InternalError
@@ -82,6 +60,28 @@ components:
                 type: number
             example:
               nbSlides: 4
+  parameters:
+    contentRef:
+      name: contentRef
+      in: path
+      description: ref of the content
+      required: true
+      schema:
+        type: string
+    version:
+      name: version
+      in: path
+      description: the version
+      required: true
+      schema:
+        type: number
+    engineRef:
+      name: engineRef
+      in: path
+      description: ref of the engine
+      required: true
+      schema:
+        type: string
   securitySchemes:
     Authorization:
       type: apiKey

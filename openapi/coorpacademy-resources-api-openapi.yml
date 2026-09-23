@@ -6,14 +6,13 @@ info:
 servers:
 - url: https://progression.coorpacademy.com/api
 tags:
-- name: resources
+- name: Resources
 paths:
   /v1/progressions/{id}/resources:
     post:
       tags:
-      - resources
+      - Resources
       summary: Mark a resource as viewed
-      description: Mark a resource as viewed
       operationId: viewResourcePOST
       security:
       - authentication: []
@@ -69,8 +68,8 @@ paths:
         required: true
 components:
   responses:
-    Forbidden:
-      description: Forbidden
+    Conflit:
+      description: Conflit
       content:
         application/json:
           schema:
@@ -87,19 +86,114 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Conflit:
-      description: Conflit
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
+    UpdatedProgression:
+      type: object
+      additionalProperties: false
+      required:
+      - _id
+      - userId
+      - content
+      - state
+      - meta
+      - engine
+      properties:
+        _id:
+          type: string
+          description: Progression identifier
+        userId:
+          type: string
+          description: User identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        state:
+          $ref: '#/components/schemas/State'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        engine:
+          $ref: '#/components/schemas/Engine'
+        engineOptions:
+          $ref: '#/components/schemas/EngineOptions'
+    Meta:
+      type: object
+      additionalProperties: false
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+          description: progression source
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
+    Engine:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
+          type: string
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
+        version:
+          type: string
+          description: Engine version
     EngineOptions:
       type: object
       additionalProperties: false
@@ -187,101 +281,6 @@ components:
                   type: string
               isCorrect:
                 type: boolean
-    Meta:
-      type: object
-      additionalProperties: false
-      required:
-      - createdAt
-      - updatedAt
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        source:
-          type: string
-          description: progression source
-    Engine:
-      type: object
-      additionalProperties: false
-      description: Content information related to the used progression engine
-      required:
-      - ref
-      properties:
-        ref:
-          type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
-          - external
-          - review
-        version:
-          type: string
-          description: Engine version
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-        message:
-          type: string
-    UpdatedProgression:
-      type: object
-      additionalProperties: false
-      required:
-      - _id
-      - userId
-      - content
-      - state
-      - meta
-      - engine
-      properties:
-        _id:
-          type: string
-          description: Progression identifier
-        userId:
-          type: string
-          description: User identifier
-        content:
-          $ref: '#/components/schemas/Content'
-        state:
-          $ref: '#/components/schemas/State'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        engine:
-          $ref: '#/components/schemas/Engine'
-        engineOptions:
-          $ref: '#/components/schemas/EngineOptions'
-    Content:
-      type: object
-      additionalProperties: false
-      required:
-      - ref
-      - type
-      description: Content information related to the progression
-      properties:
-        ref:
-          type: string
-          description: Content ref
-        type:
-          type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
-        version:
-          type: string
-          description: Version of the given content
   securitySchemes:
     authentication:
       type: apiKey

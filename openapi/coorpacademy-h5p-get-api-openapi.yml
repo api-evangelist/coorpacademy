@@ -23,7 +23,7 @@ paths:
           type: string
         description: The exit node ref
         example: exi_xxxxx
-      summary: Get file in h5p resource.
+      summary: Get file in h5p resource
       description: ''
       operationId: h5pExitNodeGET
       security:
@@ -58,31 +58,31 @@ paths:
                 - $ref: '#/components/schemas/BrandNotFoundError'
 components:
   schemas:
-    ProgressionNotFoundError:
-      description: ProgressionNotFoundError
+    NotDefinedError:
+      description: NotDefinedError
       type: string
-    Success:
-      type: string
-      description: ''
     BrandNotFoundError:
       description: ProgressionNotFoundError
       type: string
     InvalidJWTokenError:
       description: InvalidJWTokenError
       type: string
-    NotDefinedError:
-      description: NotDefinedError
+    Success:
+      type: string
+      description: ''
+    ProgressionNotFoundError:
+      description: ProgressionNotFoundError
       type: string
   headers:
-    Cache-Control:
-      schema:
-        type: string
-      example: no-cache, no-store, must-revalidate
     Location:
       description: url location to redirect based on exitNodeRef
       schema:
         type: string
       example: https://onboarding.coorpacademy.com/externalContent/externalContentRef/progressionId/end
+    Cache-Control:
+      schema:
+        type: string
+      example: no-cache, no-store, must-revalidate
   securitySchemes:
     token:
       type: apiKey

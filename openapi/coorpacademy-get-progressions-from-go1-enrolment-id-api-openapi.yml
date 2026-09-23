@@ -46,6 +46,19 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   schemas:
+    ScormProgress:
+      description: Content information related to the progression
+      type: object
+      properties:
+        completionStatus:
+          type: string
+          description: 'Scorm completion Status: complete || incomplete'
+        completionSuccess:
+          type: string
+          description: 'Completion success: passed || fail || unknown'
+        score:
+          type: number
+          description: Scorm Score (1/100)
     content:
       type: object
       properties:
@@ -64,6 +77,24 @@ components:
           type: number
         loId:
           type: number
+    progressionStateVariables:
+      type: object
+      properties:
+        default:
+          type: string
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
     EngineOptions:
       description: Content information related to the progression engine option
       type: object
@@ -74,19 +105,6 @@ components:
           type: boolean
         lives:
           type: integer
-    ScormProgress:
-      description: Content information related to the progression
-      type: object
-      properties:
-        completionStatus:
-          type: string
-          description: 'Scorm completion Status: complete || incomplete'
-        completionSuccess:
-          type: string
-          description: 'Completion success: passed || fail || unknown'
-        score:
-          type: number
-          description: Scorm Score (1/100)
     progression:
       type: object
       properties:
@@ -206,25 +224,21 @@ components:
               format: date-time
             enrolmentId:
               type: string
-    progressionStateVariables:
-      type: object
-      properties:
-        default:
-          type: string
-      required:
-      - default
-      example:
-        lesson_status: failed
-        score_raw: '0'
-        score_max: 100
-        score_min: 0
-        session_time: '0000:00:26.15'
-      additionalProperties:
-        oneOf:
-        - type: string
-        - type: number
-        - type: boolean
   responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
     NotFoundError:
       description: NotFoundError
       content:
@@ -256,20 +270,6 @@ components:
               enrolmentId:
                 type: number
                 description: Id of the go1 enrolement identifying the coorp progression
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
   securitySchemes:
     Authorization:
       type: apiKey

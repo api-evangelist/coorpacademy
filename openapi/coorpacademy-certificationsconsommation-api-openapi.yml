@@ -17,7 +17,6 @@ paths:
       tags:
       - certificationsConsommation
       summary: Get a list of certifications
-      description: Get a list of certifications
       operationId: findCertificationsConsommation
       security:
       - token: []
@@ -108,7 +107,6 @@ paths:
       tags:
       - certificationsConsommation
       summary: upsert a certification
-      description: upsert a certification
       operationId: upsertCertificationConsommation
       parameters:
       - name: repository
@@ -199,6 +197,81 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    ResourceRewards:
+      type:
+      - 'null'
+      - object
+      required:
+      - label
+      - file_uri
+      properties:
+        label:
+          type: string
+        file_uri:
+          type: string
+    CertificationConsommation:
+      type: object
+      properties:
+        ongoing:
+          type: boolean
+        ref:
+          type: string
+        repository:
+          type: string
+        version:
+          type: number
+        payload:
+          $ref: '#/components/schemas/CertificationConsommationPayload'
+        order_:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CertificationConsommationOrderMap'
+    ConsommationContentCount:
+      type: object
+      properties:
+        _id:
+          type: string
+          enum:
+          - published
+          - archived
+          - draft
+        count:
+          type: number
+    CertificationCondition:
+      type: object
+      properties:
+        type:
+          type: string
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CertificationConditionItemsDecoder'
+        nbDone:
+          type: number
+        badge:
+          type: string
+        level:
+          type: string
     CertificationConditionItemsDecoder:
       type: object
       properties:
@@ -208,6 +281,15 @@ components:
           type: string
         ref:
           type: string
+    CertificationRewards:
+      type: object
+      properties:
+        diploma:
+          $ref: '#/components/schemas/DiplomaRewards'
+        resource:
+          $ref: '#/components/schemas/ResourceRewards'
+        stars:
+          $ref: '#/components/schemas/StarsRewards'
     StarsRewards:
       type:
       - 'null'
@@ -258,15 +340,6 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/CertificationLocales'
-    CertificationRewards:
-      type: object
-      properties:
-        diploma:
-          $ref: '#/components/schemas/DiplomaRewards'
-        resource:
-          $ref: '#/components/schemas/ResourceRewards'
-        stars:
-          $ref: '#/components/schemas/StarsRewards'
     DiplomaRewards:
       type:
       - 'null'
@@ -280,54 +353,6 @@ components:
           type:
           - string
           - 'null'
-    ResourceRewards:
-      type:
-      - 'null'
-      - object
-      required:
-      - label
-      - file_uri
-      properties:
-        label:
-          type: string
-        file_uri:
-          type: string
-    CertificationConsommation:
-      type: object
-      properties:
-        ongoing:
-          type: boolean
-        ref:
-          type: string
-        repository:
-          type: string
-        version:
-          type: number
-        payload:
-          $ref: '#/components/schemas/CertificationConsommationPayload'
-        order_:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CertificationConsommationOrderMap'
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
     CertificationLocales:
       type: object
       properties:
@@ -367,33 +392,6 @@ components:
                     type: string
     CertificationConsommationOrderMap:
       type: number
-    CertificationCondition:
-      type: object
-      properties:
-        type:
-          type: string
-        items:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CertificationConditionItemsDecoder'
-        nbDone:
-          type: number
-        badge:
-          type: string
-        level:
-          type: string
-    ConsommationContentCount:
-      type: object
-      properties:
-        _id:
-          type: string
-          enum:
-          - published
-          - archived
-          - draft
-        count:
-          type: number
   securitySchemes:
     token:
       type: apiKey

@@ -39,6 +39,28 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    ClueSuccess:
+      description: Get clue
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: What a beautiful clue
   schemas:
     content:
       type: object
@@ -49,6 +71,24 @@ components:
           type: string
         version:
           type: string
+    progressionStateVariables:
+      type: object
+      properties:
+        default:
+          type: string
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
     EngineOptions:
       description: Content information related to the progression engine option
       type: object
@@ -178,24 +218,6 @@ components:
               format: date-time
             enrolmentId:
               type: string
-    progressionStateVariables:
-      type: object
-      properties:
-        default:
-          type: string
-      required:
-      - default
-      example:
-        lesson_status: failed
-        score_raw: '0'
-        score_max: 100
-        score_min: 0
-        session_time: '0000:00:26.15'
-      additionalProperties:
-        oneOf:
-        - type: string
-        - type: number
-        - type: boolean
   parameters:
     slideRef:
       name: slideRef
@@ -204,28 +226,6 @@ components:
       required: true
       schema:
         type: string
-  responses:
-    ClueSuccess:
-      description: Get clue
-      content:
-        text/plain:
-          schema:
-            type: string
-            example: What a beautiful clue
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
   securitySchemes:
     Authorization:
       type: apiKey

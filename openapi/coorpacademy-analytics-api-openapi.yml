@@ -8,14 +8,13 @@ servers:
 - url: https://progression.coorpacademy.com/api
 host: content.coorpacademy.com
 tags:
-- name: analytics
+- name: Analytics
 paths:
   /v1/analytics/slides/{slideId}:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get slide's analytics
-      description: Get slide's analytics
       operationId: slideAnalyticsFromDynamodbGET
       security:
       - authentication: []
@@ -42,9 +41,8 @@ paths:
   /v1/users/{userId}/analytics/completion:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get user progression completion
-      description: Get user progression completion
       operationId: completionFromDynamodbForUserGET
       security:
       - authentication: []
@@ -72,9 +70,8 @@ paths:
       x-swagger-router-controller: analytics
     post:
       tags:
-      - analytics
+      - Analytics
       summary: Post user progression completion
-      description: Post user progression completion
       operationId: completionFromDynamodbForUserPOST
       security:
       - authentication: []
@@ -113,9 +110,8 @@ paths:
   /v1/users/{userId}/analytics/slide-count:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get content's slide count
-      description: Get content's slide count
       operationId: slideCountFromDynamodbForUserGET
       security:
       - authentication: []
@@ -143,9 +139,8 @@ paths:
       x-swagger-router-controller: analytics
     post:
       tags:
-      - analytics
+      - Analytics
       summary: Post content's slide count
-      description: Post content's slide count
       operationId: slideCountFromDynamodbForUserPOST
       security:
       - authentication: []
@@ -182,9 +177,8 @@ paths:
   /v2/analytics/completion:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get user progression completion
-      description: Get user progression completion
       operationId: completionFromDynamodbGET
       security:
       - authentication: []
@@ -202,9 +196,8 @@ paths:
       x-swagger-router-controller: analytics
     post:
       tags:
-      - analytics
+      - Analytics
       summary: Post user progression completion
-      description: Post user progression completion
       operationId: completionFromDynamodbPOST
       security:
       - authentication: []
@@ -231,9 +224,8 @@ paths:
   /v2/analytics/completion/review:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get user review progression completion
-      description: Get user review progression completion
       operationId: reviewCompletionFromDynamodbGET
       security:
       - authentication: []
@@ -254,9 +246,8 @@ paths:
   /v2/analytics/review:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get stars from review progressions by skill
-      description: Get stars from review progressions by skill
       operationId: starsBySkillGET
       security:
       - authentication: []
@@ -277,9 +268,8 @@ paths:
   /v2/analytics/slide-count:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get content's slide count
-      description: Get content's slide count
       operationId: slideCountFromDynamodbGET
       security:
       - authentication: []
@@ -297,9 +287,8 @@ paths:
       x-swagger-router-controller: analytics
     post:
       tags:
-      - analytics
+      - Analytics
       summary: Post content's slide count
-      description: Post content's slide count
       operationId: slideCountFromDynamodbPOST
       security:
       - authentication: []
@@ -326,7 +315,7 @@ paths:
   /v2/analytics/progression/current:
     post:
       tags:
-      - analytics
+      - Analytics
       summary: Post user current state on his progressions according to the given content
       description: Post user current state on his progressions
       operationId: currentFromDynamodbPOST
@@ -355,9 +344,8 @@ paths:
   /v2/analytics/slides/{slideId}:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get slide's analytics
-      description: Get slide's analytics
       operationId: slideAnalyticsFromDynamodbGET
       security:
       - authentication: []
@@ -384,9 +372,8 @@ paths:
   /v2/users/{userId}/analytics/completion:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get user progression completion
-      description: Get user progression completion
       operationId: completionFromDynamodbForUserGET
       security:
       - authentication: []
@@ -414,9 +401,8 @@ paths:
       x-swagger-router-controller: analytics
     post:
       tags:
-      - analytics
+      - Analytics
       summary: Post user progression completion
-      description: Post user progression completion
       operationId: completionFromDynamodbForUserPOST
       security:
       - authentication: []
@@ -453,9 +439,8 @@ paths:
   /v2/users/{userId}/analytics/completion/review:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get user review progression completion
-      description: Get user review progression completion
       operationId: reviewCompletionFromDynamodbForUserGET
       security:
       - authentication: []
@@ -486,9 +471,8 @@ paths:
   /v2/users/{userId}/analytics/review:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get stars from review progressions by skill
-      description: Get stars from review progressions by skill
       operationId: starsBySkillIForUserGET
       security:
       - authentication: []
@@ -519,9 +503,8 @@ paths:
   /v2/users/{userId}/analytics/slide-count:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: Get content's slide count
-      description: Get content's slide count
       operationId: slideCountFromDynamodbForUserGET
       security:
       - authentication: []
@@ -549,9 +532,8 @@ paths:
       x-swagger-router-controller: analytics
     post:
       tags:
-      - analytics
+      - Analytics
       summary: Post content's slide count
-      description: Post content's slide count
       operationId: slideCountFromDynamodbForUserPOST
       security:
       - authentication: []
@@ -588,7 +570,7 @@ paths:
   /v2/users/{userId}/analytics/progression/current:
     post:
       tags:
-      - analytics
+      - Analytics
       summary: Post user current state on his progressions according to the given content
       description: Post user current state on his progressions
       operationId: currentFromDynamodbForUserPOST
@@ -625,26 +607,24 @@ paths:
     servers:
     - url: https://progression.coorpacademy.com/api
 components:
-  responses:
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
     AnalyticsSlide:
       type: object
       additionalProperties: false
@@ -655,6 +635,39 @@ components:
           type: integer
         total:
           type: integer
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
+    Engine:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
+          type: string
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+        version:
+          type: string
+          description: Engine version
     AnalyticsProgression:
       type: object
       additionalProperties: false
@@ -703,39 +716,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    Engine:
-      type: object
-      additionalProperties: false
-      description: Content information related to the used progression engine
-      required:
-      - ref
-      properties:
-        ref:
-          type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
-        version:
-          type: string
-          description: Engine version
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-        message:
-          type: string
     AnalyticsSlideCount:
       type: object
       required:
@@ -752,23 +732,6 @@ components:
           type: integer
         nbAttempts:
           type: integer
-    Content:
-      type: object
-      additionalProperties: false
-      required:
-      - ref
-      - type
-      description: Content information related to the progression
-      properties:
-        ref:
-          type: string
-          description: Content ref
-        type:
-          type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
-        version:
-          type: string
-          description: Version of the given content
     UsersStarsReviewBySkill:
       type: object
       additionalProperties: false
@@ -782,6 +745,36 @@ components:
         stars:
           type: integer
           description: Number of stars earned by the User on that review
+    CurrentProgression:
+      type: object
+      additionalProperties: false
+      required:
+      - engine
+      - userId
+      - content
+      - currentProgressionId
+      - inProgress
+      - createdAt
+      - updatedAt
+      properties:
+        engine:
+          $ref: '#/components/schemas/Engine_2'
+        userId:
+          type: string
+          description: User identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        currentProgressionId:
+          type: string
+          description: Progression identifier
+        inProgress:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     ReviewCompletions:
       type: object
       properties:
@@ -842,36 +835,25 @@ components:
           type: integer
         nbDone:
           type: integer
-    CurrentProgression:
-      type: object
-      additionalProperties: false
-      required:
-      - engine
-      - userId
-      - content
-      - currentProgressionId
-      - inProgress
-      - createdAt
-      - updatedAt
-      properties:
-        engine:
-          $ref: '#/components/schemas/Engine_2'
-        userId:
-          type: string
-          description: User identifier
-        content:
-          $ref: '#/components/schemas/Content'
-        currentProgressionId:
-          type: string
-          description: Progression identifier
-        inProgress:
-          type: boolean
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     authentication:
       type: apiKey

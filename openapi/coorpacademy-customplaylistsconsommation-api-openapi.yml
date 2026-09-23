@@ -17,7 +17,6 @@ paths:
       tags:
       - customPlaylistsConsommation
       summary: Get a list of custom playlists
-      description: Get a list of custom playlists
       operationId: findCustomPlaylistsConsommation
       security:
       - token: []
@@ -92,7 +91,6 @@ paths:
       tags:
       - customPlaylistsConsommation
       summary: upsert a custom playlist
-      description: upsert a custom playlist
       operationId: upsertCustomPlaylistConsommation
       parameters:
       - name: repository
@@ -184,33 +182,24 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    CustomPlaylistItemMap:
+    Error:
       type: object
       properties:
-        type:
+        id:
           type: string
-        engine:
+        code:
           type: string
-        ref:
-          type: string
-    CustomPlaylistStructureEdition:
-      type: object
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        defaultLocale:
-          type: string
-        items:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CustomPlaylistItemMap'
-        populations:
+        errors:
           type: array
           items:
-            type: string
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     CustomPlaylistConsommation:
       type: object
       properties:
@@ -256,43 +245,6 @@ components:
             es:
               title: title
               description: description
-    CustomPlaylistLocales:
-      type: object
-      properties:
-        title:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    CustomPlaylistConsommationPayload:
-      type: object
-      properties:
-        structure:
-          $ref: '#/components/schemas/CustomPlaylistStructureEdition'
-        locales:
-          additionalProperties:
-            $ref: '#/components/schemas/CustomPlaylistLocales'
     ConsommationContentCount:
       type: object
       properties:
@@ -304,6 +256,52 @@ components:
           - draft
         count:
           type: number
+    CustomPlaylistLocales:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+    CustomPlaylistItemMap:
+      type: object
+      properties:
+        type:
+          type: string
+        engine:
+          type: string
+        ref:
+          type: string
+    CustomPlaylistStructureEdition:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        defaultLocale:
+          type: string
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CustomPlaylistItemMap'
+        populations:
+          type: array
+          items:
+            type: string
+    CustomPlaylistConsommationPayload:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/CustomPlaylistStructureEdition'
+        locales:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomPlaylistLocales'
   securitySchemes:
     token:
       type: apiKey

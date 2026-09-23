@@ -5,13 +5,13 @@ info:
 servers:
 - url: /api-service
 tags:
-- name: upload
+- name: Upload
 paths:
   /medias:
     post:
       description: Upload a media to s3 (as multipart-encoded body)- eventually resize on fly & return s3 url
       tags:
-      - upload
+      - Upload
       responses:
         '200':
           description: s3 url of newly uploaded media
@@ -54,3 +54,7 @@ paths:
                   required: false
         description: File to upload
         required: true
+      summary: Create medias
+      x-summary-source: derived
+      operationId: postMedias
+      x-operation-id-source: derived

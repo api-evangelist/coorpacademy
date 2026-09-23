@@ -25,7 +25,7 @@ paths:
           type: string
         description: The SCORM zip
         example: valid-scorm.zip
-      summary: Get Root file in scorm resource.
+      summary: Get Root file in scorm resource
       description: ''
       operationId: scormRootFileGET
       responses:
@@ -54,13 +54,13 @@ paths:
                 - $ref: '#/components/schemas/NotFoundError'
 components:
   schemas:
-    GetScormRootFileSuccess:
-      type: string
-      description: ''
     ScormFileError:
       description: ScormFileError
       type: string
       example: Unable to get presigned upload URL from S3
+    GetScormRootFileSuccess:
+      type: string
+      description: ''
     NotFoundError:
       description: NotFoundError
       type: string

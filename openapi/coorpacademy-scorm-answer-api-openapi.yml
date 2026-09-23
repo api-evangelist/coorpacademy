@@ -79,6 +79,33 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
+  responses:
+    PostProgressionSuccess:
+      description: POST progression
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/progression'
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    AnswerSuccess:
+      description: POST answer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/answer'
   schemas:
     content:
       type: object
@@ -89,16 +116,6 @@ components:
           type: string
         version:
           type: string
-    EngineOptions:
-      description: Content information related to the progression engine option
-      type: object
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
     answer:
       type: object
       properties:
@@ -123,6 +140,34 @@ components:
         corrections:
         - answer: Pure players
           isCorrect: true
+    progressionStateVariables:
+      type: object
+      properties:
+        default:
+          type: string
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
     progression:
       type: object
       properties:
@@ -242,51 +287,6 @@ components:
               format: date-time
             enrolmentId:
               type: string
-    progressionStateVariables:
-      type: object
-      properties:
-        default:
-          type: string
-      required:
-      - default
-      example:
-        lesson_status: failed
-        score_raw: '0'
-        score_max: 100
-        score_min: 0
-        session_time: '0000:00:26.15'
-      additionalProperties:
-        oneOf:
-        - type: string
-        - type: number
-        - type: boolean
-  responses:
-    PostProgressionSuccess:
-      description: POST progression
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/progression'
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
-    AnswerSuccess:
-      description: POST answer
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/answer'
   securitySchemes:
     Authorization:
       type: apiKey

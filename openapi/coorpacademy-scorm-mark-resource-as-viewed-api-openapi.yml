@@ -42,6 +42,27 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    MarkResourceAsViewedSuccess:
+      description: Mark Resource As Viewed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/progression'
   schemas:
     content:
       type: object
@@ -52,6 +73,47 @@ components:
           type: string
         version:
           type: string
+    resource:
+      type: object
+      properties:
+        ref:
+          type: string
+          example: med_art3f5P
+        type:
+          type: string
+          example: pdf
+    progressionStateVariables:
+      type: object
+      properties:
+        default:
+          type: string
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+    payloadMarkResourceAsViewed:
+      type: object
+      properties:
+        content:
+          type: object
+          properties:
+            ref:
+              type: string
+              example: cha_er3dfTs
+            type:
+              type: string
+              example: chapter
+        resource:
+          $ref: '#/components/schemas/resource'
     EngineOptions:
       description: Content information related to the progression engine option
       type: object
@@ -181,68 +243,6 @@ components:
               format: date-time
             enrolmentId:
               type: string
-    resource:
-      type: object
-      properties:
-        ref:
-          type: string
-          example: med_art3f5P
-        type:
-          type: string
-          example: pdf
-    progressionStateVariables:
-      type: object
-      properties:
-        default:
-          type: string
-      required:
-      - default
-      example:
-        lesson_status: failed
-        score_raw: '0'
-        score_max: 100
-        score_min: 0
-        session_time: '0000:00:26.15'
-      additionalProperties:
-        oneOf:
-        - type: string
-        - type: number
-        - type: boolean
-    payloadMarkResourceAsViewed:
-      type: object
-      properties:
-        content:
-          type: object
-          properties:
-            ref:
-              type: string
-              example: cha_er3dfTs
-            type:
-              type: string
-              example: chapter
-        resource:
-          $ref: '#/components/schemas/resource'
-  responses:
-    MarkResourceAsViewedSuccess:
-      description: Mark Resource As Viewed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/progression'
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
   securitySchemes:
     Authorization:
       type: apiKey

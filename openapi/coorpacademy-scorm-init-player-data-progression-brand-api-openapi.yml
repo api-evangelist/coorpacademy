@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   description: API for Coorp Scorm player content
   version: 1.0.0
-  title: scorm content Scorm init player data (progression & brand) API
+  title: scorm content Scorm init player data (progression & brand)…
 servers:
 - url: https://api.coorpacademy.com/content-scorm
   description: production
@@ -36,6 +36,27 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    InitPlayerSuccess:
+      description: Get init Player data (progression & brand)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/progression'
   schemas:
     content:
       type: object
@@ -46,6 +67,24 @@ components:
           type: string
         version:
           type: string
+    progressionStateVariables:
+      type: object
+      properties:
+        default:
+          type: string
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
     EngineOptions:
       description: Content information related to the progression engine option
       type: object
@@ -175,45 +214,6 @@ components:
               format: date-time
             enrolmentId:
               type: string
-    progressionStateVariables:
-      type: object
-      properties:
-        default:
-          type: string
-      required:
-      - default
-      example:
-        lesson_status: failed
-        score_raw: '0'
-        score_max: 100
-        score_min: 0
-        session_time: '0000:00:26.15'
-      additionalProperties:
-        oneOf:
-        - type: string
-        - type: number
-        - type: boolean
-  responses:
-    InitPlayerSuccess:
-      description: Get init Player data (progression & brand)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/progression'
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
   securitySchemes:
     Authorization:
       type: apiKey

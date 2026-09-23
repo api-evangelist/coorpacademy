@@ -32,7 +32,7 @@ paths:
           type: string
         description: The SCORM zip
         example: index_lms.html
-      summary: Get file in scorm resource.
+      summary: Get file in scorm resource
       description: ''
       operationId: scormFileGET
       responses:
@@ -61,9 +61,6 @@ paths:
                 - $ref: '#/components/schemas/NotFoundError'
 components:
   schemas:
-    GetScormFileSuccess:
-      type: string
-      description: file in scorm zip, base64 encoded
     ScormFileError:
       description: ScormFileError
       type: string
@@ -72,6 +69,9 @@ components:
       description: NotFoundError
       type: string
       example: Could not find this scorm file $scormFile
+    GetScormFileSuccess:
+      type: string
+      description: file in scorm zip, base64 encoded
     InvalidFileError:
       description: InvalidFileError
       type: string

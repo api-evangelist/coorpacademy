@@ -11,14 +11,13 @@ servers:
 - url: /review
 host: content.coorpacademy.com
 tags:
-- name: skills
+- name: Skills
 paths:
   /repository/{repository}/skills:
     get:
       tags:
-      - skills
+      - Skills
       summary: Get some skills
-      description: Get some skills
       operationId: skillsGET
       security:
       - token: []
@@ -52,7 +51,7 @@ paths:
                   $ref: '#/components/schemas/SkillResponse'
     post:
       tags:
-      - skills
+      - Skills
       summary: Create a new skills
       description: Create a new skill
       operationId: skillsPOST
@@ -113,9 +112,8 @@ paths:
   /repository/{repository}/skills/{ref}:
     put:
       tags:
-      - skills
+      - Skills
       summary: Update a skill
-      description: Update a skill
       operationId: skillsPUT
       security:
       - token: []
@@ -175,9 +173,8 @@ paths:
                 $ref: '#/components/schemas/Error'
     delete:
       tags:
-      - skills
+      - Skills
       summary: Delete a skill
-      description: Delete a skill
       operationId: skillsDELETE
       security:
       - token: []
@@ -220,8 +217,8 @@ paths:
   /api/v1/review/users/{userId}/skills:
     get:
       tags:
-      - skills
-      summary: Get skills available to be reviewed for the given user.
+      - Skills
+      summary: Get skills available to be reviewed for the given user
       description: Get skills available to be reviewed for the given user.
       operationId: getUserSkillsToReview
       security:
@@ -250,6 +247,43 @@ paths:
     - url: /review
 components:
   schemas:
+    SkillStructure:
+      type: object
+      required:
+      - ref
+      - name
+      properties:
+        ref:
+          type: string
+          description: Object structure
+        type:
+          type: string
+          description: Type object. In this case is skill
+        name:
+          type: string
+          description: Translation key for name
+        meta:
+          $ref: '#/components/schemas/Meta'
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    SkillLocales:
+      type: object
     Meta:
       type: object
       required:
@@ -264,6 +298,24 @@ components:
           type: string
           format: date-time
           example: '2021-10-11T14:54:52.368Z'
+    SkillBodyRequest:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/SkillStructure'
+        locales:
+          $ref: '#/components/schemas/SkillLocales'
+      example:
+        structure:
+          ref: skill_001
+          name: name
+        locales:
+          fr:
+            name: Communication
+          en:
+            name: Communication
+          es:
+            name: Comunicación
     SkillResponse:
       type: object
       required:
@@ -289,61 +341,6 @@ components:
             name: Communicación
           fr:
             name: Communication
-    SkillBodyRequest:
-      type: object
-      properties:
-        structure:
-          $ref: '#/components/schemas/SkillStructure'
-        locales:
-          $ref: '#/components/schemas/SkillLocales'
-      example:
-        structure:
-          ref: skill_001
-          name: name
-        locales:
-          fr:
-            name: Communication
-          en:
-            name: Communication
-          es:
-            name: Comunicación
-    SkillStructure:
-      type: object
-      required:
-      - ref
-      - name
-      properties:
-        ref:
-          type: string
-          description: Object structure
-        type:
-          type: string
-          description: Type object. In this case is skill
-        name:
-          type: string
-          description: Translation key for name
-        meta:
-          $ref: '#/components/schemas/Meta'
-    SkillLocales:
-      type: object
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
   securitySchemes:
     token:
       type: apiKey

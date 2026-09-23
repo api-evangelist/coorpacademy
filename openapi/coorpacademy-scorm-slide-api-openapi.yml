@@ -32,14 +32,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  parameters:
-    slideRef:
-      name: slideRef
-      in: path
-      description: id of the slide
-      required: true
-      schema:
-        type: string
   schemas:
     slide:
       type: object
@@ -230,6 +222,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/slide'
+  parameters:
+    slideRef:
+      name: slideRef
+      in: path
+      description: id of the slide
+      required: true
+      schema:
+        type: string
   securitySchemes:
     Authorization:
       type: apiKey

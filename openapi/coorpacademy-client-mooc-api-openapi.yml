@@ -47,10 +47,21 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   parameters:
+    BrandId:
+      name: brandId
+      in: formData
+      description: digital, up, onboarding etc.
+      type: string
+      required: true
     UserId_:
       name: data[userId]
       in: formData
       required: true
+      type: string
+    LmsEndpoint:
+      name: data[lmsEndpoint]
+      in: formData
+      required: false
       type: string
     RecipientAddress:
       name: recipientAddress
@@ -60,17 +71,6 @@ components:
       type: string
     Csv:
       name: data[csv]
-      in: formData
-      required: false
-      type: string
-    BrandId:
-      name: brandId
-      in: formData
-      description: digital, up, onboarding etc.
-      type: string
-      required: true
-    LmsEndpoint:
-      name: data[lmsEndpoint]
       in: formData
       required: false
       type: string

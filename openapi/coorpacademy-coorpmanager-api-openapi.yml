@@ -28,24 +28,24 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   parameters:
-    UserId:
-      name: userId
-      in: formData
-      description: id from /api/v1/users/me
-      required: true
-      type: string
-    RecipientAddress:
-      name: recipientAddress
-      in: formData
-      description: an address mail
-      required: true
-      type: string
     BrandId:
       name: brandId
       in: formData
       description: digital, up, onboarding etc.
       type: string
       required: true
+    RecipientAddress:
+      name: recipientAddress
+      in: formData
+      description: an address mail
+      required: true
+      type: string
+    UserId:
+      name: userId
+      in: formData
+      description: id from /api/v1/users/me
+      required: true
+      type: string
   responses:
     InternalError:
       description: InternalError

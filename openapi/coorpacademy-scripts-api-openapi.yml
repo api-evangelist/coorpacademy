@@ -10,14 +10,13 @@ servers:
 - url: https://content.coorpacademy.com/api/v2
 host: content.coorpacademy.com
 tags:
-- name: scripts
+- name: Scripts
 paths:
   /scripts:
     get:
       tags:
-      - scripts
+      - Scripts
       summary: get all script
-      description: get all script
       operationId: scriptsGETAll
       security:
       - token: []
@@ -71,9 +70,8 @@ paths:
   /scripts/video:
     post:
       tags:
-      - scripts
+      - Scripts
       summary: post a script
-      description: post a script
       operationId: scriptsPOST
       security:
       - token: []
@@ -113,9 +111,8 @@ paths:
   /scripts/video/{videoId}:
     get:
       tags:
-      - scripts
+      - Scripts
       summary: get a script
-      description: get a script
       operationId: scriptsGET
       security:
       - token: []
@@ -149,7 +146,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     delete:
       tags:
-      - scripts
+      - Scripts
       summary: Delete a script object
       description: Delete a script
       operationId: scriptsCLEAN
@@ -176,9 +173,8 @@ paths:
   /scripts/video/{videoId}/lang/{lang}:
     put:
       tags:
-      - scripts
+      - Scripts
       summary: update a script
-      description: update a script
       operationId: scriptsPUT
       security:
       - token: []
@@ -226,9 +222,8 @@ paths:
                 $ref: '#/components/schemas/Error'
     delete:
       tags:
-      - scripts
+      - Scripts
       summary: Delete the script information for the given language
-      description: Delete the script information for the given language
       operationId: scriptsLangDELETE
       security:
       - token: []
@@ -272,8 +267,8 @@ paths:
   /scripts/video/{videoId}/lang/{lang}/upsert:
     post:
       tags:
-      - scripts
-      summary: Creates a script or updates it if it exists already.
+      - Scripts
+      summary: Creates a script or updates it if it exists already
       description: Creates a script or updates it if it exists already.
       operationId: scriptsUPSERT
       security:
@@ -334,83 +329,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    ScriptLocales:
-      type: object
-      properties:
-        scriptUrl:
-          type: string
-          description: Script url on aws s3
-        srtUrl:
-          type: string
-          description: Srt url on aws s3
-        jwTrackId:
-          type: string
-          description: Track key on jw player
-    ScriptResponse:
-      type: object
-      required:
-      - structure
-      - locales
-      - videoId
-      - repository
-      properties:
-        structure:
-          $ref: '#/components/schemas/ScriptStructure'
-        locales:
-          $ref: '#/components/schemas/ScriptLocales'
-        videoId:
-          type: string
-          description: id of the video
-        repository:
-          type: string
-          description: repository of the video
-      example:
-        structure:
-          ref: sub_123
-          states:
-            en:
-              edition: validate
-              published: true
-              original: true
-              authot:
-                state: success
-                progression: 100
-            fr:
-              edition: validate
-              published: true
-              original: true
-              authot:
-                state: success
-                progression: 100
-        videoId: videoId
-        repository: repo-core
-        locales:
-          en:
-            scriptUrl: srtUrl
-            srtUrl: strUrl
-            jwTrackId: id_track_en
-          es:
-            scriptUrl: srtUrl
-            srtUrl: strUrl
-            jwTrackId: id_track_es
-          fr:
-            scriptUrl: srtUrl
-            srtUrl: strUrl
-            jwTrackId: id_track_fr
-    Meta:
-      type: object
-      required:
-      - createdAt
-      - updatedAt
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          example: '2021-10-11T14:54:52.368Z'
-        updatedAt:
-          type: string
-          format: date-time
-          example: '2021-10-11T14:54:52.368Z'
     ScriptBodyRequest:
       type: object
       properties:
@@ -464,6 +382,78 @@ components:
             scriptUrl: url3
             srtUrl: srtUrl
             jwTrackId: id_track_es
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    Meta:
+      type: object
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
+    ScriptBodyRequestPut:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/ScriptStructure'
+        locales:
+          $ref: '#/components/schemas/ScriptLocales'
+        videoId:
+          type: string
+          description: id of the video
+        repository:
+          type: string
+          description: repository of the video
+      example:
+        locales:
+          en:
+            scriptUrl: string
+            srtUrl: string
+            jwTrackId: id_track_en
+        structure:
+          states:
+            en:
+              edition: validate
+              published: true
+              orignal: true
+              authot:
+                state: success
+                progression: 100
+    ScriptLocales:
+      type: object
+      properties:
+        scriptUrl:
+          type: string
+          description: Script url on aws s3
+        srtUrl:
+          type: string
+          description: Srt url on aws s3
+        jwTrackId:
+          type: string
+          description: Track key on jw player
     ScriptStructure:
       type: object
       properties:
@@ -493,26 +483,13 @@ components:
                 description: '% of progression of the generation of the subtitle'
         meta:
           $ref: '#/components/schemas/Meta'
-    Error:
+    ScriptResponse:
       type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    ScriptBodyRequestPut:
-      type: object
+      required:
+      - structure
+      - locales
+      - videoId
+      - repository
       properties:
         structure:
           $ref: '#/components/schemas/ScriptStructure'
@@ -525,20 +502,38 @@ components:
           type: string
           description: repository of the video
       example:
-        locales:
-          en:
-            scriptUrl: string
-            srtUrl: string
-            jwTrackId: id_track_en
         structure:
+          ref: sub_123
           states:
             en:
               edition: validate
               published: true
-              orignal: true
+              original: true
               authot:
                 state: success
                 progression: 100
+            fr:
+              edition: validate
+              published: true
+              original: true
+              authot:
+                state: success
+                progression: 100
+        videoId: videoId
+        repository: repo-core
+        locales:
+          en:
+            scriptUrl: srtUrl
+            srtUrl: strUrl
+            jwTrackId: id_track_en
+          es:
+            scriptUrl: srtUrl
+            srtUrl: strUrl
+            jwTrackId: id_track_es
+          fr:
+            scriptUrl: srtUrl
+            srtUrl: strUrl
+            jwTrackId: id_track_fr
   securitySchemes:
     token:
       type: apiKey

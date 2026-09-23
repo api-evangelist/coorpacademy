@@ -6,14 +6,13 @@ info:
 servers:
 - url: https://progression.coorpacademy.com/api
 tags:
-- name: actions
+- name: Actions
 paths:
   /v1/progressions/{id}/actions:
     get:
       tags:
-      - actions
+      - Actions
       summary: Get progression's actions
-      description: Get progression's actions
       operationId: actionsGET
       security:
       - authentication: []
@@ -44,13 +43,34 @@ paths:
           $ref: '#/components/responses/NotFound'
       x-swagger-router-controller: progressions
 components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
+    Action:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+        payload:
+          type: object
   responses:
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad Request
       content:
@@ -69,33 +89,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  schemas:
-    Action:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-        payload:
-          type: object
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-        message:
-          type: string
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     authentication:
       type: apiKey

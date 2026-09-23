@@ -10,14 +10,13 @@ servers:
 - url: https://content.coorpacademy.com/api/v2
 host: content.coorpacademy.com
 tags:
-- name: jobs
+- name: Jobs
 paths:
   /repository/{repository}/jobs/add-locale:
     post:
       tags:
-      - jobs
+      - Jobs
       summary: Add a new locale to repository resources
-      description: Add a new locale to repository resources
       operationId: addLocale
       security:
       - token: []

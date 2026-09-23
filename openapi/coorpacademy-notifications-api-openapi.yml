@@ -10,14 +10,13 @@ servers:
 - url: https://content.coorpacademy.com/api/v2
 host: content.coorpacademy.com
 tags:
-- name: notifications
+- name: Notifications
 paths:
   /notifications:
     get:
       tags:
-      - notifications
+      - Notifications
       summary: get all notifications
-      description: get all notifications
       operationId: getNotifications
       security:
       - token: []
@@ -62,9 +61,8 @@ paths:
                 $ref: '#/components/schemas/Error'
     post:
       tags:
-      - notifications
+      - Notifications
       summary: Create a new notification
-      description: Create a new notification
       operationId: createNotification
       security:
       - token: []
@@ -107,7 +105,7 @@ paths:
   /notifications/{name}:
     get:
       tags:
-      - notifications
+      - Notifications
       summary: get one notifications
       description: get one notifications by its name
       operationId: getOneNotification
@@ -143,7 +141,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     delete:
       tags:
-      - notifications
+      - Notifications
       summary: delete one notifications
       description: delete one notifications by its name
       operationId: deleteNotification
@@ -181,7 +179,7 @@ paths:
                 $ref: '#/components/schemas/Error'
     put:
       tags:
-      - notifications
+      - Notifications
       summary: update one notification
       description: update one notification by its name
       operationId: updateNotification
@@ -235,44 +233,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    NotificationBodyRequestPut:
-      type: object
-      properties:
-        type:
-          type: string
-          description: type of notification
-        active:
-          type: boolean
-          description: whether the notification is active or not
-        message:
-          type: string
-          description: message of notification
-        link:
-          type: string
-          description: link to be used as CTA of the notification
-      example:
-        type: feature
-        active: true
-        message: New feature subtitles online. Click on button to see the demo!
-        link: https://video.com/feature/new
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
     NotificationBodyRequest:
       type: object
       properties:
@@ -326,6 +286,44 @@ components:
         active: true
         message: New feature subtitles online. Click on button to see the demo!
         link: https://video.com/feature/new
+    NotificationBodyRequestPut:
+      type: object
+      properties:
+        type:
+          type: string
+          description: type of notification
+        active:
+          type: boolean
+          description: whether the notification is active or not
+        message:
+          type: string
+          description: message of notification
+        link:
+          type: string
+          description: link to be used as CTA of the notification
+      example:
+        type: feature
+        active: true
+        message: New feature subtitles online. Click on button to see the demo!
+        link: https://video.com/feature/new
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
   securitySchemes:
     token:
       type: apiKey

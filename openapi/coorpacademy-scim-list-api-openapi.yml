@@ -28,21 +28,13 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  parameters:
-    brand:
-      name: brand
-      in: path
-      description: brandName
-      required: true
-      schema:
-        type: string
-    externalId:
-      name: externalId
-      in: query
-      description: id of the user (IDP Side)
-      schema:
-        type: string
   responses:
+    InternalError:
+      description: InternalError
+      content:
+        '*/*':
+          schema:
+            type: string
     Success:
       description: User created successfully
       content:
@@ -62,12 +54,20 @@ components:
                     type: string
                   MessageId:
                     type: string
-    InternalError:
-      description: InternalError
-      content:
-        '*/*':
-          schema:
-            type: string
+  parameters:
+    externalId:
+      name: externalId
+      in: query
+      description: id of the user (IDP Side)
+      schema:
+        type: string
+    brand:
+      name: brand
+      in: path
+      description: brandName
+      required: true
+      schema:
+        type: string
   securitySchemes:
     token:
       type: apiKey

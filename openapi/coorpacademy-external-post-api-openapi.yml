@@ -23,7 +23,7 @@ paths:
           type: string
         description: The type of the external content
         example: pdf, mp4, png
-      summary: Get signed s3 url for external content upload.
+      summary: Get signed s3 url for external content upload
       description: ''
       operationId: externalPOST
       responses:

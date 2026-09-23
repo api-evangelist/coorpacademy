@@ -17,7 +17,6 @@ paths:
       tags:
       - customSkills
       summary: Get a list of custom skills snapshot
-      description: Get a list of custom skills snapshot
       operationId: findCustomSkillSnapshots
       security:
       - token: []
@@ -74,7 +73,6 @@ paths:
       tags:
       - customSkills
       summary: Upsert a custom skill snapshot
-      description: Upsert a custom skill snapshot
       operationId: upsertCustomSkillSnapshot
       security:
       - token: []
@@ -130,7 +128,6 @@ paths:
       tags:
       - customSkills
       summary: Get a single custom skill snapshot by ref
-      description: Get a single custom skill snapshot by ref
       operationId: findOneCustomSkillSnapshot
       security:
       - token: []
@@ -175,7 +172,6 @@ paths:
       tags:
       - customSkills
       summary: Revert modification since the last publish
-      description: Revert modification since the last publish
       operationId: undoCustomSkillsChange
       security:
       - token: []
@@ -237,6 +233,24 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     CustomSkillMeta:
       type: object
       required:
@@ -252,33 +266,24 @@ components:
         updatedAt:
           type: string
           format: date-time
-    CustomSkillLocalesMap:
+    CustomSkillItemMap:
       type: object
       properties:
-        title:
+        type:
           type: string
-        description:
+          example: type
+        ref:
           type: string
-    CustomSkillStructureEdition:
+          example: ref
+    CustomSkillIcon:
       type: object
       properties:
-        title:
+        color:
           type: string
-          example: title
-        description:
+          example: '#FFFFFF'
+        name:
           type: string
-          example: description
-        defaultLocale:
-          type: string
-          example: en
-        icon:
-          type: object
-          $ref: '#/components/schemas/CustomSkillIcon'
-        items:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CustomSkillItemMap'
+          example: white
     CustomSkillEdition:
       type: object
       required:
@@ -302,42 +307,33 @@ components:
           type: string
         structure:
           $ref: '#/components/schemas/CustomSkillStructureEdition'
-    CustomSkillItemMap:
+    CustomSkillStructureEdition:
       type: object
       properties:
-        type:
+        title:
           type: string
-          example: type
-        ref:
+          example: title
+        description:
           type: string
-          example: ref
-    Error:
+          example: description
+        defaultLocale:
+          type: string
+          example: en
+        icon:
+          type: object
+          $ref: '#/components/schemas/CustomSkillIcon'
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CustomSkillItemMap'
+    CustomSkillLocalesMap:
       type: object
       properties:
-        id:
+        title:
           type: string
-        code:
+        description:
           type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    CustomSkillIcon:
-      type: object
-      properties:
-        color:
-          type: string
-          example: '#FFFFFF'
-        name:
-          type: string
-          example: white
   securitySchemes:
     token:
       type: apiKey

@@ -67,7 +67,6 @@ paths:
       tags:
       - custom playlists
       summary: Get a list of custom playlists snapshot
-      description: Get a list of custom playlists snapshot
       operationId: findCustomPlaylists
       security:
       - token: []
@@ -105,7 +104,6 @@ paths:
       tags:
       - custom playlists
       summary: Revert modification since the last publish
-      description: Revert modification since the last publish
       operationId: undoCustomPlaylistChange
       security:
       - token: []
@@ -165,7 +163,6 @@ paths:
       tags:
       - custom playlists
       summary: create a custom playlist diff and upsert a snapshot
-      description: create a custom playlist diff and upsert a snapshot
       operationId: upsertCustomPlaylist
       security:
       - token: []
@@ -206,33 +203,79 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    CustomPlaylistItemMap:
+    Error:
       type: object
       properties:
-        type:
+        id:
           type: string
-        engine:
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    CustomPlaylistEdition:
+      type: object
+      required:
+      - ref
+      - repository
+      - version
+      - meta
+      properties:
+        repository:
           type: string
         ref:
           type: string
-    CustomPlaylistStructureEdition:
-      type: object
-      properties:
-        title:
+        version:
+          type: number
+        locales:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomPlaylistLocales'
+        meta:
+          $ref: '#/components/schemas/CustomPlaylistMeta'
+        state:
           type: string
-        description:
-          type: string
-        defaultLocale:
-          type: string
-        items:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CustomPlaylistItemMap'
-        populations:
-          type: array
+        structure:
+          $ref: '#/components/schemas/CustomPlaylistStructureEdition'
+      example:
+        ref: cplaylist_kIIm6bPa00
+        repository: content-core@cockpitRecette-core
+        version: 1
+        meta:
+          createdAt: '2016-02-09T10:31:57.702Z'
+          updatedAt: '2019-12-13T10:50:42.668Z'
+          modifiedBy: silouone
+          createdBy: stefano
+        structure:
+          title: title
+          description: description
+          populations:
+          - pop1
+          - pop2
+          defaultLocale: en
           items:
-            type: string
+            dis_N12Qn2u8I:
+              engine: learner
+              ref: dis_N12Qn2u8I
+              type: level
+              position: 1
+        locales:
+          en:
+            title: title
+            description: description
+          fr:
+            title: title
+            description: description
+          es:
+            title: title
+            description: description
     CustomPlaylistConsommation:
       type: object
       properties:
@@ -289,24 +332,33 @@ components:
           type:
           - string
           - 'null'
-    Error:
+    CustomPlaylistItemMap:
       type: object
       properties:
-        id:
+        type:
           type: string
-        code:
+        engine:
           type: string
-        errors:
+        ref:
+          type: string
+    CustomPlaylistStructureEdition:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        defaultLocale:
+          type: string
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CustomPlaylistItemMap'
+        populations:
           type: array
           items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
+            type: string
     CustomPlaylistMeta:
       type: object
       required:
@@ -328,61 +380,6 @@ components:
         locales:
           additionalProperties:
             $ref: '#/components/schemas/CustomPlaylistLocales'
-    CustomPlaylistEdition:
-      type: object
-      required:
-      - ref
-      - repository
-      - version
-      - meta
-      properties:
-        repository:
-          type: string
-        ref:
-          type: string
-        version:
-          type: number
-        locales:
-          additionalProperties:
-            $ref: '#/components/schemas/CustomPlaylistLocales'
-        meta:
-          $ref: '#/components/schemas/CustomPlaylistMeta'
-        state:
-          type: string
-        structure:
-          $ref: '#/components/schemas/CustomPlaylistStructureEdition'
-      example:
-        ref: cplaylist_kIIm6bPa00
-        repository: content-core@cockpitRecette-core
-        version: 1
-        meta:
-          createdAt: '2016-02-09T10:31:57.702Z'
-          updatedAt: '2019-12-13T10:50:42.668Z'
-          modifiedBy: silouone
-          createdBy: stefano
-        structure:
-          title: title
-          description: description
-          populations:
-          - pop1
-          - pop2
-          defaultLocale: en
-          items:
-            dis_N12Qn2u8I:
-              engine: learner
-              ref: dis_N12Qn2u8I
-              type: level
-              position: 1
-        locales:
-          en:
-            title: title
-            description: description
-          fr:
-            title: title
-            description: description
-          es:
-            title: title
-            description: description
   securitySchemes:
     token:
       type: apiKey

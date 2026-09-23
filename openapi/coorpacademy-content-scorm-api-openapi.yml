@@ -28,24 +28,24 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   parameters:
-    DownloadLink:
-      name: data[downloadLink]
-      in: formData
-      description: download link scorm file
-      required: true
-      type: string
-    RecipientAddress:
-      name: recipientAddress
-      in: formData
-      description: an address mail
-      required: true
-      type: string
     BrandId:
       name: brandId
       in: formData
       description: digital, up, onboarding etc.
       type: string
       required: true
+    RecipientAddress:
+      name: recipientAddress
+      in: formData
+      description: an address mail
+      required: true
+      type: string
+    DownloadLink:
+      name: data[downloadLink]
+      in: formData
+      description: download link scorm file
+      required: true
+      type: string
   responses:
     InternalError:
       description: InternalError

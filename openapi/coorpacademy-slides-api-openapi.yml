@@ -6,13 +6,13 @@ info:
 servers:
 - url: /review
 tags:
-- name: slides
+- name: Slides
 paths:
   /api/v1/review/users/{userId}/skills/{skillRef}/slide:
     get:
       tags:
-      - slides
-      summary: Get slide available to be reviewed for the given user and skill.
+      - Slides
+      summary: Get slide available to be reviewed for the given user and skill
       description: Get slide available to be reviewed for the given user and skill.
       operationId: getSlideToReview
       security:
