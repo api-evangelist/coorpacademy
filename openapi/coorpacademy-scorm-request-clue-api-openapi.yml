@@ -43,6 +43,12 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   responses:
+    RequestClueSuccess:
+      description: Request Clue
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/progression'
     InternalError:
       description: InternalError
       content:
@@ -57,73 +63,7 @@ components:
             example:
               statusCode: 500
               body: internal Error while resolving request
-    RequestClueSuccess:
-      description: Request Clue
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/progression'
   schemas:
-    content:
-      type: object
-      properties:
-        ref:
-          type: string
-        type:
-          type: string
-        version:
-          type: string
-    resource:
-      type: object
-      properties:
-        ref:
-          type: string
-          example: med_art3f5P
-        type:
-          type: string
-          example: pdf
-    payloadRequestClue:
-      type: object
-      properties:
-        content:
-          type: object
-          properties:
-            ref:
-              type: string
-              example: cha_er3dfTs
-            type:
-              type: string
-              example: slide
-        resource:
-          $ref: '#/components/schemas/resource'
-    progressionStateVariables:
-      type: object
-      properties:
-        default:
-          type: string
-      required:
-      - default
-      example:
-        lesson_status: failed
-        score_raw: '0'
-        score_max: 100
-        score_min: 0
-        session_time: '0000:00:26.15'
-      additionalProperties:
-        oneOf:
-        - type: string
-        - type: number
-        - type: boolean
-    EngineOptions:
-      description: Content information related to the progression engine option
-      type: object
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
     progression:
       type: object
       properties:
@@ -243,6 +183,66 @@ components:
               format: date-time
             enrolmentId:
               type: string
+    resource:
+      type: object
+      properties:
+        ref:
+          type: string
+          example: med_art3f5P
+        type:
+          type: string
+          example: pdf
+    progressionStateVariables:
+      type: object
+      properties:
+        default:
+          type: string
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+    content:
+      type: object
+      properties:
+        ref:
+          type: string
+        type:
+          type: string
+        version:
+          type: string
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
+    payloadRequestClue:
+      type: object
+      properties:
+        content:
+          type: object
+          properties:
+            ref:
+              type: string
+              example: cha_er3dfTs
+            type:
+              type: string
+              example: slide
+        resource:
+          $ref: '#/components/schemas/resource'
   securitySchemes:
     Authorization:
       type: apiKey

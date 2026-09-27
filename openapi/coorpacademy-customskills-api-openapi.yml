@@ -233,6 +233,35 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    CustomSkillIcon:
+      type: object
+      properties:
+        color:
+          type: string
+          example: '#FFFFFF'
+        name:
+          type: string
+          example: white
+    CustomSkillStructureEdition:
+      type: object
+      properties:
+        title:
+          type: string
+          example: title
+        description:
+          type: string
+          example: description
+        defaultLocale:
+          type: string
+          example: en
+        icon:
+          type: object
+          $ref: '#/components/schemas/CustomSkillIcon'
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CustomSkillItemMap'
     Error:
       type: object
       properties:
@@ -251,21 +280,6 @@ components:
           format: int32
         message:
           type: string
-    CustomSkillMeta:
-      type: object
-      required:
-      - modifiedBy
-      properties:
-        modifiedBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
     CustomSkillItemMap:
       type: object
       properties:
@@ -275,15 +289,6 @@ components:
         ref:
           type: string
           example: ref
-    CustomSkillIcon:
-      type: object
-      properties:
-        color:
-          type: string
-          example: '#FFFFFF'
-        name:
-          type: string
-          example: white
     CustomSkillEdition:
       type: object
       required:
@@ -307,26 +312,21 @@ components:
           type: string
         structure:
           $ref: '#/components/schemas/CustomSkillStructureEdition'
-    CustomSkillStructureEdition:
+    CustomSkillMeta:
       type: object
+      required:
+      - modifiedBy
       properties:
-        title:
+        modifiedBy:
           type: string
-          example: title
-        description:
+        createdAt:
           type: string
-          example: description
-        defaultLocale:
+          format: date-time
+        createdBy:
           type: string
-          example: en
-        icon:
-          type: object
-          $ref: '#/components/schemas/CustomSkillIcon'
-        items:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CustomSkillItemMap'
+        updatedAt:
+          type: string
+          format: date-time
     CustomSkillLocalesMap:
       type: object
       properties:

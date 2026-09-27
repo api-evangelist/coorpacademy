@@ -54,13 +54,6 @@ paths:
                 - $ref: '#/components/schemas/NotFoundError'
 components:
   schemas:
-    ScormFileError:
-      description: ScormFileError
-      type: string
-      example: Unable to get presigned upload URL from S3
-    GetScormRootFileSuccess:
-      type: string
-      description: ''
     NotFoundError:
       description: NotFoundError
       type: string
@@ -69,6 +62,13 @@ components:
       description: InvalidFileError
       type: string
       example: Invalid scorm file $scormFile
+    ScormFileError:
+      description: ScormFileError
+      type: string
+      example: Unable to get presigned upload URL from S3
+    GetScormRootFileSuccess:
+      type: string
+      description: ''
   headers:
     Location:
       schema:

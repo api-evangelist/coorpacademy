@@ -49,82 +49,7 @@ paths:
               $ref: '#/components/schemas/AnswerBody'
         required: true
 components:
-  responses:
-    Conflit:
-      description: Conflit
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-        message:
-          type: string
-    UpdatedProgression:
-      type: object
-      additionalProperties: false
-      required:
-      - _id
-      - userId
-      - content
-      - state
-      - meta
-      - engine
-      properties:
-        _id:
-          type: string
-          description: Progression identifier
-        userId:
-          type: string
-          description: User identifier
-        content:
-          $ref: '#/components/schemas/Content'
-        state:
-          $ref: '#/components/schemas/State'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        engine:
-          $ref: '#/components/schemas/Engine'
-        engineOptions:
-          $ref: '#/components/schemas/EngineOptions'
     AnswerBody:
       type: object
       additionalProperties: false
@@ -166,22 +91,24 @@ components:
         answer:
         - foo
         - bar
-    Meta:
+    Engine:
       type: object
       additionalProperties: false
+      description: Content information related to the used progression engine
       required:
-      - createdAt
-      - updatedAt
+      - ref
       properties:
-        createdAt:
+        ref:
           type: string
-          format: date-time
-        updatedAt:
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
+        version:
           type: string
-          format: date-time
-        source:
-          type: string
-          description: progression source
+          description: Engine version
     Content:
       type: object
       additionalProperties: false
@@ -219,24 +146,39 @@ components:
           - number
           - boolean
           - string
-    Engine:
+    Meta:
       type: object
       additionalProperties: false
-      description: Content information related to the used progression engine
       required:
-      - ref
+      - createdAt
+      - updatedAt
       properties:
-        ref:
+        createdAt:
           type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
-          - external
-          - review
-        version:
+          format: date-time
+        updatedAt:
           type: string
-          description: Engine version
+          format: date-time
+        source:
+          type: string
+          description: progression source
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
     EngineOptions:
       type: object
       additionalProperties: false
@@ -248,6 +190,33 @@ components:
           type: boolean
         lives:
           type: integer
+    UpdatedProgression:
+      type: object
+      additionalProperties: false
+      required:
+      - _id
+      - userId
+      - content
+      - state
+      - meta
+      - engine
+      properties:
+        _id:
+          type: string
+          description: Progression identifier
+        userId:
+          type: string
+          description: User identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        state:
+          $ref: '#/components/schemas/State'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        engine:
+          $ref: '#/components/schemas/Engine'
+        engineOptions:
+          $ref: '#/components/schemas/EngineOptions'
     State:
       type: object
       additionalProperties: false
@@ -324,6 +293,37 @@ components:
                   type: string
               isCorrect:
                 type: boolean
+  responses:
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflit:
+      description: Conflit
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     authentication:
       type: apiKey

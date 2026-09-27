@@ -58,21 +58,21 @@ paths:
                 - $ref: '#/components/schemas/BrandNotFoundError'
 components:
   schemas:
+    InvalidJWTokenError:
+      description: InvalidJWTokenError
+      type: string
     NotDefinedError:
       description: NotDefinedError
       type: string
     BrandNotFoundError:
       description: ProgressionNotFoundError
       type: string
-    InvalidJWTokenError:
-      description: InvalidJWTokenError
+    ProgressionNotFoundError:
+      description: ProgressionNotFoundError
       type: string
     Success:
       type: string
       description: ''
-    ProgressionNotFoundError:
-      description: ProgressionNotFoundError
-      type: string
   headers:
     Location:
       description: url location to redirect based on exitNodeRef

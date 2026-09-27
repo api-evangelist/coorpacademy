@@ -26,13 +26,19 @@ paths:
       operationId: postApiV1SkillToReview
       x-operation-id-source: derived
 components:
+  parameters:
+    UserId:
+      name: userId
+      in: formData
+      description: id from /api/v1/users/me
+      required: true
+      type: string
+    SkillRef:
+      name: data[skillRef]
+      in: formData
+      required: true
+      type: string
   responses:
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: string
     Success:
       description: Email sent successfully
       content:
@@ -52,18 +58,12 @@ components:
                     type: string
                   MessageId:
                     type: string
-  parameters:
-    SkillRef:
-      name: data[skillRef]
-      in: formData
-      required: true
-      type: string
-    UserId:
-      name: userId
-      in: formData
-      description: id from /api/v1/users/me
-      required: true
-      type: string
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
   securitySchemes:
     Authorization:
       type: apiKey

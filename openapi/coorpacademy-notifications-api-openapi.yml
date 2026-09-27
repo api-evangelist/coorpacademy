@@ -233,12 +233,35 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    NotificationBodyRequest:
+    Error:
       type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    Notification:
+      type: object
+      required:
+      - name
+      - type
+      - active
+      - message
       properties:
         name:
           type: string
-          description: name of the notifications. This name will be used as cookie name
+          description: name (id) of the notifications. This name will be used as cookie name
         type:
           type: string
           description: type of notification
@@ -257,17 +280,12 @@ components:
         active: true
         message: New feature subtitles online. Click on button to see the demo!
         link: https://video.com/feature/new
-    Notification:
+    NotificationBodyRequest:
       type: object
-      required:
-      - name
-      - type
-      - active
-      - message
       properties:
         name:
           type: string
-          description: name (id) of the notifications. This name will be used as cookie name
+          description: name of the notifications. This name will be used as cookie name
         type:
           type: string
           description: type of notification
@@ -306,24 +324,6 @@ components:
         active: true
         message: New feature subtitles online. Click on button to see the demo!
         link: https://video.com/feature/new
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
   securitySchemes:
     token:
       type: apiKey

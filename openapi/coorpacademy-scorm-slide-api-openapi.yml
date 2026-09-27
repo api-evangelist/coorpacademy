@@ -202,6 +202,12 @@ components:
           items:
             type: string
   responses:
+    SlideSuccess:
+      description: Get slide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/slide'
     InternalError:
       description: InternalError
       content:
@@ -216,12 +222,6 @@ components:
             example:
               statusCode: 500
               body: internal Error while resolving request
-    SlideSuccess:
-      description: Get slide
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/slide'
   parameters:
     slideRef:
       name: slideRef

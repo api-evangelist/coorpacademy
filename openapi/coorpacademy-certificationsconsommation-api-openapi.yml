@@ -197,36 +197,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    ResourceRewards:
-      type:
-      - 'null'
-      - object
-      required:
-      - label
-      - file_uri
-      properties:
-        label:
-          type: string
-        file_uri:
-          type: string
     CertificationConsommation:
       type: object
       properties:
@@ -245,51 +215,6 @@ components:
           properties:
             ref:
               $ref: '#/components/schemas/CertificationConsommationOrderMap'
-    ConsommationContentCount:
-      type: object
-      properties:
-        _id:
-          type: string
-          enum:
-          - published
-          - archived
-          - draft
-        count:
-          type: number
-    CertificationCondition:
-      type: object
-      properties:
-        type:
-          type: string
-        items:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CertificationConditionItemsDecoder'
-        nbDone:
-          type: number
-        badge:
-          type: string
-        level:
-          type: string
-    CertificationConditionItemsDecoder:
-      type: object
-      properties:
-        type:
-          type: string
-        engine:
-          type: string
-        ref:
-          type: string
-    CertificationRewards:
-      type: object
-      properties:
-        diploma:
-          $ref: '#/components/schemas/DiplomaRewards'
-        resource:
-          $ref: '#/components/schemas/ResourceRewards'
-        stars:
-          $ref: '#/components/schemas/StarsRewards'
     StarsRewards:
       type:
       - 'null'
@@ -304,6 +229,68 @@ components:
           type: array
           items:
             type: string
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    ConsommationContentCount:
+      type: object
+      properties:
+        _id:
+          type: string
+          enum:
+          - published
+          - archived
+          - draft
+        count:
+          type: number
+    CertificationConsommationOrderMap:
+      type: number
+    CertificationConsommationPayload:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/CertificationStructureSnapshot'
+        locales:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CertificationLocales'
+    CertificationConditionItemsDecoder:
+      type: object
+      properties:
+        type:
+          type: string
+        engine:
+          type: string
+        ref:
+          type: string
+    DiplomaRewards:
+      type:
+      - 'null'
+      - object
+      properties:
+        logo_url:
+          type:
+          - string
+          - 'null'
+        signature_url:
+          type:
+          - string
+          - 'null'
     CertificationStructureSnapshot:
       type: object
       required:
@@ -331,28 +318,18 @@ components:
           type: string
         updated:
           type: boolean
-    CertificationConsommationPayload:
-      type: object
-      properties:
-        structure:
-          $ref: '#/components/schemas/CertificationStructureSnapshot'
-        locales:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CertificationLocales'
-    DiplomaRewards:
+    ResourceRewards:
       type:
       - 'null'
       - object
+      required:
+      - label
+      - file_uri
       properties:
-        logo_url:
-          type:
-          - string
-          - 'null'
-        signature_url:
-          type:
-          - string
-          - 'null'
+        label:
+          type: string
+        file_uri:
+          type: string
     CertificationLocales:
       type: object
       properties:
@@ -390,8 +367,31 @@ components:
                   type: array
                   items:
                     type: string
-    CertificationConsommationOrderMap:
-      type: number
+    CertificationRewards:
+      type: object
+      properties:
+        diploma:
+          $ref: '#/components/schemas/DiplomaRewards'
+        resource:
+          $ref: '#/components/schemas/ResourceRewards'
+        stars:
+          $ref: '#/components/schemas/StarsRewards'
+    CertificationCondition:
+      type: object
+      properties:
+        type:
+          type: string
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CertificationConditionItemsDecoder'
+        nbDone:
+          type: number
+        badge:
+          type: string
+        level:
+          type: string
   securitySchemes:
     token:
       type: apiKey

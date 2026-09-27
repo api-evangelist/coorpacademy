@@ -32,6 +32,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
+  parameters:
+    exitNodeRef:
+      name: exitNodeRef
+      in: path
+      description: ref of the exitNode
+      required: true
+      schema:
+        type: string
   responses:
     InternalError:
       description: InternalError
@@ -83,14 +91,6 @@ components:
       example:
         mediaUrl: //static.coorpacademy.com/content/CoorpAcademy/content-catalogue/cockpit-assessment/raw/teste.pdf
         type: pdf
-  parameters:
-    exitNodeRef:
-      name: exitNodeRef
-      in: path
-      description: ref of the exitNode
-      required: true
-      schema:
-        type: string
   securitySchemes:
     Authorization:
       type: apiKey

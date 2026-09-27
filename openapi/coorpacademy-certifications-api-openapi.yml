@@ -203,48 +203,56 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
+    CertificationStructureEdition:
       type: object
       properties:
-        id:
+        title:
           type: string
-        code:
+        description:
           type: string
-        errors:
+        condition:
+          $ref: '#/components/schemas/CertificationCondition'
+        rewards:
+          $ref: '#/components/schemas/CertificationRewards'
+        defaultLocale:
+          type: string
+        groups:
           type: array
           items:
-            type: object
-        success:
+            type: string
+        populations:
+          type: array
+          items:
+            type: string
+        svg:
+          type: string
+        updated:
           type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    CertificationDiff:
+    CertificationStructureDiff:
       type: object
-      required:
-      - ref
-      - repository
-      - version
-      - meta
       properties:
-        repository:
+        title:
           type: string
-        ref:
+        description:
           type: string
-        version:
-          type: number
-        locales:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CertificationLocales'
-        meta:
-          $ref: '#/components/schemas/CertificationMeta'
-        state:
-          type: string
-        structure:
-          $ref: '#/components/schemas/CertificationStructureDiff'
+        condition:
+          $ref: '#/components/schemas/CertificationCondition'
+        rewards:
+          $ref: '#/components/schemas/CertificationRewards'
+        groups:
+          type: array
+          items:
+            type: string
+        populations:
+          type: array
+          items:
+            type: string
+        svg:
+          type:
+          - string
+          - 'null'
+        updated:
+          type: boolean
     CertificationSnapshot:
       type: object
       required:
@@ -271,52 +279,6 @@ components:
           type: string
         structure:
           $ref: '#/components/schemas/CertificationStructureSnapshot'
-    ResourceRewards:
-      type:
-      - 'null'
-      - object
-      required:
-      - label
-      - file_uri
-      properties:
-        label:
-          type: string
-        file_uri:
-          type: string
-    CertificationRewards:
-      type: object
-      properties:
-        diploma:
-          $ref: '#/components/schemas/DiplomaRewards'
-        resource:
-          $ref: '#/components/schemas/ResourceRewards'
-        stars:
-          $ref: '#/components/schemas/StarsRewards'
-    CertificationConditionItemsDecoder:
-      type: object
-      properties:
-        type:
-          type: string
-        engine:
-          type: string
-        ref:
-          type: string
-    CertificationCondition:
-      type: object
-      properties:
-        type:
-          type: string
-        items:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CertificationConditionItemsDecoder'
-        nbDone:
-          type: number
-        badge:
-          type: string
-        level:
-          type: string
     StarsRewards:
       type:
       - 'null'
@@ -331,71 +293,6 @@ components:
           type: array
           items:
             type: string
-    CertificationStructureDiff:
-      type: object
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        condition:
-          $ref: '#/components/schemas/CertificationCondition'
-        rewards:
-          $ref: '#/components/schemas/CertificationRewards'
-        groups:
-          type: array
-          items:
-            type: string
-        populations:
-          type: array
-          items:
-            type: string
-        svg:
-          type:
-          - string
-          - 'null'
-        updated:
-          type: boolean
-    CertificationMeta:
-      type: object
-      required:
-      - modifiedBy
-      properties:
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-        modifiedBy:
-          type: string
-        createdBy:
-          type: string
-    CertificationStructureSnapshot:
-      type: object
-      required:
-      - title
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        defaultLocale:
-          type: string
-        condition:
-          $ref: '#/components/schemas/CertificationCondition'
-        rewards:
-          $ref: '#/components/schemas/CertificationRewards'
-        groups:
-          type: array
-          items:
-            type: string
-        populations:
-          type: array
-          items:
-            type: string
-        svg:
-          type: string
-        updated:
-          type: boolean
     CertificationEdition:
       type: object
       required:
@@ -445,19 +342,39 @@ components:
           es:
             title: title
             description: description
-    CertificationStructureEdition:
+    Error:
       type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    CertificationStructureSnapshot:
+      type: object
+      required:
+      - title
       properties:
         title:
           type: string
         description:
           type: string
+        defaultLocale:
+          type: string
         condition:
           $ref: '#/components/schemas/CertificationCondition'
         rewards:
           $ref: '#/components/schemas/CertificationRewards'
-        defaultLocale:
-          type: string
         groups:
           type: array
           items:
@@ -470,6 +387,43 @@ components:
           type: string
         updated:
           type: boolean
+    CertificationMeta:
+      type: object
+      required:
+      - modifiedBy
+      properties:
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        modifiedBy:
+          type: string
+        createdBy:
+          type: string
+    CertificationDiff:
+      type: object
+      required:
+      - ref
+      - repository
+      - version
+      - meta
+      properties:
+        repository:
+          type: string
+        ref:
+          type: string
+        version:
+          type: number
+        locales:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CertificationLocales'
+        meta:
+          $ref: '#/components/schemas/CertificationMeta'
+        state:
+          type: string
+        structure:
+          $ref: '#/components/schemas/CertificationStructureDiff'
     DiplomaRewards:
       type:
       - 'null'
@@ -483,6 +437,27 @@ components:
           type:
           - string
           - 'null'
+    CertificationConditionItemsDecoder:
+      type: object
+      properties:
+        type:
+          type: string
+        engine:
+          type: string
+        ref:
+          type: string
+    ResourceRewards:
+      type:
+      - 'null'
+      - object
+      required:
+      - label
+      - file_uri
+      properties:
+        label:
+          type: string
+        file_uri:
+          type: string
     CertificationLocales:
       type: object
       properties:
@@ -520,6 +495,31 @@ components:
                   type: array
                   items:
                     type: string
+    CertificationRewards:
+      type: object
+      properties:
+        diploma:
+          $ref: '#/components/schemas/DiplomaRewards'
+        resource:
+          $ref: '#/components/schemas/ResourceRewards'
+        stars:
+          $ref: '#/components/schemas/StarsRewards'
+    CertificationCondition:
+      type: object
+      properties:
+        type:
+          type: string
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CertificationConditionItemsDecoder'
+        nbDone:
+          type: number
+        badge:
+          type: string
+        level:
+          type: string
   securitySchemes:
     token:
       type: apiKey

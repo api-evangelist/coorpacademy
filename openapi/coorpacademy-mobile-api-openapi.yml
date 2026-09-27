@@ -27,12 +27,6 @@ paths:
       x-operation-id-source: derived
 components:
   responses:
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: string
     Success:
       description: Email sent successfully
       content:
@@ -52,6 +46,12 @@ components:
                     type: string
                   MessageId:
                     type: string
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
   parameters:
     RecipientAddress:
       name: recipientAddress

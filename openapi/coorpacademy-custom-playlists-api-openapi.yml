@@ -203,24 +203,52 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
+    CustomPlaylistConsommationPayload:
       type: object
       properties:
-        id:
+        structure:
+          $ref: '#/components/schemas/CustomPlaylistStructureEdition'
+        locales:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomPlaylistLocales'
+    CustomPlaylistItemMap:
+      type: object
+      properties:
+        type:
           type: string
-        code:
+        engine:
           type: string
-        errors:
+        ref:
+          type: string
+    CustomPlaylistStructureEdition:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        defaultLocale:
+          type: string
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CustomPlaylistItemMap'
+        populations:
           type: array
           items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
+            type: string
+    CustomPlaylistLocales:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
     CustomPlaylistEdition:
       type: object
       required:
@@ -276,6 +304,37 @@ components:
           es:
             title: title
             description: description
+    CustomPlaylistMeta:
+      type: object
+      required:
+      - modifiedBy
+      properties:
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        modifiedBy:
+          type: string
+        createdBy:
+          type: string
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     CustomPlaylistConsommation:
       type: object
       properties:
@@ -321,65 +380,6 @@ components:
             es:
               title: title
               description: description
-    CustomPlaylistLocales:
-      type: object
-      properties:
-        title:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-    CustomPlaylistItemMap:
-      type: object
-      properties:
-        type:
-          type: string
-        engine:
-          type: string
-        ref:
-          type: string
-    CustomPlaylistStructureEdition:
-      type: object
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        defaultLocale:
-          type: string
-        items:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CustomPlaylistItemMap'
-        populations:
-          type: array
-          items:
-            type: string
-    CustomPlaylistMeta:
-      type: object
-      required:
-      - modifiedBy
-      properties:
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-        modifiedBy:
-          type: string
-        createdBy:
-          type: string
-    CustomPlaylistConsommationPayload:
-      type: object
-      properties:
-        structure:
-          $ref: '#/components/schemas/CustomPlaylistStructureEdition'
-        locales:
-          additionalProperties:
-            $ref: '#/components/schemas/CustomPlaylistLocales'
   securitySchemes:
     token:
       type: apiKey

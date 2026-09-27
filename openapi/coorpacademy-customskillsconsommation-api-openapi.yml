@@ -172,6 +172,36 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    CustomSkillConsommationPayload:
+      type: object
+      required:
+      - title
+      - description
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        items:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomSkillItems'
+        icon:
+          type: object
+          properties:
+            color:
+              type: string
+            name:
+              type: string
+        locales:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              title:
+                type: string
+              description:
+                type: string
     Error:
       type: object
       properties:
@@ -190,31 +220,13 @@ components:
           format: int32
         message:
           type: string
-    CustomSkillMeta:
-      type: object
-      required:
-      - modifiedBy
-      properties:
-        modifiedBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-    CustomSkillConsommation:
+    CustomSkillConsommationBodyUpsert:
       type: object
       required:
       - ref
       - repository
-      - version
       - meta
       - state
-      - defaultLocale
-      - payload
       properties:
         repository:
           type: string
@@ -246,20 +258,16 @@ components:
           - draft
         count:
           type: number
-    CustomSkillItems:
-      type: object
-      properties:
-        type:
-          type: string
-        ref:
-          type: string
-    CustomSkillConsommationBodyUpsert:
+    CustomSkillConsommation:
       type: object
       required:
       - ref
       - repository
+      - version
       - meta
       - state
+      - defaultLocale
+      - payload
       properties:
         repository:
           type: string
@@ -280,36 +288,28 @@ components:
           $ref: '#/components/schemas/CustomSkillMeta'
         payload:
           $ref: '#/components/schemas/CustomSkillConsommationPayload'
-    CustomSkillConsommationPayload:
+    CustomSkillItems:
+      type: object
+      properties:
+        type:
+          type: string
+        ref:
+          type: string
+    CustomSkillMeta:
       type: object
       required:
-      - title
-      - description
+      - modifiedBy
       properties:
-        title:
+        modifiedBy:
           type: string
-        description:
+        createdAt:
           type: string
-        items:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CustomSkillItems'
-        icon:
-          type: object
-          properties:
-            color:
-              type: string
-            name:
-              type: string
-        locales:
-          type: object
-          additionalProperties:
-            type: object
-            properties:
-              title:
-                type: string
-              description:
-                type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
   securitySchemes:
     token:
       type: apiKey

@@ -47,17 +47,6 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   parameters:
-    BrandId:
-      name: brandId
-      in: formData
-      description: digital, up, onboarding etc.
-      type: string
-      required: true
-    UserId_:
-      name: data[userId]
-      in: formData
-      required: true
-      type: string
     LmsEndpoint:
       name: data[lmsEndpoint]
       in: formData
@@ -74,13 +63,18 @@ components:
       in: formData
       required: false
       type: string
+    UserId_:
+      name: data[userId]
+      in: formData
+      required: true
+      type: string
+    BrandId:
+      name: brandId
+      in: formData
+      description: digital, up, onboarding etc.
+      type: string
+      required: true
   responses:
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: string
     Success:
       description: Email sent successfully
       content:
@@ -100,6 +94,12 @@ components:
                     type: string
                   MessageId:
                     type: string
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
   securitySchemes:
     Authorization:
       type: apiKey

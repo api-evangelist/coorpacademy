@@ -46,8 +46,8 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   responses:
-    InternalError:
-      description: InternalError
+    LoNotFoundError:
+      description: NotFoundError
       content:
         application/json:
           schema:
@@ -58,8 +58,8 @@ components:
               body:
                 type: string
             example:
-              statusCode: 500
-              body: internal Error while resolving request
+              statusCode: 404
+              body: Given Learning Object not found or not bound to the enrolmentId/progressionId
     GetLaunchUrlSuccess:
       description: Response containe Launch Acces URL for the Coorp Scorm Player as well as progressionId and JWT
       content:
@@ -76,8 +76,8 @@ components:
               JWT:
                 type: string
                 description: Jwt to grant access to the progression endpoint to check Scorm Progress
-    LoNotFoundError:
-      description: NotFoundError
+    InternalError:
+      description: InternalError
       content:
         application/json:
           schema:
@@ -88,8 +88,8 @@ components:
               body:
                 type: string
             example:
-              statusCode: 404
-              body: Given Learning Object not found or not bound to the enrolmentId/progressionId
+              statusCode: 500
+              body: internal Error while resolving request
   schemas:
     launchURLBody:
       type: object

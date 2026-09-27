@@ -46,91 +46,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  responses:
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
-    ExtralifeSuccess:
-      description: POST extralife
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/progressionExtralife'
   schemas:
-    content:
-      type: object
-      properties:
-        ref:
-          type: string
-        type:
-          type: string
-        version:
-          type: string
-    progressionStateVariables:
-      type: object
-      properties:
-        default:
-          type: string
-      required:
-      - default
-      example:
-        lesson_status: failed
-        score_raw: '0'
-        score_max: 100
-        score_min: 0
-        session_time: '0000:00:26.15'
-      additionalProperties:
-        oneOf:
-        - type: string
-        - type: number
-        - type: boolean
-    instruction:
-      type: object
-      properties:
-        field:
-          type: string
-        type:
-          type: string
-          enum:
-          - add
-          - set
-        value:
-          oneOf:
-          - type: string
-          - type: number
-          - type: boolean
-    EngineOptions:
-      description: Content information related to the progression engine option
-      type: object
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
-    extralifePayload:
-      type: object
-      properties:
-        content:
-          $ref: '#/components/schemas/content'
-        nextContent:
-          $ref: '#/components/schemas/content'
-        instructions:
-          type: array
-          items:
-            $ref: '#/components/schemas/instruction'
     progressionExtralife:
       allOf:
       - $ref: '#/components/schemas/progression'
@@ -269,6 +185,90 @@ components:
               format: date-time
             enrolmentId:
               type: string
+    progressionStateVariables:
+      type: object
+      properties:
+        default:
+          type: string
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+    instruction:
+      type: object
+      properties:
+        field:
+          type: string
+        type:
+          type: string
+          enum:
+          - add
+          - set
+        value:
+          oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+    content:
+      type: object
+      properties:
+        ref:
+          type: string
+        type:
+          type: string
+        version:
+          type: string
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
+    extralifePayload:
+      type: object
+      properties:
+        content:
+          $ref: '#/components/schemas/content'
+        nextContent:
+          $ref: '#/components/schemas/content'
+        instructions:
+          type: array
+          items:
+            $ref: '#/components/schemas/instruction'
+  responses:
+    ExtralifeSuccess:
+      description: POST extralife
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/progressionExtralife'
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
   securitySchemes:
     Authorization:
       type: apiKey

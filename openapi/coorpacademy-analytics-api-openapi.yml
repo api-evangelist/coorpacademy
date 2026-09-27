@@ -346,7 +346,7 @@ paths:
       tags:
       - Analytics
       summary: Get slide's analytics
-      operationId: slideAnalyticsFromDynamodbGET
+      operationId: getV2AnalyticsSlidesBySlideId
       security:
       - authentication: []
       parameters:
@@ -367,6 +367,8 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
       x-swagger-router-controller: analytics
+      x-operation-id-source: normalized
+      x-operation-id-original: slideAnalyticsFromDynamodbGET
     servers:
     - url: https://progression.coorpacademy.com/api
   /v2/users/{userId}/analytics/completion:
@@ -374,7 +376,7 @@ paths:
       tags:
       - Analytics
       summary: Get user progression completion
-      operationId: completionFromDynamodbForUserGET
+      operationId: getV2UsersByUserIdAnalyticsCompletion
       security:
       - authentication: []
       parameters:
@@ -399,11 +401,13 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
       x-swagger-router-controller: analytics
+      x-operation-id-source: normalized
+      x-operation-id-original: completionFromDynamodbForUserGET
     post:
       tags:
       - Analytics
       summary: Post user progression completion
-      operationId: completionFromDynamodbForUserPOST
+      operationId: postV2UsersByUserIdAnalyticsCompletion
       security:
       - authentication: []
       parameters:
@@ -434,6 +438,8 @@ paths:
             schema:
               type: string
         description: 'format: engine@type@ref,engine@type@ref (ex: microlearning@chapter@cha_111,microlearning@chapter@cha_222,learner@level@mod_444)'
+      x-operation-id-source: normalized
+      x-operation-id-original: completionFromDynamodbForUserPOST
     servers:
     - url: https://progression.coorpacademy.com/api
   /v2/users/{userId}/analytics/completion/review:
@@ -505,7 +511,7 @@ paths:
       tags:
       - Analytics
       summary: Get content's slide count
-      operationId: slideCountFromDynamodbForUserGET
+      operationId: getV2UsersByUserIdAnalyticsSlideCount
       security:
       - authentication: []
       parameters:
@@ -530,11 +536,13 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
       x-swagger-router-controller: analytics
+      x-operation-id-source: normalized
+      x-operation-id-original: slideCountFromDynamodbForUserGET
     post:
       tags:
       - Analytics
       summary: Post content's slide count
-      operationId: slideCountFromDynamodbForUserPOST
+      operationId: postV2UsersByUserIdAnalyticsSlideCount
       security:
       - authentication: []
       parameters:
@@ -565,6 +573,8 @@ paths:
             schema:
               type: string
         description: 'format: engine@type@ref,engine@type@ref (ex: microlearning@chapter@cha_111,microlearning@chapter@cha_222,learner@level@mod_444)'
+      x-operation-id-source: normalized
+      x-operation-id-original: slideCountFromDynamodbForUserPOST
     servers:
     - url: https://progression.coorpacademy.com/api
   /v2/users/{userId}/analytics/progression/current:
@@ -608,6 +618,39 @@ paths:
     - url: https://progression.coorpacademy.com/api
 components:
   schemas:
+    Engine:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
+          type: string
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+        version:
+          type: string
+          description: Engine version
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
     Error:
       type: object
       properties:
@@ -635,39 +678,22 @@ components:
           type: integer
         total:
           type: integer
-    Content:
+    AnalyticsSlideCount:
       type: object
-      additionalProperties: false
       required:
       - ref
-      - type
-      description: Content information related to the progression
+      - best
+      - total
+      - nbAttempts
       properties:
         ref:
           type: string
-          description: Content ref
-        type:
-          type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
-        version:
-          type: string
-          description: Version of the given content
-    Engine:
-      type: object
-      additionalProperties: false
-      description: Content information related to the used progression engine
-      required:
-      - ref
-      properties:
-        ref:
-          type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
-        version:
-          type: string
-          description: Engine version
+        best:
+          type: integer
+        total:
+          type: integer
+        nbAttempts:
+          type: integer
     AnalyticsProgression:
       type: object
       additionalProperties: false
@@ -716,22 +742,24 @@ components:
         updatedAt:
           type: string
           format: date-time
-    AnalyticsSlideCount:
+    Engine_2:
       type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
       required:
       - ref
-      - best
-      - total
-      - nbAttempts
       properties:
         ref:
           type: string
-        best:
-          type: integer
-        total:
-          type: integer
-        nbAttempts:
-          type: integer
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
+        version:
+          type: string
+          description: Engine version
     UsersStarsReviewBySkill:
       type: object
       additionalProperties: false
@@ -798,24 +826,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    Engine_2:
-      type: object
-      additionalProperties: false
-      description: Content information related to the used progression engine
-      required:
-      - ref
-      properties:
-        ref:
-          type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
-          - external
-          - review
-        version:
-          type: string
-          description: Engine version
     AnalyticsSlideCount_2:
       type: object
       required:
@@ -836,12 +846,6 @@ components:
         nbDone:
           type: integer
   responses:
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Unauthorized
       content:
@@ -850,6 +854,12 @@ components:
             $ref: '#/components/schemas/Error'
     Forbidden:
       description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:

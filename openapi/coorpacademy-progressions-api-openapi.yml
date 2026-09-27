@@ -409,39 +409,6 @@ paths:
         required: true
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-        message:
-          type: string
-    Meta:
-      type: object
-      additionalProperties: false
-      required:
-      - createdAt
-      - updatedAt
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        source:
-          type: string
-          description: progression source
     MetaBody:
       type: object
       additionalProperties: false
@@ -458,6 +425,26 @@ components:
         enrolmentId:
           type: string
           description: id of the go1 enrolment
+    Instruction:
+      type: object
+      additionalProperties: false
+      required:
+      - field
+      - type
+      - value
+      properties:
+        field:
+          type: string
+        type:
+          type: string
+          enum:
+          - add
+          - set
+        value:
+          type:
+          - number
+          - boolean
+          - string
     Content:
       type: object
       additionalProperties: false
@@ -475,51 +462,6 @@ components:
         version:
           type: string
           description: Version of the given content
-    ExtraLifeRefused:
-      type: object
-      additionalProperties: false
-      required:
-      - content
-      - nextContent
-      properties:
-        content:
-          $ref: '#/components/schemas/Content'
-        nextContent:
-          $ref: '#/components/schemas/Content'
-      example:
-        content:
-          ref: extraLife
-          type: node
-        nextContent:
-          ref: failExitNode
-          type: failure
-    Progression:
-      type: object
-      additionalProperties: false
-      required:
-      - _id
-      - userId
-      - content
-      - engine
-      - meta
-      - state
-      properties:
-        _id:
-          type: string
-          description: Progression identifier
-        userId:
-          type: string
-          description: User identifier
-        content:
-          $ref: '#/components/schemas/Content'
-        engine:
-          $ref: '#/components/schemas/Engine'
-        engineOptions:
-          $ref: '#/components/schemas/EngineOptions'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        state:
-          $ref: '#/components/schemas/State'
     UpdatedProgression:
       type: object
       additionalProperties: false
@@ -547,170 +489,6 @@ components:
           $ref: '#/components/schemas/Engine'
         engineOptions:
           $ref: '#/components/schemas/EngineOptions'
-    Instruction:
-      type: object
-      additionalProperties: false
-      required:
-      - field
-      - type
-      - value
-      properties:
-        field:
-          type: string
-        type:
-          type: string
-          enum:
-          - add
-          - set
-        value:
-          type:
-          - number
-          - boolean
-          - string
-    EngineOptions:
-      type: object
-      additionalProperties: false
-      description: ''
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
-    MoveBody:
-      type: object
-      additionalProperties: false
-      required:
-      - nextContent
-      properties:
-        nextContent:
-          $ref: '#/components/schemas/Content'
-        instructions:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Instruction'
-          default: null
-      example:
-        nextContent:
-          ref: 1.A1.1
-          type: slide
-    ProgressionBody:
-      type: object
-      additionalProperties: false
-      required:
-      - content
-      - engine
-      properties:
-        _id:
-          type: string
-          description: Progression identifier
-        content:
-          $ref: '#/components/schemas/Content'
-        engine:
-          $ref: '#/components/schemas/Engine'
-        meta:
-          $ref: '#/components/schemas/MetaBody'
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Action'
-        engineOptions:
-          $ref: '#/components/schemas/EngineOptions'
-      example:
-        content:
-          ref: 1.A1
-          type: chapter
-        engine:
-          ref: microlearning
-          version: '1'
-        engineOptions:
-          livesDisabled: false
-        actions:
-        - type: move
-          payload:
-            nextContent:
-              ref: 1.A1.2
-              type: slide
-    ExtraLifeAccepted:
-      type: object
-      additionalProperties: false
-      required:
-      - content
-      - nextContent
-      properties:
-        content:
-          $ref: '#/components/schemas/Content'
-        nextContent:
-          $ref: '#/components/schemas/Content'
-      example:
-        content:
-          ref: extraLife
-          type: node
-        nextContent:
-          ref: 1.A1.1
-          type: slide
-    AnswerBody:
-      type: object
-      additionalProperties: false
-      required:
-      - content
-      - nextContent
-      - answer
-      properties:
-        content:
-          $ref: '#/components/schemas/Content'
-        nextContent:
-          $ref: '#/components/schemas/Content'
-        answer:
-          type: array
-          items:
-            type: string
-        isCorrect:
-          type:
-          - boolean
-          - 'null'
-        godMode:
-          type: boolean
-          default: false
-        instructions:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Instruction'
-          default: null
-      example:
-        content:
-          ref: 1.A1.2
-          type: slide
-        nextContent:
-          ref: 1.A1.1
-          type: slide
-        isCorrect: false
-        answer:
-        - foo
-        - bar
-    Engine:
-      type: object
-      additionalProperties: false
-      description: Content information related to the used progression engine
-      required:
-      - ref
-      properties:
-        ref:
-          type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
-          - external
-          - review
-        version:
-          type: string
-          description: Engine version
     Action:
       type: object
       required:
@@ -796,9 +574,231 @@ components:
                   type: string
               isCorrect:
                 type: boolean
+    ExtraLifeAccepted:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - nextContent
+      properties:
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+      example:
+        content:
+          ref: extraLife
+          type: node
+        nextContent:
+          ref: 1.A1.1
+          type: slide
+    ExtraLifeRefused:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - nextContent
+      properties:
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+      example:
+        content:
+          ref: extraLife
+          type: node
+        nextContent:
+          ref: failExitNode
+          type: failure
+    ProgressionBody:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - engine
+      properties:
+        _id:
+          type: string
+          description: Progression identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        engine:
+          $ref: '#/components/schemas/Engine'
+        meta:
+          $ref: '#/components/schemas/MetaBody'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        engineOptions:
+          $ref: '#/components/schemas/EngineOptions'
+      example:
+        content:
+          ref: 1.A1
+          type: chapter
+        engine:
+          ref: microlearning
+          version: '1'
+        engineOptions:
+          livesDisabled: false
+        actions:
+        - type: move
+          payload:
+            nextContent:
+              ref: 1.A1.2
+              type: slide
+    MoveBody:
+      type: object
+      additionalProperties: false
+      required:
+      - nextContent
+      properties:
+        nextContent:
+          $ref: '#/components/schemas/Content'
+        instructions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Instruction'
+          default: null
+      example:
+        nextContent:
+          ref: 1.A1.1
+          type: slide
+    AnswerBody:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - nextContent
+      - answer
+      properties:
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+        answer:
+          type: array
+          items:
+            type: string
+        isCorrect:
+          type:
+          - boolean
+          - 'null'
+        godMode:
+          type: boolean
+          default: false
+        instructions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Instruction'
+          default: null
+      example:
+        content:
+          ref: 1.A1.2
+          type: slide
+        nextContent:
+          ref: 1.A1.1
+          type: slide
+        isCorrect: false
+        answer:
+        - foo
+        - bar
+    Engine:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
+          type: string
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
+        version:
+          type: string
+          description: Engine version
+    Meta:
+      type: object
+      additionalProperties: false
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+          description: progression source
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
+    EngineOptions:
+      type: object
+      additionalProperties: false
+      description: ''
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
+    Progression:
+      type: object
+      additionalProperties: false
+      required:
+      - _id
+      - userId
+      - content
+      - engine
+      - meta
+      - state
+      properties:
+        _id:
+          type: string
+          description: Progression identifier
+        userId:
+          type: string
+          description: User identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        engine:
+          $ref: '#/components/schemas/Engine'
+        engineOptions:
+          $ref: '#/components/schemas/EngineOptions'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        state:
+          $ref: '#/components/schemas/State'
   responses:
-    Conflit:
-      description: Conflit
+    Unauthorized:
+      description: Unauthorized
       content:
         application/json:
           schema:
@@ -809,20 +809,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Forbidden:
       description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflit:
+      description: Conflit
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found
       content:
         application/json:
           schema:
