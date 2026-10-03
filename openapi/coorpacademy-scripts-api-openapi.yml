@@ -329,129 +329,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    ScriptLocales:
-      type: object
-      properties:
-        scriptUrl:
-          type: string
-          description: Script url on aws s3
-        srtUrl:
-          type: string
-          description: Srt url on aws s3
-        jwTrackId:
-          type: string
-          description: Track key on jw player
-    ScriptResponse:
-      type: object
-      required:
-      - structure
-      - locales
-      - videoId
-      - repository
-      properties:
-        structure:
-          $ref: '#/components/schemas/ScriptStructure'
-        locales:
-          $ref: '#/components/schemas/ScriptLocales'
-        videoId:
-          type: string
-          description: id of the video
-        repository:
-          type: string
-          description: repository of the video
-      example:
-        structure:
-          ref: sub_123
-          states:
-            en:
-              edition: validate
-              published: true
-              original: true
-              authot:
-                state: success
-                progression: 100
-            fr:
-              edition: validate
-              published: true
-              original: true
-              authot:
-                state: success
-                progression: 100
-        videoId: videoId
-        repository: repo-core
-        locales:
-          en:
-            scriptUrl: srtUrl
-            srtUrl: strUrl
-            jwTrackId: id_track_en
-          es:
-            scriptUrl: srtUrl
-            srtUrl: strUrl
-            jwTrackId: id_track_es
-          fr:
-            scriptUrl: srtUrl
-            srtUrl: strUrl
-            jwTrackId: id_track_fr
-    Meta:
-      type: object
-      required:
-      - createdAt
-      - updatedAt
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          example: '2021-10-11T14:54:52.368Z'
-        updatedAt:
-          type: string
-          format: date-time
-          example: '2021-10-11T14:54:52.368Z'
-    ScriptBodyRequestPut:
-      type: object
-      properties:
-        structure:
-          $ref: '#/components/schemas/ScriptStructure'
-        locales:
-          $ref: '#/components/schemas/ScriptLocales'
-        videoId:
-          type: string
-          description: id of the video
-        repository:
-          type: string
-          description: repository of the video
-      example:
-        locales:
-          en:
-            scriptUrl: string
-            srtUrl: string
-            jwTrackId: id_track_en
-        structure:
-          states:
-            en:
-              edition: validate
-              published: true
-              orignal: true
-              authot:
-                state: success
-                progression: 100
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
     ScriptBodyRequest:
       type: object
       properties:
@@ -505,6 +382,129 @@ components:
             scriptUrl: url3
             srtUrl: srtUrl
             jwTrackId: id_track_es
+    ScriptBodyRequestPut:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/ScriptStructure'
+        locales:
+          $ref: '#/components/schemas/ScriptLocales'
+        videoId:
+          type: string
+          description: id of the video
+        repository:
+          type: string
+          description: repository of the video
+      example:
+        locales:
+          en:
+            scriptUrl: string
+            srtUrl: string
+            jwTrackId: id_track_en
+        structure:
+          states:
+            en:
+              edition: validate
+              published: true
+              orignal: true
+              authot:
+                state: success
+                progression: 100
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    ScriptLocales:
+      type: object
+      properties:
+        scriptUrl:
+          type: string
+          description: Script url on aws s3
+        srtUrl:
+          type: string
+          description: Srt url on aws s3
+        jwTrackId:
+          type: string
+          description: Track key on jw player
+    Meta:
+      type: object
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
+    ScriptResponse:
+      type: object
+      required:
+      - structure
+      - locales
+      - videoId
+      - repository
+      properties:
+        structure:
+          $ref: '#/components/schemas/ScriptStructure'
+        locales:
+          $ref: '#/components/schemas/ScriptLocales'
+        videoId:
+          type: string
+          description: id of the video
+        repository:
+          type: string
+          description: repository of the video
+      example:
+        structure:
+          ref: sub_123
+          states:
+            en:
+              edition: validate
+              published: true
+              original: true
+              authot:
+                state: success
+                progression: 100
+            fr:
+              edition: validate
+              published: true
+              original: true
+              authot:
+                state: success
+                progression: 100
+        videoId: videoId
+        repository: repo-core
+        locales:
+          en:
+            scriptUrl: srtUrl
+            srtUrl: strUrl
+            jwTrackId: id_track_en
+          es:
+            scriptUrl: srtUrl
+            srtUrl: strUrl
+            jwTrackId: id_track_es
+          fr:
+            scriptUrl: srtUrl
+            srtUrl: strUrl
+            jwTrackId: id_track_fr
     ScriptStructure:
       type: object
       properties:

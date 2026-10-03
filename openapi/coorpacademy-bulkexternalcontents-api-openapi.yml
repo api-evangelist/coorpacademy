@@ -226,7 +226,36 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    BulkExternalContent:
+    BulkExternalContentMeta:
+      type: object
+      required:
+      - modifiedBy
+      properties:
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        modifiedBy:
+          type: string
+        createdBy:
+          type: string
+        disableLocalesFallback:
+          type: boolean
+        taggedNewUntil:
+          type: string
+    ErrorCSV:
+      type: object
+      properties:
+        column:
+          type: string
+          description: column of the errorCSV
+        errorCode:
+          type: string
+          description: errorCode of the errorCSV
+        description:
+          type: string
+          description: description of the errorCSV
+    BulkExternalContentStateUpsert:
       type: object
       properties:
         ref:
@@ -235,63 +264,24 @@ components:
         repository:
           type: string
           description: repository of the bulk external content
-        states:
+        state:
           type: string
+          enum:
+          - saved
+          - deleted
           description: state of the bulk external content
-        progress:
-          type: number
-          description: progress of the bulk external content
         metadata:
           $ref: '#/components/schemas/BulkExternalContentMeta'
-        externalContentList:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ExternalContentForBulk'
-        resourceUrl:
-          type: string
-          description: resourceUrl of the bulk external content
-        metadataUrl:
-          type: string
-          description: metadataUrl of the bulk external content
+      required:
+      - ref
+      - repository
+      - state
       example:
-        ref: ref
+        ref: extBulk_zIaDGjAXDA
         repository: content-core@cockpitRecette-core
-        states: pending
-        progress: 50
+        states: saved
         metadata:
-          createdAt: '2021-10-11T14:54:52.368Z'
-          updatedAt: '2021-10-11T14:54:52.368Z'
           modifiedBy: ouiza
-          createdBy: ouiza
-          disableLocalesFallback: true
-        externalContentList:
-          key1:
-            duration: '10'
-            cover:
-              mimeType: image/jpeg
-              type: img
-              url: url
-            skills:
-            - skill0
-            - skill1
-            partners:
-            - partner0
-            - partner1
-            mode: mode
-            title: title
-            fileName: fileName
-            description: description
-            errorResource:
-              key1:
-                type: error1
-                fileName: fileName
-            errorCSV:
-              key1:
-                column: column
-                errorCode: errorCode
-                description: description
-        resourceUrl: ''
-        metadataUrl: ''
     BulkExternalContentUpsertResponse:
       type: object
       properties:
@@ -377,82 +367,24 @@ components:
                 description: description
         resourceUrl: ''
         metadataUrl: ''
-    ExternalContentForBulk:
+    Error:
       type: object
       properties:
-        duration:
-          type: number
-          description: duration of the external content
-        cover:
-          type: object
-          properties:
-            mimeType:
-              type: string
-              description: mimeType of the cover
-            type:
-              type: string
-              description: type of the cover
-            url:
-              type: string
-              description: url of the cover
-        skills:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
           type: array
           items:
-            type: string
-          description: skills of the external content
-        partners:
-          type: array
-          items:
-            type: string
-          description: partners of the external content
-        thematiques:
-          type: array
-          items:
-            type: string
-          description: thematiques of the external content
-        disableLocalesFallback:
+            type: object
+        success:
           type: boolean
-          description: disableLocalesFallback of the external content
-        lang:
+        status:
+          type: integer
+          format: int32
+        message:
           type: string
-          description: language of the external content
-        state:
-          type: string
-          description: state of the external content
-        url:
-          type: string
-          description: url of the external content
-        externalRef:
-          type: string
-          description: external ref of the external content
-        mode:
-          type: string
-          description: mode of the external content
-        title:
-          type: string
-          description: title of the external content
-        fileName:
-          type: string
-          description: file name of the external content
-        description:
-          type: string
-          description: description of the external content
-        errorResource:
-          $ref: '#/components/schemas/ErrorResource'
-        errorCSV:
-          $ref: '#/components/schemas/ErrorCSV'
-    ErrorCSV:
-      type: object
-      properties:
-        column:
-          type: string
-          description: column of the errorCSV
-        errorCode:
-          type: string
-          description: errorCode of the errorCSV
-        description:
-          type: string
-          description: description of the errorCSV
     BulkExternalContentUpsert:
       type: object
       properties:
@@ -526,24 +458,81 @@ components:
                 description: description
         resourceUrl: ''
         metadataUrl: ''
-    Error:
+    ErrorResource:
       type: object
       properties:
-        id:
+        type:
           type: string
-        code:
+          description: type of the error resource
+        fileName:
           type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
+          description: name of the error resource
+    BulkExternalContent:
+      type: object
+      properties:
+        ref:
           type: string
+          description: ref of the bulk external content
+        repository:
+          type: string
+          description: repository of the bulk external content
+        states:
+          type: string
+          description: state of the bulk external content
+        progress:
+          type: number
+          description: progress of the bulk external content
+        metadata:
+          $ref: '#/components/schemas/BulkExternalContentMeta'
+        externalContentList:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ExternalContentForBulk'
+        resourceUrl:
+          type: string
+          description: resourceUrl of the bulk external content
+        metadataUrl:
+          type: string
+          description: metadataUrl of the bulk external content
+      example:
+        ref: ref
+        repository: content-core@cockpitRecette-core
+        states: pending
+        progress: 50
+        metadata:
+          createdAt: '2021-10-11T14:54:52.368Z'
+          updatedAt: '2021-10-11T14:54:52.368Z'
+          modifiedBy: ouiza
+          createdBy: ouiza
+          disableLocalesFallback: true
+        externalContentList:
+          key1:
+            duration: '10'
+            cover:
+              mimeType: image/jpeg
+              type: img
+              url: url
+            skills:
+            - skill0
+            - skill1
+            partners:
+            - partner0
+            - partner1
+            mode: mode
+            title: title
+            fileName: fileName
+            description: description
+            errorResource:
+              key1:
+                type: error1
+                fileName: fileName
+            errorCSV:
+              key1:
+                column: column
+                errorCode: errorCode
+                description: description
+        resourceUrl: ''
+        metadataUrl: ''
     BulkExternalContentInitialUpsert:
       type: object
       properties:
@@ -583,59 +572,70 @@ components:
           modifiedBy: ouiza
           createdBy: ouiza
           disableLocalesFallback: true
-    ErrorResource:
+    ExternalContentForBulk:
       type: object
       properties:
-        type:
-          type: string
-          description: type of the error resource
-        fileName:
-          type: string
-          description: name of the error resource
-    BulkExternalContentStateUpsert:
-      type: object
-      properties:
-        ref:
-          type: string
-          description: ref of the bulk external content
-        repository:
-          type: string
-          description: repository of the bulk external content
-        state:
-          type: string
-          enum:
-          - saved
-          - deleted
-          description: state of the bulk external content
-        metadata:
-          $ref: '#/components/schemas/BulkExternalContentMeta'
-      required:
-      - ref
-      - repository
-      - state
-      example:
-        ref: extBulk_zIaDGjAXDA
-        repository: content-core@cockpitRecette-core
-        states: saved
-        metadata:
-          modifiedBy: ouiza
-    BulkExternalContentMeta:
-      type: object
-      required:
-      - modifiedBy
-      properties:
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-        modifiedBy:
-          type: string
-        createdBy:
-          type: string
+        duration:
+          type: number
+          description: duration of the external content
+        cover:
+          type: object
+          properties:
+            mimeType:
+              type: string
+              description: mimeType of the cover
+            type:
+              type: string
+              description: type of the cover
+            url:
+              type: string
+              description: url of the cover
+        skills:
+          type: array
+          items:
+            type: string
+          description: skills of the external content
+        partners:
+          type: array
+          items:
+            type: string
+          description: partners of the external content
+        thematiques:
+          type: array
+          items:
+            type: string
+          description: thematiques of the external content
         disableLocalesFallback:
           type: boolean
-        taggedNewUntil:
+          description: disableLocalesFallback of the external content
+        lang:
           type: string
+          description: language of the external content
+        state:
+          type: string
+          description: state of the external content
+        url:
+          type: string
+          description: url of the external content
+        externalRef:
+          type: string
+          description: external ref of the external content
+        mode:
+          type: string
+          description: mode of the external content
+        title:
+          type: string
+          description: title of the external content
+        fileName:
+          type: string
+          description: file name of the external content
+        description:
+          type: string
+          description: description of the external content
+        errorResource:
+          $ref: '#/components/schemas/ErrorResource'
+        errorCSV:
+          $ref: '#/components/schemas/ErrorCSV'
   securitySchemes:
     token:
       type: apiKey

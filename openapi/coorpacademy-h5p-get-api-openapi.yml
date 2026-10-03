@@ -61,13 +61,13 @@ components:
     InvalidJWTokenError:
       description: InvalidJWTokenError
       type: string
+    ProgressionNotFoundError:
+      description: ProgressionNotFoundError
+      type: string
     NotDefinedError:
       description: NotDefinedError
       type: string
     BrandNotFoundError:
-      description: ProgressionNotFoundError
-      type: string
-    ProgressionNotFoundError:
       description: ProgressionNotFoundError
       type: string
     Success:

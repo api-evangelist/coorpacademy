@@ -32,29 +32,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  parameters:
-    exitNodeRef:
-      name: exitNodeRef
-      in: path
-      description: ref of the exitNode
-      required: true
-      schema:
-        type: string
   responses:
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
     ExitNodeSuccess:
       description: Get exitNode
       content:
@@ -80,6 +58,28 @@ components:
               ref: biba-exit-node-C
               title: title
               type: success
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+  parameters:
+    exitNodeRef:
+      name: exitNodeRef
+      in: path
+      description: ref of the exitNode
+      required: true
+      schema:
+        type: string
   schemas:
     media:
       type: object

@@ -33,6 +33,17 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   responses:
+    LevelSuccess:
+      description: Fetch level
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              universalRef:
+                type: string
+            example:
+              universalRef: mod_NJVc3JLJr
     InternalError:
       description: InternalError
       content:
@@ -47,17 +58,6 @@ components:
             example:
               statusCode: 500
               body: internal Error while resolving request
-    LevelSuccess:
-      description: Fetch level
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              universalRef:
-                type: string
-            example:
-              universalRef: mod_NJVc3JLJr
   parameters:
     levelRef:
       name: levelRef

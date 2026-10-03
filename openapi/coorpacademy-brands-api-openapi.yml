@@ -348,118 +348,6 @@ paths:
       x-swagger-router-controller: brands
 components:
   schemas:
-    UserMappingValue:
-      type: array
-      items:
-        type: string
-    ImportPayload:
-      type: object
-      properties:
-        users:
-          type: object
-          properties:
-            template:
-              type: string
-    SAMLPayload:
-      type: object
-      properties:
-        authnRequestBinding:
-          type: string
-          enum:
-          - HTTP-POST
-          - HTTP-REDIRECT
-        disableRequestedAuthnContext:
-          type: boolean
-        identifierFormat:
-          type: string
-        forceAuthn:
-          type: boolean
-        skipRequestCompression:
-          type: boolean
-        logoutUrl:
-          type: string
-        idpIssuer:
-          type: string
-        acceptedClockSkewMs:
-          type: number
-          minimum: 0
-          maximum: 100000
-        signatureAlgorithm:
-          type: string
-          enum:
-          - sha1
-          - sha256
-          - sha512
-        cert:
-          type: string
-        entryPoint:
-          type: string
-        userMapping:
-          $ref: '#/components/schemas/userMappingPayload'
-    Brands:
-      type: array
-      items:
-        $ref: '#/components/schemas/Brand'
-    BrandMigrationStatus:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Message
-        status:
-          type: string
-          description: Status of migration
-        brand:
-          type: string
-          description: Brand migrated
-        cluster:
-          type: string
-          description: cluster migrated to
-    OIDCPayload:
-      type: object
-      properties:
-        auth:
-          type: object
-          properties:
-            authorizationURL:
-              type: string
-            clientID:
-              type: string
-            clientSecret:
-              type: string
-            issuer:
-              type: string
-            scope:
-              type: string
-            tokenURL:
-              type: string
-            userInfoURL:
-              type: string
-            responseMode:
-              type: string
-            nonce:
-              type: boolean
-            skipUserProfile:
-              type: boolean
-            authorizationParams:
-              type: object
-              properties:
-                resource:
-                  type: string
-        userMapping:
-          $ref: '#/components/schemas/userMappingPayload'
-    Error:
-      type: object
-      properties:
-        success:
-          type: boolean
-        id:
-          type: string
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
     BrandPayload:
       type: object
       properties:
@@ -967,18 +855,6 @@ components:
         version:
           type: number
           description: Incremental number to indicate a new version related to changes on config
-    Slider:
-      type: object
-      properties:
-        start:
-          type: object
-          $ref: '#/components/schemas/Slide'
-        resume:
-          type: object
-          $ref: '#/components/schemas/Slide'
-        battle:
-          type: object
-          $ref: '#/components/schemas/Slide'
     userMappingPayload:
       type: object
       properties:
@@ -1055,10 +931,42 @@ components:
                 $ref: '#/components/schemas/UserMappingValue'
               extendedField3:
                 $ref: '#/components/schemas/UserMappingValue'
-    BrandsList:
+    BrandMigrationStatus:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message
+        status:
+          type: string
+          description: Status of migration
+        brand:
+          type: string
+          description: Brand migrated
+        cluster:
+          type: string
+          description: cluster migrated to
+    Boolean:
+      type: object
+      properties:
+        value:
+          type: boolean
+    UserMappingValue:
       type: array
       items:
         type: string
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+        id:
+          type: string
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     NewBrand:
       type: object
       properties:
@@ -1073,18 +981,18 @@ components:
           x-example: digital
       required:
       - hostname
-    Slide:
+    Slider:
       type: object
       properties:
-        image:
-          type: string
-          description: Image url to be used as background for the slide
-        align:
-          type: string
-          description: 'Text align on the slide. It should be one of these 3 values: ''left'', ''middle'', ''right'''
-        style:
-          type: string
-          description: 'Color style for text on the slide. It should be one of these 2 values: ''light'', ''dark'''
+        start:
+          type: object
+          $ref: '#/components/schemas/Slide'
+        resume:
+          type: object
+          $ref: '#/components/schemas/Slide'
+        battle:
+          type: object
+          $ref: '#/components/schemas/Slide'
     SSOPayload:
       type: object
       properties:
@@ -1103,11 +1011,14 @@ components:
           $ref: '#/components/schemas/SAMLPayload'
         oidc:
           $ref: '#/components/schemas/OIDCPayload'
-    Boolean:
+    ImportPayload:
       type: object
       properties:
-        value:
-          type: boolean
+        users:
+          type: object
+          properties:
+            template:
+              type: string
     Brand:
       type: object
       properties:
@@ -1120,6 +1031,95 @@ components:
         payload:
           type: object
           $ref: '#/components/schemas/BrandPayload'
+    SAMLPayload:
+      type: object
+      properties:
+        authnRequestBinding:
+          type: string
+          enum:
+          - HTTP-POST
+          - HTTP-REDIRECT
+        disableRequestedAuthnContext:
+          type: boolean
+        identifierFormat:
+          type: string
+        forceAuthn:
+          type: boolean
+        skipRequestCompression:
+          type: boolean
+        logoutUrl:
+          type: string
+        idpIssuer:
+          type: string
+        acceptedClockSkewMs:
+          type: number
+          minimum: 0
+          maximum: 100000
+        signatureAlgorithm:
+          type: string
+          enum:
+          - sha1
+          - sha256
+          - sha512
+        cert:
+          type: string
+        entryPoint:
+          type: string
+        userMapping:
+          $ref: '#/components/schemas/userMappingPayload'
+    BrandsList:
+      type: array
+      items:
+        type: string
+    OIDCPayload:
+      type: object
+      properties:
+        auth:
+          type: object
+          properties:
+            authorizationURL:
+              type: string
+            clientID:
+              type: string
+            clientSecret:
+              type: string
+            issuer:
+              type: string
+            scope:
+              type: string
+            tokenURL:
+              type: string
+            userInfoURL:
+              type: string
+            responseMode:
+              type: string
+            nonce:
+              type: boolean
+            skipUserProfile:
+              type: boolean
+            authorizationParams:
+              type: object
+              properties:
+                resource:
+                  type: string
+        userMapping:
+          $ref: '#/components/schemas/userMappingPayload'
+    Brands:
+      type: array
+      items:
+        $ref: '#/components/schemas/Brand'
+    Slide:
+      type: object
+      properties:
+        image:
+          type: string
+          description: Image url to be used as background for the slide
+        align:
+          type: string
+          description: 'Text align on the slide. It should be one of these 3 values: ''left'', ''middle'', ''right'''
+        style:
+          type: string
+          description: 'Color style for text on the slide. It should be one of these 2 values: ''light'', ''dark'''
   securitySchemes:
     authentication:
       type: apiKey

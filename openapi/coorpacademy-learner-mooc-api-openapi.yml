@@ -214,31 +214,6 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   parameters:
-    ParentPost:
-      name: data[parentPost]
-      in: formData
-      description: Original post id on the forum
-      required: true
-      type: string
-    UserId:
-      name: userId
-      in: formData
-      description: id from /api/v1/users/me
-      required: true
-      type: string
-    ExportType:
-      name: data[type]
-      in: formData
-      required: true
-      type: string
-    Rewards:
-      description: Labels of rewards. ["str1", "str2", "str3"]
-      name: data[rewards]
-      in: formData
-      required: true
-      type: array
-      items:
-        type: string
     ExportFormat:
       name: data[format]
       in: formData
@@ -254,17 +229,14 @@ components:
       in: formData
       required: true
       type: string
-    Source:
-      name: data[source]
+    Post:
+      name: data[post]
       in: formData
-      required: false
+      description: Id of the post containing the reply
+      required: true
       type: string
-      enum:
-      - import
-      - sso
-      - signup
-    Url:
-      name: data[url]
+    BattleId:
+      name: data[battleId]
       in: formData
       required: true
       type: string
@@ -273,14 +245,14 @@ components:
       in: formData
       required: true
       type: string
-    Post:
-      name: data[post]
+    ParentPost:
+      name: data[parentPost]
       in: formData
-      description: Id of the post containing the reply
+      description: Original post id on the forum
       required: true
       type: string
-    GoalLabel:
-      name: data[goalLabel]
+    Url:
+      name: data[url]
       in: formData
       required: true
       type: string
@@ -290,18 +262,46 @@ components:
       description: digital, up, onboarding etc.
       type: string
       required: true
-    LoginUrl:
-      name: data[loginUrl]
-      in: formData
-      required: true
-      type: string
     ProgressionId:
       name: data[progressionId]
       in: formData
       required: true
       type: string
-    BattleId:
-      name: data[battleId]
+    UserId:
+      name: userId
+      in: formData
+      description: id from /api/v1/users/me
+      required: true
+      type: string
+    GoalLabel:
+      name: data[goalLabel]
+      in: formData
+      required: true
+      type: string
+    Source:
+      name: data[source]
+      in: formData
+      required: false
+      type: string
+      enum:
+      - import
+      - sso
+      - signup
+    ExportType:
+      name: data[type]
+      in: formData
+      required: true
+      type: string
+    Rewards:
+      description: Labels of rewards. ["str1", "str2", "str3"]
+      name: data[rewards]
+      in: formData
+      required: true
+      type: array
+      items:
+        type: string
+    LoginUrl:
+      name: data[loginUrl]
       in: formData
       required: true
       type: string
@@ -311,6 +311,12 @@ components:
       required: true
       type: string
   responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
     Success:
       description: Email sent successfully
       content:
@@ -330,12 +336,6 @@ components:
                     type: string
                   MessageId:
                     type: string
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: string
   securitySchemes:
     Authorization:
       type: apiKey

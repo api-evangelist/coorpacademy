@@ -27,15 +27,15 @@ paths:
       x-operation-id-source: derived
 components:
   parameters:
+    SkillRef:
+      name: data[skillRef]
+      in: formData
+      required: true
+      type: string
     UserId:
       name: userId
       in: formData
       description: id from /api/v1/users/me
-      required: true
-      type: string
-    SkillRef:
-      name: data[skillRef]
-      in: formData
       required: true
       type: string
   responses:

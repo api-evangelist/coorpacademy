@@ -618,22 +618,6 @@ paths:
     - url: https://progression.coorpacademy.com/api
 components:
   schemas:
-    Engine:
-      type: object
-      additionalProperties: false
-      description: Content information related to the used progression engine
-      required:
-      - ref
-      properties:
-        ref:
-          type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
-        version:
-          type: string
-          description: Engine version
     Content:
       type: object
       additionalProperties: false
@@ -668,32 +652,6 @@ components:
           type: integer
         message:
           type: string
-    AnalyticsSlide:
-      type: object
-      additionalProperties: false
-      properties:
-        rate:
-          type: integer
-        success:
-          type: integer
-        total:
-          type: integer
-    AnalyticsSlideCount:
-      type: object
-      required:
-      - ref
-      - best
-      - total
-      - nbAttempts
-      properties:
-        ref:
-          type: string
-        best:
-          type: integer
-        total:
-          type: integer
-        nbAttempts:
-          type: integer
     AnalyticsProgression:
       type: object
       additionalProperties: false
@@ -742,7 +700,33 @@ components:
         updatedAt:
           type: string
           format: date-time
-    Engine_2:
+    AnalyticsSlide:
+      type: object
+      additionalProperties: false
+      properties:
+        rate:
+          type: integer
+        success:
+          type: integer
+        total:
+          type: integer
+    AnalyticsSlideCount:
+      type: object
+      required:
+      - ref
+      - best
+      - total
+      - nbAttempts
+      properties:
+        ref:
+          type: string
+        best:
+          type: integer
+        total:
+          type: integer
+        nbAttempts:
+          type: integer
+    Engine:
       type: object
       additionalProperties: false
       description: Content information related to the used progression engine
@@ -755,8 +739,6 @@ components:
           enum:
           - microlearning
           - learner
-          - external
-          - review
         version:
           type: string
           description: Engine version
@@ -773,6 +755,29 @@ components:
         stars:
           type: integer
           description: Number of stars earned by the User on that review
+    ReviewCompletions:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: User identifier
+        user_content:
+          type: string
+          description: user Id and content reference
+        stars:
+          type: integer
+        progressionId:
+          type: string
+          description: progression identifier
+        isDone:
+          type: boolean
+        content:
+          type: string
+        nbSlide:
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
     CurrentProgression:
       type: object
       additionalProperties: false
@@ -803,29 +808,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    ReviewCompletions:
-      type: object
-      properties:
-        userId:
-          type: string
-          description: User identifier
-        user_content:
-          type: string
-          description: user Id and content reference
-        stars:
-          type: integer
-        progressionId:
-          type: string
-          description: progression identifier
-        isDone:
-          type: boolean
-        content:
-          type: string
-        nbSlide:
-          type: integer
-        updatedAt:
-          type: string
-          format: date-time
     AnalyticsSlideCount_2:
       type: object
       required:
@@ -845,6 +827,24 @@ components:
           type: integer
         nbDone:
           type: integer
+    Engine_2:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
+          type: string
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
+        version:
+          type: string
+          description: Engine version
   responses:
     Unauthorized:
       description: Unauthorized

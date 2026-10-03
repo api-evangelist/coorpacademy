@@ -49,117 +49,25 @@ paths:
               $ref: '#/components/schemas/ExtraLifeRefused'
         required: true
 components:
-  responses:
-    NotFound:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Conflit:
-      description: Conflit
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Engine:
-      type: object
-      additionalProperties: false
-      description: Content information related to the used progression engine
-      required:
-      - ref
-      properties:
-        ref:
-          type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
-          - external
-          - review
-        version:
-          type: string
-          description: Engine version
-    Content:
+    ExtraLifeRefused:
       type: object
       additionalProperties: false
       required:
-      - ref
-      - type
-      description: Content information related to the progression
+      - content
+      - nextContent
       properties:
-        ref:
-          type: string
-          description: Content ref
-        type:
-          type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
-        version:
-          type: string
-          description: Version of the given content
-    Meta:
-      type: object
-      additionalProperties: false
-      required:
-      - createdAt
-      - updatedAt
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        source:
-          type: string
-          description: progression source
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-        message:
-          type: string
-    EngineOptions:
-      type: object
-      additionalProperties: false
-      description: ''
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+      example:
+        content:
+          ref: extraLife
+          type: node
+        nextContent:
+          ref: failExitNode
+          type: failure
     UpdatedProgression:
       type: object
       additionalProperties: false
@@ -187,6 +95,23 @@ components:
           $ref: '#/components/schemas/Engine'
         engineOptions:
           $ref: '#/components/schemas/EngineOptions'
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
+          type: string
     State:
       type: object
       additionalProperties: false
@@ -263,24 +188,99 @@ components:
                   type: string
               isCorrect:
                 type: boolean
-    ExtraLifeRefused:
+    Content:
       type: object
       additionalProperties: false
       required:
-      - content
-      - nextContent
+      - ref
+      - type
+      description: Content information related to the progression
       properties:
-        content:
-          $ref: '#/components/schemas/Content'
-        nextContent:
-          $ref: '#/components/schemas/Content'
-      example:
-        content:
-          ref: extraLife
-          type: node
-        nextContent:
-          ref: failExitNode
-          type: failure
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
+    Meta:
+      type: object
+      additionalProperties: false
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+          description: progression source
+    EngineOptions:
+      type: object
+      additionalProperties: false
+      description: ''
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
+    Engine:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
+          type: string
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
+        version:
+          type: string
+          description: Engine version
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflit:
+      description: Conflit
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     authentication:
       type: apiKey

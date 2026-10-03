@@ -197,38 +197,15 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    CertificationConsommation:
+    CertificationRewards:
       type: object
       properties:
-        ongoing:
-          type: boolean
-        ref:
-          type: string
-        repository:
-          type: string
-        version:
-          type: number
-        payload:
-          $ref: '#/components/schemas/CertificationConsommationPayload'
-        order_:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CertificationConsommationOrderMap'
-    StarsRewards:
-      type:
-      - 'null'
-      - object
-      required:
-      - value
-      - groups
-      properties:
-        value:
-          type: number
-        groups:
-          type: array
-          items:
-            type: string
+        diploma:
+          $ref: '#/components/schemas/DiplomaRewards'
+        resource:
+          $ref: '#/components/schemas/ResourceRewards'
+        stars:
+          $ref: '#/components/schemas/StarsRewards'
     Error:
       type: object
       properties:
@@ -247,77 +224,6 @@ components:
           format: int32
         message:
           type: string
-    ConsommationContentCount:
-      type: object
-      properties:
-        _id:
-          type: string
-          enum:
-          - published
-          - archived
-          - draft
-        count:
-          type: number
-    CertificationConsommationOrderMap:
-      type: number
-    CertificationConsommationPayload:
-      type: object
-      properties:
-        structure:
-          $ref: '#/components/schemas/CertificationStructureSnapshot'
-        locales:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CertificationLocales'
-    CertificationConditionItemsDecoder:
-      type: object
-      properties:
-        type:
-          type: string
-        engine:
-          type: string
-        ref:
-          type: string
-    DiplomaRewards:
-      type:
-      - 'null'
-      - object
-      properties:
-        logo_url:
-          type:
-          - string
-          - 'null'
-        signature_url:
-          type:
-          - string
-          - 'null'
-    CertificationStructureSnapshot:
-      type: object
-      required:
-      - title
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        defaultLocale:
-          type: string
-        condition:
-          $ref: '#/components/schemas/CertificationCondition'
-        rewards:
-          $ref: '#/components/schemas/CertificationRewards'
-        groups:
-          type: array
-          items:
-            type: string
-        populations:
-          type: array
-          items:
-            type: string
-        svg:
-          type: string
-        updated:
-          type: boolean
     ResourceRewards:
       type:
       - 'null'
@@ -330,6 +236,17 @@ components:
           type: string
         file_uri:
           type: string
+    ConsommationContentCount:
+      type: object
+      properties:
+        _id:
+          type: string
+          enum:
+          - published
+          - archived
+          - draft
+        count:
+          type: number
     CertificationLocales:
       type: object
       properties:
@@ -367,15 +284,6 @@ components:
                   type: array
                   items:
                     type: string
-    CertificationRewards:
-      type: object
-      properties:
-        diploma:
-          $ref: '#/components/schemas/DiplomaRewards'
-        resource:
-          $ref: '#/components/schemas/ResourceRewards'
-        stars:
-          $ref: '#/components/schemas/StarsRewards'
     CertificationCondition:
       type: object
       properties:
@@ -392,6 +300,98 @@ components:
           type: string
         level:
           type: string
+    DiplomaRewards:
+      type:
+      - 'null'
+      - object
+      properties:
+        logo_url:
+          type:
+          - string
+          - 'null'
+        signature_url:
+          type:
+          - string
+          - 'null'
+    CertificationConsommationPayload:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/CertificationStructureSnapshot'
+        locales:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CertificationLocales'
+    CertificationStructureSnapshot:
+      type: object
+      required:
+      - title
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        defaultLocale:
+          type: string
+        condition:
+          $ref: '#/components/schemas/CertificationCondition'
+        rewards:
+          $ref: '#/components/schemas/CertificationRewards'
+        groups:
+          type: array
+          items:
+            type: string
+        populations:
+          type: array
+          items:
+            type: string
+        svg:
+          type: string
+        updated:
+          type: boolean
+    StarsRewards:
+      type:
+      - 'null'
+      - object
+      required:
+      - value
+      - groups
+      properties:
+        value:
+          type: number
+        groups:
+          type: array
+          items:
+            type: string
+    CertificationConditionItemsDecoder:
+      type: object
+      properties:
+        type:
+          type: string
+        engine:
+          type: string
+        ref:
+          type: string
+    CertificationConsommationOrderMap:
+      type: number
+    CertificationConsommation:
+      type: object
+      properties:
+        ongoing:
+          type: boolean
+        ref:
+          type: string
+        repository:
+          type: string
+        version:
+          type: number
+        payload:
+          $ref: '#/components/schemas/CertificationConsommationPayload'
+        order_:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CertificationConsommationOrderMap'
   securitySchemes:
     token:
       type: apiKey

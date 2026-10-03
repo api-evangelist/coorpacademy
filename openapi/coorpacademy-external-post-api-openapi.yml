@@ -43,14 +43,14 @@ paths:
                 - $ref: '#/components/schemas/InternalError'
 components:
   schemas:
-    Success:
-      type: string
-      description: s3 url
-      example: '{"uploadUrl":"https://s3.eu-west-1.amazonaws.com/external-staging.coorpacademy.com/resource-id.content_type&Content-Type=application/content_type&x-amz-meta-content-disposition=inline&x-amz-security-token=secret&Signature=foo","fetchUrl":"//localhost:7004/resource-id.content_type"}'
     NotDefinedError:
       description: NotDefinedError
       type: string
       example: File extension is not defined
+    Success:
+      type: string
+      description: s3 url
+      example: '{"uploadUrl":"https://s3.eu-west-1.amazonaws.com/external-staging.coorpacademy.com/resource-id.content_type&Content-Type=application/content_type&x-amz-meta-content-disposition=inline&x-amz-security-token=secret&Signature=foo","fetchUrl":"//localhost:7004/resource-id.content_type"}'
     InternalError:
       description: InternalError
       type: string

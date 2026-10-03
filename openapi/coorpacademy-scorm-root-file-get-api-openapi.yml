@@ -54,14 +54,14 @@ paths:
                 - $ref: '#/components/schemas/NotFoundError'
 components:
   schemas:
-    NotFoundError:
-      description: NotFoundError
-      type: string
-      example: Could not find this scorm file $scormFile
     InvalidFileError:
       description: InvalidFileError
       type: string
       example: Invalid scorm file $scormFile
+    NotFoundError:
+      description: NotFoundError
+      type: string
+      example: Could not find this scorm file $scormFile
     ScormFileError:
       description: ScormFileError
       type: string

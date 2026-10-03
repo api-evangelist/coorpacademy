@@ -469,28 +469,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    MetaVersion:
-      type: object
-      required:
-      - createdBy
-      - modifiedBy
-      properties:
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-        modifiedBy:
-          type: string
-        createdBy:
-          type: string
-        taggedNewUntil:
-          type: string
-          format: date-time
-        isoCore:
-          type: boolean
-        coreBranch:
-          type: string
-          description: External Course's reference that belongs the current external content
     ExternalContent:
       type: object
       properties:
@@ -678,6 +656,28 @@ components:
             skill_4JePwQgcbe: Expliquer quelles sont les missions clés des data scientists et des data engineers
             skill_Ey6Iw7lqZg: Saisir l'importance de la science des données pour les entreprises
             skill_VyP8vXl5We: Citer les différences entre les data scientists et les data engineers
+    MetaVersion:
+      type: object
+      required:
+      - createdBy
+      - modifiedBy
+      properties:
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        modifiedBy:
+          type: string
+        createdBy:
+          type: string
+        taggedNewUntil:
+          type: string
+          format: date-time
+        isoCore:
+          type: boolean
+        coreBranch:
+          type: string
+          description: External Course's reference that belongs the current external content
     Error:
       type: object
       properties:

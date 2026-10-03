@@ -34,23 +34,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  parameters:
-    brand:
-      name: brand
-      in: path
-      description: brandName
-      required: true
-      schema:
-        type: string
-  schemas:
-    IDPUserBodyRequest:
-      type: object
-      properties:
-        id:
-          type: string
-          description: userId
-      example:
-        id: '1234'
   responses:
     Success:
       description: User created successfully
@@ -77,6 +60,23 @@ components:
         '*/*':
           schema:
             type: string
+  parameters:
+    brand:
+      name: brand
+      in: path
+      description: brandName
+      required: true
+      schema:
+        type: string
+  schemas:
+    IDPUserBodyRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: userId
+      example:
+        id: '1234'
   securitySchemes:
     token:
       type: apiKey

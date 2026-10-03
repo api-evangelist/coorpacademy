@@ -45,7 +45,80 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
+  responses:
+    ProgressionFromEnrolmentSuccess:
+      description: Full progression response for the endpoint containing coorp Data, scormProgress, go1 LoId & go1 enrolmentId
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              progression:
+                $ref: '#/components/schemas/progression'
+              scormProgress:
+                $ref: '#/components/schemas/ScormProgress'
+              loId:
+                type: number
+                description: Id of the go1 learning Object
+              enrolmentId:
+                type: number
+                description: Id of the go1 enrolement identifying the coorp progression
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    NotFoundError:
+      description: NotFoundError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 404
+              body: progression not found for go1 enrolmentId XXXXX
   schemas:
+    progressionStateVariables:
+      type: object
+      properties:
+        default:
+          type: string
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+    content:
+      type: object
+      properties:
+        ref:
+          type: string
+        type:
+          type: string
+        version:
+          type: string
     progression:
       type: object
       properties:
@@ -165,33 +238,6 @@ components:
               format: date-time
             enrolmentId:
               type: string
-    progressionStateVariables:
-      type: object
-      properties:
-        default:
-          type: string
-      required:
-      - default
-      example:
-        lesson_status: failed
-        score_raw: '0'
-        score_max: 100
-        score_min: 0
-        session_time: '0000:00:26.15'
-      additionalProperties:
-        oneOf:
-        - type: string
-        - type: number
-        - type: boolean
-    content:
-      type: object
-      properties:
-        ref:
-          type: string
-        type:
-          type: string
-        version:
-          type: string
     ScormProgress:
       description: Content information related to the progression
       type: object
@@ -224,52 +270,6 @@ components:
           type: number
         loId:
           type: number
-  responses:
-    NotFoundError:
-      description: NotFoundError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 404
-              body: progression not found for go1 enrolmentId XXXXX
-    ProgressionFromEnrolmentSuccess:
-      description: Full progression response for the endpoint containing coorp Data, scormProgress, go1 LoId & go1 enrolmentId
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              progression:
-                $ref: '#/components/schemas/progression'
-              scormProgress:
-                $ref: '#/components/schemas/ScormProgress'
-              loId:
-                type: number
-                description: Id of the go1 learning Object
-              enrolmentId:
-                type: number
-                description: Id of the go1 enrolement identifying the coorp progression
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
   securitySchemes:
     Authorization:
       type: apiKey

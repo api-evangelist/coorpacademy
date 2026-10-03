@@ -172,54 +172,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    CustomSkillConsommationPayload:
-      type: object
-      required:
-      - title
-      - description
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        items:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CustomSkillItems'
-        icon:
-          type: object
-          properties:
-            color:
-              type: string
-            name:
-              type: string
-        locales:
-          type: object
-          additionalProperties:
-            type: object
-            properties:
-              title:
-                type: string
-              description:
-                type: string
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
     CustomSkillConsommationBodyUpsert:
       type: object
       required:
@@ -258,6 +210,46 @@ components:
           - draft
         count:
           type: number
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    CustomSkillItems:
+      type: object
+      properties:
+        type:
+          type: string
+        ref:
+          type: string
+    CustomSkillMeta:
+      type: object
+      required:
+      - modifiedBy
+      properties:
+        modifiedBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
     CustomSkillConsommation:
       type: object
       required:
@@ -288,28 +280,36 @@ components:
           $ref: '#/components/schemas/CustomSkillMeta'
         payload:
           $ref: '#/components/schemas/CustomSkillConsommationPayload'
-    CustomSkillItems:
-      type: object
-      properties:
-        type:
-          type: string
-        ref:
-          type: string
-    CustomSkillMeta:
+    CustomSkillConsommationPayload:
       type: object
       required:
-      - modifiedBy
+      - title
+      - description
       properties:
-        modifiedBy:
+        title:
           type: string
-        createdAt:
+        description:
           type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
+        items:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomSkillItems'
+        icon:
+          type: object
+          properties:
+            color:
+              type: string
+            name:
+              type: string
+        locales:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              title:
+                type: string
+              description:
+                type: string
   securitySchemes:
     token:
       type: apiKey

@@ -80,6 +80,33 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   schemas:
+    progressionStateVariables:
+      type: object
+      properties:
+        default:
+          type: string
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+    content:
+      type: object
+      properties:
+        ref:
+          type: string
+        type:
+          type: string
+        version:
+          type: string
     progression:
       type: object
       properties:
@@ -199,33 +226,6 @@ components:
               format: date-time
             enrolmentId:
               type: string
-    progressionStateVariables:
-      type: object
-      properties:
-        default:
-          type: string
-      required:
-      - default
-      example:
-        lesson_status: failed
-        score_raw: '0'
-        score_max: 100
-        score_min: 0
-        session_time: '0000:00:26.15'
-      additionalProperties:
-        oneOf:
-        - type: string
-        - type: number
-        - type: boolean
-    content:
-      type: object
-      properties:
-        ref:
-          type: string
-        type:
-          type: string
-        version:
-          type: string
     answer:
       type: object
       properties:
@@ -261,12 +261,6 @@ components:
         lives:
           type: integer
   responses:
-    AnswerSuccess:
-      description: POST answer
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/answer'
     PostProgressionSuccess:
       description: POST progression
       content:
@@ -287,6 +281,12 @@ components:
             example:
               statusCode: 500
               body: internal Error while resolving request
+    AnswerSuccess:
+      description: POST answer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/answer'
   securitySchemes:
     Authorization:
       type: apiKey

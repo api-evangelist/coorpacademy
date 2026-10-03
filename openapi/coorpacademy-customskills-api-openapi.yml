@@ -242,6 +242,24 @@ components:
         name:
           type: string
           example: white
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     CustomSkillStructureEdition:
       type: object
       properties:
@@ -262,33 +280,28 @@ components:
           properties:
             ref:
               $ref: '#/components/schemas/CustomSkillItemMap'
-    Error:
+    CustomSkillLocalesMap:
       type: object
       properties:
-        id:
+        title:
           type: string
-        code:
+        description:
           type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    CustomSkillItemMap:
+    CustomSkillMeta:
       type: object
+      required:
+      - modifiedBy
       properties:
-        type:
+        modifiedBy:
           type: string
-          example: type
-        ref:
+        createdAt:
           type: string
-          example: ref
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
     CustomSkillEdition:
       type: object
       required:
@@ -312,28 +325,15 @@ components:
           type: string
         structure:
           $ref: '#/components/schemas/CustomSkillStructureEdition'
-    CustomSkillMeta:
-      type: object
-      required:
-      - modifiedBy
-      properties:
-        modifiedBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-    CustomSkillLocalesMap:
+    CustomSkillItemMap:
       type: object
       properties:
-        title:
+        type:
           type: string
-        description:
+          example: type
+        ref:
           type: string
+          example: ref
   securitySchemes:
     token:
       type: apiKey

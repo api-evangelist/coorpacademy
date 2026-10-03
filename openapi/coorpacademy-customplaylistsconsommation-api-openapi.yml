@@ -182,23 +182,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    CustomPlaylistConsommationPayload:
-      type: object
-      properties:
-        structure:
-          $ref: '#/components/schemas/CustomPlaylistStructureEdition'
-        locales:
-          additionalProperties:
-            $ref: '#/components/schemas/CustomPlaylistLocales'
-    CustomPlaylistItemMap:
-      type: object
-      properties:
-        type:
-          type: string
-        engine:
-          type: string
-        ref:
-          type: string
     CustomPlaylistStructureEdition:
       type: object
       properties:
@@ -217,17 +200,17 @@ components:
           type: array
           items:
             type: string
-    CustomPlaylistLocales:
+    ConsommationContentCount:
       type: object
       properties:
-        title:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
+        _id:
+          type: string
+          enum:
+          - published
+          - archived
+          - draft
+        count:
+          type: number
     Error:
       type: object
       properties:
@@ -246,17 +229,14 @@ components:
           format: int32
         message:
           type: string
-    ConsommationContentCount:
+    CustomPlaylistConsommationPayload:
       type: object
       properties:
-        _id:
-          type: string
-          enum:
-          - published
-          - archived
-          - draft
-        count:
-          type: number
+        structure:
+          $ref: '#/components/schemas/CustomPlaylistStructureEdition'
+        locales:
+          additionalProperties:
+            $ref: '#/components/schemas/CustomPlaylistLocales'
     CustomPlaylistConsommation:
       type: object
       properties:
@@ -302,6 +282,26 @@ components:
             es:
               title: title
               description: description
+    CustomPlaylistLocales:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+    CustomPlaylistItemMap:
+      type: object
+      properties:
+        type:
+          type: string
+        engine:
+          type: string
+        ref:
+          type: string
   securitySchemes:
     token:
       type: apiKey

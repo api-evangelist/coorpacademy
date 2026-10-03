@@ -247,6 +247,61 @@ paths:
     - url: /review
 components:
   schemas:
+    SkillBodyRequest:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/SkillStructure'
+        locales:
+          $ref: '#/components/schemas/SkillLocales'
+      example:
+        structure:
+          ref: skill_001
+          name: name
+        locales:
+          fr:
+            name: Communication
+          en:
+            name: Communication
+          es:
+            name: Comunicación
+    SkillStructure:
+      type: object
+      required:
+      - ref
+      - name
+      properties:
+        ref:
+          type: string
+          description: Object structure
+        type:
+          type: string
+          description: Type object. In this case is skill
+        name:
+          type: string
+          description: Translation key for name
+        meta:
+          $ref: '#/components/schemas/Meta'
+    SkillLocales:
+      type: object
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     SkillResponse:
       type: object
       required:
@@ -286,61 +341,6 @@ components:
           type: string
           format: date-time
           example: '2021-10-11T14:54:52.368Z'
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    SkillBodyRequest:
-      type: object
-      properties:
-        structure:
-          $ref: '#/components/schemas/SkillStructure'
-        locales:
-          $ref: '#/components/schemas/SkillLocales'
-      example:
-        structure:
-          ref: skill_001
-          name: name
-        locales:
-          fr:
-            name: Communication
-          en:
-            name: Communication
-          es:
-            name: Comunicación
-    SkillLocales:
-      type: object
-    SkillStructure:
-      type: object
-      required:
-      - ref
-      - name
-      properties:
-        ref:
-          type: string
-          description: Object structure
-        type:
-          type: string
-          description: Type object. In this case is skill
-        name:
-          type: string
-          description: Translation key for name
-        meta:
-          $ref: '#/components/schemas/Meta'
   securitySchemes:
     token:
       type: apiKey

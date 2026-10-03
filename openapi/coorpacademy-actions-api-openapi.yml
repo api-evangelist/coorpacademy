@@ -44,26 +44,26 @@ paths:
       x-swagger-router-controller: progressions
 components:
   responses:
-    NotFound:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Unauthorized
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request
+    NotFound:
+      description: Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
     Forbidden:
       description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:

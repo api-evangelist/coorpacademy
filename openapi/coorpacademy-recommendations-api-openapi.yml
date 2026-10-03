@@ -69,40 +69,6 @@ paths:
       x-swagger-router-controller: recommendations
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-        message:
-          type: string
-    Content:
-      type: object
-      additionalProperties: false
-      required:
-      - ref
-      - type
-      description: Content information related to the progression
-      properties:
-        ref:
-          type: string
-          description: Content ref
-        type:
-          type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
-        version:
-          type: string
-          description: Version of the given content
     HeroRecommendation:
       type: object
       required:
@@ -122,6 +88,40 @@ components:
           type: string
           format: date-time
         progressionId:
+          type: string
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
           type: string
   responses:
     Unauthorized:

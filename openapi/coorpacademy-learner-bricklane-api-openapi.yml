@@ -150,7 +150,46 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
+  parameters:
+    BrandId:
+      name: brandId
+      in: formData
+      description: digital, up, onboarding etc.
+      type: string
+      required: true
+    UserId:
+      name: userId
+      in: formData
+      description: id from /api/v1/users/me
+      required: true
+      type: string
+    CourseRef:
+      name: data[courseRef]
+      in: formData
+      required: true
+      type: string
+    AnsweredQuestions:
+      name: data[answeredQuestions]
+      in: formData
+      required: true
+      type: number
+    ViewedLessons:
+      name: data[viewedLessons]
+      in: formData
+      required: true
+      type: number
+    ConnectedUsers:
+      name: data[connectedUsers]
+      in: formData
+      required: true
+      type: number
   responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
     Success:
       description: Email sent successfully
       content:
@@ -170,45 +209,6 @@ components:
                     type: string
                   MessageId:
                     type: string
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: string
-  parameters:
-    UserId:
-      name: userId
-      in: formData
-      description: id from /api/v1/users/me
-      required: true
-      type: string
-    ConnectedUsers:
-      name: data[connectedUsers]
-      in: formData
-      required: true
-      type: number
-    CourseRef:
-      name: data[courseRef]
-      in: formData
-      required: true
-      type: string
-    ViewedLessons:
-      name: data[viewedLessons]
-      in: formData
-      required: true
-      type: number
-    AnsweredQuestions:
-      name: data[answeredQuestions]
-      in: formData
-      required: true
-      type: number
-    BrandId:
-      name: brandId
-      in: formData
-      description: digital, up, onboarding etc.
-      type: string
-      required: true
   securitySchemes:
     Authorization:
       type: apiKey

@@ -28,20 +28,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  parameters:
-    externalId:
-      name: externalId
-      in: query
-      description: id of the user (IDP Side)
-      schema:
-        type: string
-    brand:
-      name: brand
-      in: path
-      description: brandName
-      required: true
-      schema:
-        type: string
   responses:
     Success:
       description: User created successfully
@@ -68,6 +54,20 @@ components:
         '*/*':
           schema:
             type: string
+  parameters:
+    externalId:
+      name: externalId
+      in: query
+      description: id of the user (IDP Side)
+      schema:
+        type: string
+    brand:
+      name: brand
+      in: path
+      description: brandName
+      required: true
+      schema:
+        type: string
   securitySchemes:
     token:
       type: apiKey
