@@ -35,17 +35,6 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   responses:
-    SlidesNumberSuccess:
-      description: Fetch slides number
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              nbSlides:
-                type: number
-            example:
-              nbSlides: 4
     InternalError:
       description: InternalError
       content:
@@ -60,18 +49,29 @@ components:
             example:
               statusCode: 500
               body: internal Error while resolving request
+    SlidesNumberSuccess:
+      description: Fetch slides number
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              nbSlides:
+                type: number
+            example:
+              nbSlides: 4
   parameters:
-    engineRef:
-      name: engineRef
-      in: path
-      description: ref of the engine
-      required: true
-      schema:
-        type: string
     contentRef:
       name: contentRef
       in: path
       description: ref of the content
+      required: true
+      schema:
+        type: string
+    engineRef:
+      name: engineRef
+      in: path
+      description: ref of the engine
       required: true
       schema:
         type: string

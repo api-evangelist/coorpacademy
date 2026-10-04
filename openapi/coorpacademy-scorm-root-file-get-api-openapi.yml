@@ -58,10 +58,6 @@ components:
       description: InvalidFileError
       type: string
       example: Invalid scorm file $scormFile
-    NotFoundError:
-      description: NotFoundError
-      type: string
-      example: Could not find this scorm file $scormFile
     ScormFileError:
       description: ScormFileError
       type: string
@@ -69,6 +65,10 @@ components:
     GetScormRootFileSuccess:
       type: string
       description: ''
+    NotFoundError:
+      description: NotFoundError
+      type: string
+      example: Could not find this scorm file $scormFile
   headers:
     Location:
       schema:

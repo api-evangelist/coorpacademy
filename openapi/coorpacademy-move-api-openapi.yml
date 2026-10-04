@@ -50,6 +50,23 @@ paths:
         required: true
 components:
   schemas:
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
     UpdatedProgression:
       type: object
       additionalProperties: false
@@ -77,23 +94,6 @@ components:
           $ref: '#/components/schemas/Engine'
         engineOptions:
           $ref: '#/components/schemas/EngineOptions'
-    Content:
-      type: object
-      additionalProperties: false
-      required:
-      - ref
-      - type
-      description: Content information related to the progression
-      properties:
-        ref:
-          type: string
-          description: Content ref
-        type:
-          type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
-        version:
-          type: string
-          description: Version of the given content
     Error:
       type: object
       properties:
@@ -111,26 +111,25 @@ components:
           type: integer
         message:
           type: string
-    Instruction:
+    MoveBody:
       type: object
       additionalProperties: false
       required:
-      - field
-      - type
-      - value
+      - nextContent
       properties:
-        field:
-          type: string
-        type:
-          type: string
-          enum:
-          - add
-          - set
-        value:
+        nextContent:
+          $ref: '#/components/schemas/Content'
+        instructions:
           type:
-          - number
-          - boolean
-          - string
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Instruction'
+          default: null
+      example:
+        nextContent:
+          ref: 1.A1.1
+          type: slide
     State:
       type: object
       additionalProperties: false
@@ -223,36 +222,26 @@ components:
         source:
           type: string
           description: progression source
-    MoveBody:
+    Instruction:
       type: object
       additionalProperties: false
       required:
-      - nextContent
+      - field
+      - type
+      - value
       properties:
-        nextContent:
-          $ref: '#/components/schemas/Content'
-        instructions:
+        field:
+          type: string
+        type:
+          type: string
+          enum:
+          - add
+          - set
+        value:
           type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Instruction'
-          default: null
-      example:
-        nextContent:
-          ref: 1.A1.1
-          type: slide
-    EngineOptions:
-      type: object
-      additionalProperties: false
-      description: ''
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
+          - number
+          - boolean
+          - string
     Engine:
       type: object
       additionalProperties: false
@@ -271,9 +260,26 @@ components:
         version:
           type: string
           description: Engine version
+    EngineOptions:
+      type: object
+      additionalProperties: false
+      description: ''
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
   responses:
-    NotFound:
-      description: Not Found
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:
@@ -290,14 +296,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request
+    NotFound:
+      description: Not Found
       content:
         application/json:
           schema:

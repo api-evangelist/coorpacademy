@@ -43,17 +43,6 @@ paths:
           $ref: '#/components/responses/NotDefinedError'
 components:
   responses:
-    GetSignedS3Link:
-      description: Response contain a S3 Signed Link URL to upload Scorm File and Csv Metadata File URL
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              uploadZipUrl:
-                type: string
-            example:
-              uploadZipUrl: https://uploadZipUrl.com
     S3LinkUploadError:
       description: S3LinkUploadError
       content:
@@ -82,6 +71,17 @@ components:
             example:
               statusCode: 501
               body: InternalError because something (like host in header) was not correctly defined
+    GetSignedS3Link:
+      description: Response contain a S3 Signed Link URL to upload Scorm File and Csv Metadata File URL
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uploadZipUrl:
+                type: string
+            example:
+              uploadZipUrl: https://uploadZipUrl.com
   schemas:
     presignedS3UrlBody:
       description: get S3 Signed Url to upload scorm & CSV metadata

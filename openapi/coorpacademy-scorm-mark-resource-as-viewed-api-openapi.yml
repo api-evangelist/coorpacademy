@@ -43,12 +43,6 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   responses:
-    MarkResourceAsViewedSuccess:
-      description: Mark Resource As Viewed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/progression'
     InternalError:
       description: InternalError
       content:
@@ -63,25 +57,13 @@ components:
             example:
               statusCode: 500
               body: internal Error while resolving request
+    MarkResourceAsViewedSuccess:
+      description: Mark Resource As Viewed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/progression'
   schemas:
-    progressionStateVariables:
-      type: object
-      properties:
-        default:
-          type: string
-      required:
-      - default
-      example:
-        lesson_status: failed
-        score_raw: '0'
-        score_max: 100
-        score_min: 0
-        session_time: '0000:00:26.15'
-      additionalProperties:
-        oneOf:
-        - type: string
-        - type: number
-        - type: boolean
     payloadMarkResourceAsViewed:
       type: object
       properties:
@@ -96,6 +78,25 @@ components:
               example: chapter
         resource:
           $ref: '#/components/schemas/resource'
+    resource:
+      type: object
+      properties:
+        ref:
+          type: string
+          example: med_art3f5P
+        type:
+          type: string
+          example: pdf
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
     content:
       type: object
       properties:
@@ -224,25 +225,24 @@ components:
               format: date-time
             enrolmentId:
               type: string
-    resource:
+    progressionStateVariables:
       type: object
       properties:
-        ref:
+        default:
           type: string
-          example: med_art3f5P
-        type:
-          type: string
-          example: pdf
-    EngineOptions:
-      description: Content information related to the progression engine option
-      type: object
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
+      required:
+      - default
+      example:
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
   securitySchemes:
     Authorization:
       type: apiKey

@@ -247,43 +247,6 @@ paths:
     - url: /review
 components:
   schemas:
-    SkillBodyRequest:
-      type: object
-      properties:
-        structure:
-          $ref: '#/components/schemas/SkillStructure'
-        locales:
-          $ref: '#/components/schemas/SkillLocales'
-      example:
-        structure:
-          ref: skill_001
-          name: name
-        locales:
-          fr:
-            name: Communication
-          en:
-            name: Communication
-          es:
-            name: Comunicación
-    SkillStructure:
-      type: object
-      required:
-      - ref
-      - name
-      properties:
-        ref:
-          type: string
-          description: Object structure
-        type:
-          type: string
-          description: Type object. In this case is skill
-        name:
-          type: string
-          description: Translation key for name
-        meta:
-          $ref: '#/components/schemas/Meta'
-    SkillLocales:
-      type: object
     Error:
       type: object
       properties:
@@ -302,6 +265,20 @@ components:
           format: int32
         message:
           type: string
+    Meta:
+      type: object
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
     SkillResponse:
       type: object
       required:
@@ -327,20 +304,43 @@ components:
             name: Communicación
           fr:
             name: Communication
-    Meta:
+    SkillStructure:
       type: object
       required:
-      - createdAt
-      - updatedAt
+      - ref
+      - name
       properties:
-        createdAt:
+        ref:
           type: string
-          format: date-time
-          example: '2021-10-11T14:54:52.368Z'
-        updatedAt:
+          description: Object structure
+        type:
           type: string
-          format: date-time
-          example: '2021-10-11T14:54:52.368Z'
+          description: Type object. In this case is skill
+        name:
+          type: string
+          description: Translation key for name
+        meta:
+          $ref: '#/components/schemas/Meta'
+    SkillLocales:
+      type: object
+    SkillBodyRequest:
+      type: object
+      properties:
+        structure:
+          $ref: '#/components/schemas/SkillStructure'
+        locales:
+          $ref: '#/components/schemas/SkillLocales'
+      example:
+        structure:
+          ref: skill_001
+          name: name
+        locales:
+          fr:
+            name: Communication
+          en:
+            name: Communication
+          es:
+            name: Comunicación
   securitySchemes:
     token:
       type: apiKey

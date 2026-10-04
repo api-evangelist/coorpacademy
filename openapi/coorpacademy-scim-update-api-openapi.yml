@@ -84,6 +84,21 @@ components:
                     type: string
                   MessageId:
                     type: string
+  parameters:
+    userId:
+      name: userId
+      in: path
+      description: id of the user (Coorp Side)
+      required: true
+      schema:
+        type: string
+    brand:
+      name: brand
+      in: path
+      description: brandName
+      required: true
+      schema:
+        type: string
   schemas:
     IDPUserBodyRequest:
       type: object
@@ -93,21 +108,6 @@ components:
           description: userId
       example:
         id: '1234'
-  parameters:
-    brand:
-      name: brand
-      in: path
-      description: brandName
-      required: true
-      schema:
-        type: string
-    userId:
-      name: userId
-      in: path
-      description: id of the user (Coorp Side)
-      required: true
-      schema:
-        type: string
   securitySchemes:
     token:
       type: apiKey

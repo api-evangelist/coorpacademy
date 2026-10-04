@@ -199,17 +199,6 @@ components:
           $ref: '#/components/schemas/CustomSkillMeta'
         payload:
           $ref: '#/components/schemas/CustomSkillConsommationPayload'
-    ConsommationContentCount:
-      type: object
-      properties:
-        _id:
-          type: string
-          enum:
-          - published
-          - archived
-          - draft
-        count:
-          type: number
     Error:
       type: object
       properties:
@@ -228,6 +217,36 @@ components:
           format: int32
         message:
           type: string
+    CustomSkillConsommationPayload:
+      type: object
+      required:
+      - title
+      - description
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        items:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomSkillItems'
+        icon:
+          type: object
+          properties:
+            color:
+              type: string
+            name:
+              type: string
+        locales:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              title:
+                type: string
+              description:
+                type: string
     CustomSkillItems:
       type: object
       properties:
@@ -280,36 +299,17 @@ components:
           $ref: '#/components/schemas/CustomSkillMeta'
         payload:
           $ref: '#/components/schemas/CustomSkillConsommationPayload'
-    CustomSkillConsommationPayload:
+    ConsommationContentCount:
       type: object
-      required:
-      - title
-      - description
       properties:
-        title:
+        _id:
           type: string
-        description:
-          type: string
-        items:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CustomSkillItems'
-        icon:
-          type: object
-          properties:
-            color:
-              type: string
-            name:
-              type: string
-        locales:
-          type: object
-          additionalProperties:
-            type: object
-            properties:
-              title:
-                type: string
-              description:
-                type: string
+          enum:
+          - published
+          - archived
+          - draft
+        count:
+          type: number
   securitySchemes:
     token:
       type: apiKey

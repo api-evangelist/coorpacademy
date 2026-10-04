@@ -68,6 +68,23 @@ paths:
         required: true
 components:
   schemas:
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
     UpdatedProgression:
       type: object
       additionalProperties: false
@@ -95,23 +112,6 @@ components:
           $ref: '#/components/schemas/Engine'
         engineOptions:
           $ref: '#/components/schemas/EngineOptions'
-    Content:
-      type: object
-      additionalProperties: false
-      required:
-      - ref
-      - type
-      description: Content information related to the progression
-      properties:
-        ref:
-          type: string
-          description: Content ref
-        type:
-          type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
-        version:
-          type: string
-          description: Version of the given content
     Error:
       type: object
       properties:
@@ -129,6 +129,22 @@ components:
           type: integer
         message:
           type: string
+    Meta:
+      type: object
+      additionalProperties: false
+      required:
+      - createdAt
+      - updatedAt
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+          description: progression source
     State:
       type: object
       additionalProperties: false
@@ -205,22 +221,6 @@ components:
                   type: string
               isCorrect:
                 type: boolean
-    Meta:
-      type: object
-      additionalProperties: false
-      required:
-      - createdAt
-      - updatedAt
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        source:
-          type: string
-          description: progression source
     EngineOptions:
       type: object
       additionalProperties: false
@@ -251,8 +251,14 @@ components:
           type: string
           description: Engine version
   responses:
-    NotFound:
-      description: Not Found
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:
@@ -269,14 +275,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request
+    NotFound:
+      description: Not Found
       content:
         application/json:
           schema:

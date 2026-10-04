@@ -61,18 +61,18 @@ components:
     InvalidJWTokenError:
       description: InvalidJWTokenError
       type: string
-    ProgressionNotFoundError:
-      description: ProgressionNotFoundError
-      type: string
     NotDefinedError:
       description: NotDefinedError
       type: string
-    BrandNotFoundError:
+    ProgressionNotFoundError:
       description: ProgressionNotFoundError
       type: string
     Success:
       type: string
       description: ''
+    BrandNotFoundError:
+      description: ProgressionNotFoundError
+      type: string
   headers:
     Location:
       description: url location to redirect based on exitNodeRef

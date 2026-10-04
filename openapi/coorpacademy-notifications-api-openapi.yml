@@ -233,6 +233,26 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    NotificationBodyRequestPut:
+      type: object
+      properties:
+        type:
+          type: string
+          description: type of notification
+        active:
+          type: boolean
+          description: whether the notification is active or not
+        message:
+          type: string
+          description: message of notification
+        link:
+          type: string
+          description: link to be used as CTA of the notification
+      example:
+        type: feature
+        active: true
+        message: New feature subtitles online. Click on button to see the demo!
+        link: https://video.com/feature/new
     Notification:
       type: object
       required:
@@ -282,26 +302,6 @@ components:
           description: link to be used as CTA of the notification
       example:
         name: new_feature_subtitles
-        type: feature
-        active: true
-        message: New feature subtitles online. Click on button to see the demo!
-        link: https://video.com/feature/new
-    NotificationBodyRequestPut:
-      type: object
-      properties:
-        type:
-          type: string
-          description: type of notification
-        active:
-          type: boolean
-          description: whether the notification is active or not
-        message:
-          type: string
-          description: message of notification
-        link:
-          type: string
-          description: link to be used as CTA of the notification
-      example:
         type: feature
         active: true
         message: New feature subtitles online. Click on button to see the demo!

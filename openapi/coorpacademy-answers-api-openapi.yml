@@ -50,6 +50,23 @@ paths:
         required: true
 components:
   schemas:
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
     UpdatedProgression:
       type: object
       additionalProperties: false
@@ -77,23 +94,6 @@ components:
           $ref: '#/components/schemas/Engine'
         engineOptions:
           $ref: '#/components/schemas/EngineOptions'
-    Content:
-      type: object
-      additionalProperties: false
-      required:
-      - ref
-      - type
-      description: Content information related to the progression
-      properties:
-        ref:
-          type: string
-          description: Content ref
-        type:
-          type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
-        version:
-          type: string
-          description: Version of the given content
     Error:
       type: object
       properties:
@@ -111,26 +111,6 @@ components:
           type: integer
         message:
           type: string
-    Instruction:
-      type: object
-      additionalProperties: false
-      required:
-      - field
-      - type
-      - value
-      properties:
-        field:
-          type: string
-        type:
-          type: string
-          enum:
-          - add
-          - set
-        value:
-          type:
-          - number
-          - boolean
-          - string
     State:
       type: object
       additionalProperties: false
@@ -264,17 +244,26 @@ components:
         answer:
         - foo
         - bar
-    EngineOptions:
+    Instruction:
       type: object
       additionalProperties: false
-      description: ''
+      required:
+      - field
+      - type
+      - value
       properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
+        field:
+          type: string
+        type:
+          type: string
+          enum:
+          - add
+          - set
+        value:
+          type:
+          - number
+          - boolean
+          - string
     Engine:
       type: object
       additionalProperties: false
@@ -293,9 +282,26 @@ components:
         version:
           type: string
           description: Engine version
+    EngineOptions:
+      type: object
+      additionalProperties: false
+      description: ''
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
   responses:
-    NotFound:
-      description: Not Found
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:
@@ -312,14 +318,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request
+    NotFound:
+      description: Not Found
       content:
         application/json:
           schema:

@@ -197,15 +197,53 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    CertificationRewards:
+    ConsommationContentCount:
       type: object
       properties:
-        diploma:
-          $ref: '#/components/schemas/DiplomaRewards'
-        resource:
-          $ref: '#/components/schemas/ResourceRewards'
-        stars:
-          $ref: '#/components/schemas/StarsRewards'
+        _id:
+          type: string
+          enum:
+          - published
+          - archived
+          - draft
+        count:
+          type: number
+    CertificationConditionItemsDecoder:
+      type: object
+      properties:
+        type:
+          type: string
+        engine:
+          type: string
+        ref:
+          type: string
+    StarsRewards:
+      type:
+      - 'null'
+      - object
+      required:
+      - value
+      - groups
+      properties:
+        value:
+          type: number
+        groups:
+          type: array
+          items:
+            type: string
+    DiplomaRewards:
+      type:
+      - 'null'
+      - object
+      properties:
+        logo_url:
+          type:
+          - string
+          - 'null'
+        signature_url:
+          type:
+          - string
+          - 'null'
     Error:
       type: object
       properties:
@@ -224,29 +262,33 @@ components:
           format: int32
         message:
           type: string
-    ResourceRewards:
-      type:
-      - 'null'
-      - object
-      required:
-      - label
-      - file_uri
-      properties:
-        label:
-          type: string
-        file_uri:
-          type: string
-    ConsommationContentCount:
+    CertificationConsommation:
       type: object
       properties:
-        _id:
+        ongoing:
+          type: boolean
+        ref:
           type: string
-          enum:
-          - published
-          - archived
-          - draft
-        count:
+        repository:
+          type: string
+        version:
           type: number
+        payload:
+          $ref: '#/components/schemas/CertificationConsommationPayload'
+        order_:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CertificationConsommationOrderMap'
+    CertificationRewards:
+      type: object
+      properties:
+        diploma:
+          $ref: '#/components/schemas/DiplomaRewards'
+        resource:
+          $ref: '#/components/schemas/ResourceRewards'
+        stars:
+          $ref: '#/components/schemas/StarsRewards'
     CertificationLocales:
       type: object
       properties:
@@ -300,28 +342,6 @@ components:
           type: string
         level:
           type: string
-    DiplomaRewards:
-      type:
-      - 'null'
-      - object
-      properties:
-        logo_url:
-          type:
-          - string
-          - 'null'
-        signature_url:
-          type:
-          - string
-          - 'null'
-    CertificationConsommationPayload:
-      type: object
-      properties:
-        structure:
-          $ref: '#/components/schemas/CertificationStructureSnapshot'
-        locales:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CertificationLocales'
     CertificationStructureSnapshot:
       type: object
       required:
@@ -349,49 +369,29 @@ components:
           type: string
         updated:
           type: boolean
-    StarsRewards:
+    ResourceRewards:
       type:
       - 'null'
       - object
       required:
-      - value
-      - groups
+      - label
+      - file_uri
       properties:
-        value:
-          type: number
-        groups:
-          type: array
-          items:
-            type: string
-    CertificationConditionItemsDecoder:
+        label:
+          type: string
+        file_uri:
+          type: string
+    CertificationConsommationPayload:
       type: object
       properties:
-        type:
-          type: string
-        engine:
-          type: string
-        ref:
-          type: string
+        structure:
+          $ref: '#/components/schemas/CertificationStructureSnapshot'
+        locales:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CertificationLocales'
     CertificationConsommationOrderMap:
       type: number
-    CertificationConsommation:
-      type: object
-      properties:
-        ongoing:
-          type: boolean
-        ref:
-          type: string
-        repository:
-          type: string
-        version:
-          type: number
-        payload:
-          $ref: '#/components/schemas/CertificationConsommationPayload'
-        order_:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CertificationConsommationOrderMap'
   securitySchemes:
     token:
       type: apiKey

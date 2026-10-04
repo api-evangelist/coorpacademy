@@ -214,6 +214,21 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   parameters:
+    CourseRef:
+      name: data[courseRef]
+      in: formData
+      required: true
+      type: string
+    ResetLink:
+      name: data[resetLink]
+      in: formData
+      required: true
+      type: string
+    ExportDate:
+      name: data[date]
+      in: formData
+      required: true
+      type: string
     ExportFormat:
       name: data[format]
       in: formData
@@ -224,58 +239,10 @@ components:
       in: formData
       required: true
       type: string
-    ResetLink:
-      name: data[resetLink]
-      in: formData
-      required: true
-      type: string
-    Post:
-      name: data[post]
-      in: formData
-      description: Id of the post containing the reply
-      required: true
-      type: string
-    BattleId:
-      name: data[battleId]
-      in: formData
-      required: true
-      type: string
-    CourseRef:
-      name: data[courseRef]
-      in: formData
-      required: true
-      type: string
     ParentPost:
       name: data[parentPost]
       in: formData
       description: Original post id on the forum
-      required: true
-      type: string
-    Url:
-      name: data[url]
-      in: formData
-      required: true
-      type: string
-    BrandId:
-      name: brandId
-      in: formData
-      description: digital, up, onboarding etc.
-      type: string
-      required: true
-    ProgressionId:
-      name: data[progressionId]
-      in: formData
-      required: true
-      type: string
-    UserId:
-      name: userId
-      in: formData
-      description: id from /api/v1/users/me
-      required: true
-      type: string
-    GoalLabel:
-      name: data[goalLabel]
-      in: formData
       required: true
       type: string
     Source:
@@ -287,8 +254,8 @@ components:
       - import
       - sso
       - signup
-    ExportType:
-      name: data[type]
+    Url:
+      name: data[url]
       in: formData
       required: true
       type: string
@@ -305,18 +272,45 @@ components:
       in: formData
       required: true
       type: string
-    ExportDate:
-      name: data[date]
+    GoalLabel:
+      name: data[goalLabel]
+      in: formData
+      required: true
+      type: string
+    ExportType:
+      name: data[type]
+      in: formData
+      required: true
+      type: string
+    BrandId:
+      name: brandId
+      in: formData
+      description: digital, up, onboarding etc.
+      type: string
+      required: true
+    UserId:
+      name: userId
+      in: formData
+      description: id from /api/v1/users/me
+      required: true
+      type: string
+    Post:
+      name: data[post]
+      in: formData
+      description: Id of the post containing the reply
+      required: true
+      type: string
+    ProgressionId:
+      name: data[progressionId]
+      in: formData
+      required: true
+      type: string
+    BattleId:
+      name: data[battleId]
       in: formData
       required: true
       type: string
   responses:
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: string
     Success:
       description: Email sent successfully
       content:
@@ -336,6 +330,12 @@ components:
                     type: string
                   MessageId:
                     type: string
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
   securitySchemes:
     Authorization:
       type: apiKey

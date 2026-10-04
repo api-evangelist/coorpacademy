@@ -32,6 +32,17 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
+  schemas:
+    media:
+      type: object
+      properties:
+        mediaUrl:
+          type: string
+        type:
+          type: string
+      example:
+        mediaUrl: //static.coorpacademy.com/content/CoorpAcademy/content-catalogue/cockpit-assessment/raw/teste.pdf
+        type: pdf
   responses:
     ExitNodeSuccess:
       description: Get exitNode
@@ -80,17 +91,6 @@ components:
       required: true
       schema:
         type: string
-  schemas:
-    media:
-      type: object
-      properties:
-        mediaUrl:
-          type: string
-        type:
-          type: string
-      example:
-        mediaUrl: //static.coorpacademy.com/content/CoorpAcademy/content-catalogue/cockpit-assessment/raw/teste.pdf
-        type: pdf
   securitySchemes:
     Authorization:
       type: apiKey

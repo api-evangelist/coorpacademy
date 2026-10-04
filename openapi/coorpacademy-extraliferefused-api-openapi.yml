@@ -50,24 +50,23 @@ paths:
         required: true
 components:
   schemas:
-    ExtraLifeRefused:
+    Content:
       type: object
       additionalProperties: false
       required:
-      - content
-      - nextContent
+      - ref
+      - type
+      description: Content information related to the progression
       properties:
-        content:
-          $ref: '#/components/schemas/Content'
-        nextContent:
-          $ref: '#/components/schemas/Content'
-      example:
-        content:
-          ref: extraLife
-          type: node
-        nextContent:
-          ref: failExitNode
-          type: failure
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
     UpdatedProgression:
       type: object
       additionalProperties: false
@@ -188,23 +187,6 @@ components:
                   type: string
               isCorrect:
                 type: boolean
-    Content:
-      type: object
-      additionalProperties: false
-      required:
-      - ref
-      - type
-      description: Content information related to the progression
-      properties:
-        ref:
-          type: string
-          description: Content ref
-        type:
-          type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
-        version:
-          type: string
-          description: Version of the given content
     Meta:
       type: object
       additionalProperties: false
@@ -221,6 +203,24 @@ components:
         source:
           type: string
           description: progression source
+    ExtraLifeRefused:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - nextContent
+      properties:
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+      example:
+        content:
+          ref: extraLife
+          type: node
+        nextContent:
+          ref: failExitNode
+          type: failure
     EngineOptions:
       type: object
       additionalProperties: false
@@ -251,20 +251,8 @@ components:
           type: string
           description: Engine version
   responses:
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Conflit:
-      description: Conflit
+    BadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
@@ -275,8 +263,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflit:
+      description: Conflit
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found
       content:
         application/json:
           schema:

@@ -409,168 +409,6 @@ paths:
         required: true
 components:
   schemas:
-    ExtraLifeRefused:
-      type: object
-      additionalProperties: false
-      required:
-      - content
-      - nextContent
-      properties:
-        content:
-          $ref: '#/components/schemas/Content'
-        nextContent:
-          $ref: '#/components/schemas/Content'
-      example:
-        content:
-          ref: extraLife
-          type: node
-        nextContent:
-          ref: failExitNode
-          type: failure
-    State:
-      type: object
-      additionalProperties: false
-      required:
-      - nextContent
-      properties:
-        content:
-          $ref: '#/components/schemas/Content'
-        nextContent:
-          $ref: '#/components/schemas/Content'
-        isCorrect:
-          type:
-          - boolean
-          - 'null'
-        lives:
-          type: number
-        livesDisabled:
-          type: boolean
-          default: false
-        slides:
-          type: array
-          items:
-            type: string
-        pendingSlides:
-          type: array
-          items:
-            type: string
-        step:
-          type: object
-          additionalProperties: false
-          properties:
-            total:
-              type: number
-            current:
-              type: number
-        stars:
-          type: number
-        requestedClues:
-          type: array
-          items:
-            type: string
-        hasViewedAResourceAtThisStep:
-          type: boolean
-          default: false
-        viewedResources:
-          type: array
-          items:
-            type: object
-            additionalProperties: false
-            properties:
-              type:
-                type: string
-              ref:
-                type: string
-              resources:
-                type: array
-                items:
-                  type: string
-        variables:
-          type: object
-        remainingLifeRequests:
-          type: integer
-        allAnswers:
-          type: array
-          items:
-            type: object
-            additionalProperties: false
-            properties:
-              slideRef:
-                type: string
-              answer:
-                type: array
-                items:
-                  type: string
-              isCorrect:
-                type: boolean
-    Progression:
-      type: object
-      additionalProperties: false
-      required:
-      - _id
-      - userId
-      - content
-      - engine
-      - meta
-      - state
-      properties:
-        _id:
-          type: string
-          description: Progression identifier
-        userId:
-          type: string
-          description: User identifier
-        content:
-          $ref: '#/components/schemas/Content'
-        engine:
-          $ref: '#/components/schemas/Engine'
-        engineOptions:
-          $ref: '#/components/schemas/EngineOptions'
-        meta:
-          $ref: '#/components/schemas/Meta'
-        state:
-          $ref: '#/components/schemas/State'
-    AnswerBody:
-      type: object
-      additionalProperties: false
-      required:
-      - content
-      - nextContent
-      - answer
-      properties:
-        content:
-          $ref: '#/components/schemas/Content'
-        nextContent:
-          $ref: '#/components/schemas/Content'
-        answer:
-          type: array
-          items:
-            type: string
-        isCorrect:
-          type:
-          - boolean
-          - 'null'
-        godMode:
-          type: boolean
-          default: false
-        instructions:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Instruction'
-          default: null
-      example:
-        content:
-          ref: 1.A1.2
-          type: slide
-        nextContent:
-          ref: 1.A1.1
-          type: slide
-        isCorrect: false
-        answer:
-        - foo
-        - bar
     ProgressionBody:
       type: object
       additionalProperties: false
@@ -652,9 +490,12 @@ components:
           type: integer
         message:
           type: string
-    MetaBody:
+    Meta:
       type: object
       additionalProperties: false
+      required:
+      - createdAt
+      - updatedAt
       properties:
         createdAt:
           type: string
@@ -665,18 +506,6 @@ components:
         source:
           type: string
           description: progression source
-        enrolmentId:
-          type: string
-          description: id of the go1 enrolment
-    Action:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-        payload:
-          type: object
     MoveBody:
       type: object
       additionalProperties: false
@@ -696,23 +525,33 @@ components:
         nextContent:
           ref: 1.A1.1
           type: slide
-    Content:
+    Action:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+        payload:
+          type: object
+    ExtraLifeRefused:
       type: object
       additionalProperties: false
       required:
-      - ref
-      - type
-      description: Content information related to the progression
+      - content
+      - nextContent
       properties:
-        ref:
-          type: string
-          description: Content ref
-        type:
-          type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
-        version:
-          type: string
-          description: Version of the given content
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+      example:
+        content:
+          ref: extraLife
+          type: node
+        nextContent:
+          ref: failExitNode
+          type: failure
     Instruction:
       type: object
       additionalProperties: false
@@ -733,6 +572,98 @@ components:
           - number
           - boolean
           - string
+    State:
+      type: object
+      additionalProperties: false
+      required:
+      - nextContent
+      properties:
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+        isCorrect:
+          type:
+          - boolean
+          - 'null'
+        lives:
+          type: number
+        livesDisabled:
+          type: boolean
+          default: false
+        slides:
+          type: array
+          items:
+            type: string
+        pendingSlides:
+          type: array
+          items:
+            type: string
+        step:
+          type: object
+          additionalProperties: false
+          properties:
+            total:
+              type: number
+            current:
+              type: number
+        stars:
+          type: number
+        requestedClues:
+          type: array
+          items:
+            type: string
+        hasViewedAResourceAtThisStep:
+          type: boolean
+          default: false
+        viewedResources:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              type:
+                type: string
+              ref:
+                type: string
+              resources:
+                type: array
+                items:
+                  type: string
+        variables:
+          type: object
+        remainingLifeRequests:
+          type: integer
+        allAnswers:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              slideRef:
+                type: string
+              answer:
+                type: array
+                items:
+                  type: string
+              isCorrect:
+                type: boolean
+    MetaBody:
+      type: object
+      additionalProperties: false
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        source:
+          type: string
+          description: progression source
+        enrolmentId:
+          type: string
+          description: id of the go1 enrolment
     ExtraLifeAccepted:
       type: object
       additionalProperties: false
@@ -751,22 +682,91 @@ components:
         nextContent:
           ref: 1.A1.1
           type: slide
-    Meta:
+    Progression:
       type: object
       additionalProperties: false
       required:
-      - createdAt
-      - updatedAt
+      - _id
+      - userId
+      - content
+      - engine
+      - meta
+      - state
       properties:
-        createdAt:
+        _id:
           type: string
-          format: date-time
-        updatedAt:
+          description: Progression identifier
+        userId:
           type: string
-          format: date-time
-        source:
+          description: User identifier
+        content:
+          $ref: '#/components/schemas/Content'
+        engine:
+          $ref: '#/components/schemas/Engine'
+        engineOptions:
+          $ref: '#/components/schemas/EngineOptions'
+        meta:
+          $ref: '#/components/schemas/Meta'
+        state:
+          $ref: '#/components/schemas/State'
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
           type: string
-          description: progression source
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
+    AnswerBody:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - nextContent
+      - answer
+      properties:
+        content:
+          $ref: '#/components/schemas/Content'
+        nextContent:
+          $ref: '#/components/schemas/Content'
+        answer:
+          type: array
+          items:
+            type: string
+        isCorrect:
+          type:
+          - boolean
+          - 'null'
+        godMode:
+          type: boolean
+          default: false
+        instructions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Instruction'
+          default: null
+      example:
+        content:
+          ref: 1.A1.2
+          type: slide
+        nextContent:
+          ref: 1.A1.1
+          type: slide
+        isCorrect: false
+        answer:
+        - foo
+        - bar
     EngineOptions:
       type: object
       additionalProperties: false
@@ -797,8 +797,8 @@ components:
           type: string
           description: Engine version
   responses:
-    NotFound:
-      description: Not Found
+    BadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
@@ -815,14 +815,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request
+    Conflit:
+      description: Conflit
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Conflit:
-      description: Conflit
+    NotFound:
+      description: Not Found
       content:
         application/json:
           schema:

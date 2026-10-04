@@ -79,25 +79,68 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
+  responses:
+    PostProgressionSuccess:
+      description: POST progression
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/progression'
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    AnswerSuccess:
+      description: POST answer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/answer'
   schemas:
-    progressionStateVariables:
+    answer:
       type: object
       properties:
-        default:
-          type: string
-      required:
-      - default
+        correctAnswer:
+          type: array
+          items:
+            type: string
+        corrections:
+          type: array
+          items:
+            type: object
+            properties:
+              answer:
+                type: string
+              isCorrect:
+                type: boolean
       example:
-        lesson_status: failed
-        score_raw: '0'
-        score_max: 100
-        score_min: 0
-        session_time: '0000:00:26.15'
-      additionalProperties:
-        oneOf:
-        - type: string
-        - type: number
-        - type: boolean
+        correctAnswer:
+        - Pure players
+        - Click and mortar
+        - Sites de ventes privées et de bons plans
+        corrections:
+        - answer: Pure players
+          isCorrect: true
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
     content:
       type: object
       properties:
@@ -226,67 +269,24 @@ components:
               format: date-time
             enrolmentId:
               type: string
-    answer:
+    progressionStateVariables:
       type: object
       properties:
-        correctAnswer:
-          type: array
-          items:
-            type: string
-        corrections:
-          type: array
-          items:
-            type: object
-            properties:
-              answer:
-                type: string
-              isCorrect:
-                type: boolean
+        default:
+          type: string
+      required:
+      - default
       example:
-        correctAnswer:
-        - Pure players
-        - Click and mortar
-        - Sites de ventes privées et de bons plans
-        corrections:
-        - answer: Pure players
-          isCorrect: true
-    EngineOptions:
-      description: Content information related to the progression engine option
-      type: object
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
-  responses:
-    PostProgressionSuccess:
-      description: POST progression
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/progression'
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
-    AnswerSuccess:
-      description: POST answer
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/answer'
+        lesson_status: failed
+        score_raw: '0'
+        score_max: 100
+        score_min: 0
+        session_time: '0000:00:26.15'
+      additionalProperties:
+        oneOf:
+        - type: string
+        - type: number
+        - type: boolean
   securitySchemes:
     Authorization:
       type: apiKey

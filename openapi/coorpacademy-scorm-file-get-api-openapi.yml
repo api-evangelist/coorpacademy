@@ -65,17 +65,17 @@ components:
       description: InvalidFileError
       type: string
       example: Invalid scorm file $scormFile
-    NotFoundError:
-      description: NotFoundError
+    GetScormFileSuccess:
       type: string
-      example: Could not find this scorm file $scormFile
+      description: file in scorm zip, base64 encoded
     ScormFileError:
       description: ScormFileError
       type: string
       example: Unable to get presigned upload URL from S3
-    GetScormFileSuccess:
+    NotFoundError:
+      description: NotFoundError
       type: string
-      description: file in scorm zip, base64 encoded
+      example: Could not find this scorm file $scormFile
   headers:
     Content-Type:
       schema:

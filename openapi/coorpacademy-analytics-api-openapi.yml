@@ -635,6 +635,16 @@ components:
         version:
           type: string
           description: Version of the given content
+    AnalyticsSlide:
+      type: object
+      additionalProperties: false
+      properties:
+        rate:
+          type: integer
+        success:
+          type: integer
+        total:
+          type: integer
     Error:
       type: object
       properties:
@@ -700,16 +710,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    AnalyticsSlide:
-      type: object
-      additionalProperties: false
-      properties:
-        rate:
-          type: integer
-        success:
-          type: integer
-        total:
-          type: integer
     AnalyticsSlideCount:
       type: object
       required:
@@ -755,29 +755,43 @@ components:
         stars:
           type: integer
           description: Number of stars earned by the User on that review
-    ReviewCompletions:
+    Engine_2:
       type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
       properties:
-        userId:
+        ref:
           type: string
-          description: User identifier
-        user_content:
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
+        version:
           type: string
-          description: user Id and content reference
-        stars:
+          description: Engine version
+    AnalyticsSlideCount_2:
+      type: object
+      required:
+      - ref
+      - best
+      - total
+      - nbAttempts
+      - nbDone
+      properties:
+        ref:
+          type: string
+        best:
           type: integer
-        progressionId:
-          type: string
-          description: progression identifier
-        isDone:
-          type: boolean
-        content:
-          type: string
-        nbSlide:
+        total:
           type: integer
-        updatedAt:
-          type: string
-          format: date-time
+        nbAttempts:
+          type: integer
+        nbDone:
+          type: integer
     CurrentProgression:
       type: object
       additionalProperties: false
@@ -808,46 +822,32 @@ components:
         updatedAt:
           type: string
           format: date-time
-    AnalyticsSlideCount_2:
+    ReviewCompletions:
       type: object
-      required:
-      - ref
-      - best
-      - total
-      - nbAttempts
-      - nbDone
       properties:
-        ref:
+        userId:
           type: string
-        best:
-          type: integer
-        total:
-          type: integer
-        nbAttempts:
-          type: integer
-        nbDone:
-          type: integer
-    Engine_2:
-      type: object
-      additionalProperties: false
-      description: Content information related to the used progression engine
-      required:
-      - ref
-      properties:
-        ref:
+          description: User identifier
+        user_content:
           type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
-          - external
-          - review
-        version:
+          description: user Id and content reference
+        stars:
+          type: integer
+        progressionId:
           type: string
-          description: Engine version
+          description: progression identifier
+        isDone:
+          type: boolean
+        content:
+          type: string
+        nbSlide:
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
   responses:
-    Unauthorized:
-      description: Unauthorized
+    BadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
@@ -858,8 +858,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request
+    Unauthorized:
+      description: Unauthorized
       content:
         application/json:
           schema:

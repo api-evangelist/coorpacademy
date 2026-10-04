@@ -27,25 +27,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  parameters:
-    BrandId:
-      name: brandId
-      in: formData
-      description: digital, up, onboarding etc.
-      type: string
-      required: true
-    DownloadLink:
-      name: data[downloadLink]
-      in: formData
-      description: download link scorm file
-      required: true
-      type: string
-    RecipientAddress:
-      name: recipientAddress
-      in: formData
-      description: an address mail
-      required: true
-      type: string
   responses:
     InternalError:
       description: InternalError
@@ -72,6 +53,25 @@ components:
                     type: string
                   MessageId:
                     type: string
+  parameters:
+    RecipientAddress:
+      name: recipientAddress
+      in: formData
+      description: an address mail
+      required: true
+      type: string
+    BrandId:
+      name: brandId
+      in: formData
+      description: digital, up, onboarding etc.
+      type: string
+      required: true
+    DownloadLink:
+      name: data[downloadLink]
+      in: formData
+      description: download link scorm file
+      required: true
+      type: string
   securitySchemes:
     Authorization:
       type: apiKey
