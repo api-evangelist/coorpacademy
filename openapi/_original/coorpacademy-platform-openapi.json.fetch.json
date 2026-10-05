@@ -1,0 +1,12 @@
+{
+ "url": "https://platform.coorpacademy.com/swagger.json",
+ "requested_url": "https://platform.coorpacademy.com/swagger.json",
+ "status": 200,
+ "content_type": "application/json; charset=utf-8",
+ "bytes": 21566,
+ "sha256": "8a8ca61f3aa47d09ebf1ca3edcedabf8ba83350393daecd35050a3b4b1777ecc",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
