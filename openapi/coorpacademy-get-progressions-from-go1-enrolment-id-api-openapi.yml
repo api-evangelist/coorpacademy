@@ -45,52 +45,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  responses:
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
-    ProgressionFromEnrolmentSuccess:
-      description: Full progression response for the endpoint containing coorp Data, scormProgress, go1 LoId & go1 enrolmentId
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              progression:
-                $ref: '#/components/schemas/progression'
-              scormProgress:
-                $ref: '#/components/schemas/ScormProgress'
-              loId:
-                type: number
-                description: Id of the go1 learning Object
-              enrolmentId:
-                type: number
-                description: Id of the go1 enrolement identifying the coorp progression
-    NotFoundError:
-      description: NotFoundError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 404
-              body: progression not found for go1 enrolmentId XXXXX
   schemas:
     ScormProgress:
       description: Content information related to the progression
@@ -105,25 +59,6 @@ components:
         score:
           type: number
           description: Scorm Score (1/100)
-    launchURLBody:
-      type: object
-      properties:
-        enrolmentId:
-          type: number
-        learnerId:
-          type: number
-        loId:
-          type: number
-    EngineOptions:
-      description: Content information related to the progression engine option
-      type: object
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
     content:
       type: object
       properties:
@@ -270,6 +205,71 @@ components:
         - type: string
         - type: number
         - type: boolean
+    launchURLBody:
+      type: object
+      properties:
+        enrolmentId:
+          type: number
+        learnerId:
+          type: number
+        loId:
+          type: number
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    ProgressionFromEnrolmentSuccess:
+      description: Full progression response for the endpoint containing coorp Data, scormProgress, go1 LoId & go1 enrolmentId
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              progression:
+                $ref: '#/components/schemas/progression'
+              scormProgress:
+                $ref: '#/components/schemas/ScormProgress'
+              loId:
+                type: number
+                description: Id of the go1 learning Object
+              enrolmentId:
+                type: number
+                description: Id of the go1 enrolement identifying the coorp progression
+    NotFoundError:
+      description: NotFoundError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 404
+              body: progression not found for go1 enrolmentId XXXXX
   securitySchemes:
     Authorization:
       type: apiKey

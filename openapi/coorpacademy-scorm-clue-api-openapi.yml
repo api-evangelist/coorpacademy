@@ -39,47 +39,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  responses:
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
-    ClueSuccess:
-      description: Get clue
-      content:
-        text/plain:
-          schema:
-            type: string
-            example: What a beautiful clue
-  parameters:
-    slideRef:
-      name: slideRef
-      in: path
-      description: id of the slide
-      required: true
-      schema:
-        type: string
   schemas:
-    EngineOptions:
-      description: Content information related to the progression engine option
-      type: object
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
     content:
       type: object
       properties:
@@ -226,6 +186,46 @@ components:
         - type: string
         - type: number
         - type: boolean
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
+  responses:
+    ClueSuccess:
+      description: Get clue
+      content:
+        text/plain:
+          schema:
+            type: string
+            example: What a beautiful clue
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+  parameters:
+    slideRef:
+      name: slideRef
+      in: path
+      description: id of the slide
+      required: true
+      schema:
+        type: string
   securitySchemes:
     Authorization:
       type: apiKey

@@ -49,24 +49,56 @@ paths:
               $ref: '#/components/schemas/MoveBody'
         required: true
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflit:
+      description: Conflit
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Content:
+    Engine:
       type: object
       additionalProperties: false
+      description: Content information related to the used progression engine
       required:
       - ref
-      - type
-      description: Content information related to the progression
       properties:
         ref:
           type: string
-          description: Content ref
-        type:
-          type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
         version:
           type: string
-          description: Version of the given content
+          description: Engine version
     UpdatedProgression:
       type: object
       additionalProperties: false
@@ -94,23 +126,22 @@ components:
           $ref: '#/components/schemas/Engine'
         engineOptions:
           $ref: '#/components/schemas/EngineOptions'
-    Error:
+    Meta:
       type: object
+      additionalProperties: false
+      required:
+      - createdAt
+      - updatedAt
       properties:
-        id:
+        createdAt:
           type: string
-        code:
+          format: date-time
+        updatedAt:
           type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-        message:
+          format: date-time
+        source:
           type: string
+          description: progression source
     MoveBody:
       type: object
       additionalProperties: false
@@ -206,22 +237,23 @@ components:
                   type: string
               isCorrect:
                 type: boolean
-    Meta:
+    Error:
       type: object
-      additionalProperties: false
-      required:
-      - createdAt
-      - updatedAt
       properties:
-        createdAt:
+        id:
           type: string
-          format: date-time
-        updatedAt:
+        code:
           type: string
-          format: date-time
-        source:
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+        message:
           type: string
-          description: progression source
     Instruction:
       type: object
       additionalProperties: false
@@ -242,24 +274,6 @@ components:
           - number
           - boolean
           - string
-    Engine:
-      type: object
-      additionalProperties: false
-      description: Content information related to the used progression engine
-      required:
-      - ref
-      properties:
-        ref:
-          type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
-          - external
-          - review
-        version:
-          type: string
-          description: Engine version
     EngineOptions:
       type: object
       additionalProperties: false
@@ -271,37 +285,23 @@ components:
           type: boolean
         lives:
           type: integer
-  responses:
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Conflit:
-      description: Conflit
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    Content:
+      type: object
+      additionalProperties: false
+      required:
+      - ref
+      - type
+      description: Content information related to the progression
+      properties:
+        ref:
+          type: string
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+        version:
+          type: string
+          description: Version of the given content
   securitySchemes:
     authentication:
       type: apiKey

@@ -43,6 +43,19 @@ paths:
                 - $ref: '#/components/schemas/NotDefinedError'
                 - $ref: '#/components/schemas/ScormFileError'
 components:
+  headers:
+    Cache-Control:
+      schema:
+        type: string
+      example: no-cache, no-store, must-revalidate
+    Access-Control-Allow-Origin:
+      schema:
+        type: string
+      example: '*'
+    Content-Type:
+      schema:
+        type: string
+      example: application/json
   schemas:
     NotDefinedError:
       description: NotDefinedError
@@ -55,19 +68,6 @@ components:
       description: ScormFileError
       type: string
       example: Unable to get presigned upload URL from S3
-  headers:
-    Content-Type:
-      schema:
-        type: string
-      example: application/json
-    Cache-Control:
-      schema:
-        type: string
-      example: no-cache, no-store, must-revalidate
-    Access-Control-Allow-Origin:
-      schema:
-        type: string
-      example: '*'
   securitySchemes:
     Authorization:
       type: apiKey

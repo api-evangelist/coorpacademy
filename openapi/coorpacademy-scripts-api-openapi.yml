@@ -329,18 +329,35 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    ScriptLocales:
+    ScriptStructure:
       type: object
       properties:
-        scriptUrl:
+        ref:
           type: string
-          description: Script url on aws s3
-        srtUrl:
-          type: string
-          description: Srt url on aws s3
-        jwTrackId:
-          type: string
-          description: Track key on jw player
+          description: subtitleRef
+        states:
+          type: object
+          description: States of publication, transcription, progression transcription and edition by lang
+          additionalProperties:
+            type: object
+            properties:
+              published:
+                type: boolean
+                description: 'States of the publication : true or false'
+              original:
+                type: boolean
+                description: 'Authenticity criteria of the script (original if created by uploading a file on cockpit): true or false'
+              edition:
+                type: string
+                description: 'States of the edition value : draft or validate'
+              state:
+                type: string
+                description: 'state of the generation of subtitle : Success, Error, Pending'
+              progression:
+                type: number
+                description: '% of progression of the generation of the subtitle'
+        meta:
+          $ref: '#/components/schemas/Meta'
     ScriptResponse:
       type: object
       required:
@@ -392,53 +409,34 @@ components:
             scriptUrl: srtUrl
             srtUrl: strUrl
             jwTrackId: id_track_fr
-    Error:
+    ScriptBodyRequestPut:
       type: object
       properties:
-        id:
+        structure:
+          $ref: '#/components/schemas/ScriptStructure'
+        locales:
+          $ref: '#/components/schemas/ScriptLocales'
+        videoId:
           type: string
-        code:
+          description: id of the video
+        repository:
           type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    ScriptStructure:
-      type: object
-      properties:
-        ref:
-          type: string
-          description: subtitleRef
-        states:
-          type: object
-          description: States of publication, transcription, progression transcription and edition by lang
-          additionalProperties:
-            type: object
-            properties:
-              published:
-                type: boolean
-                description: 'States of the publication : true or false'
-              original:
-                type: boolean
-                description: 'Authenticity criteria of the script (original if created by uploading a file on cockpit): true or false'
-              edition:
-                type: string
-                description: 'States of the edition value : draft or validate'
-              state:
-                type: string
-                description: 'state of the generation of subtitle : Success, Error, Pending'
-              progression:
-                type: number
-                description: '% of progression of the generation of the subtitle'
-        meta:
-          $ref: '#/components/schemas/Meta'
+          description: repository of the video
+      example:
+        locales:
+          en:
+            scriptUrl: string
+            srtUrl: string
+            jwTrackId: id_track_en
+        structure:
+          states:
+            en:
+              edition: validate
+              published: true
+              orignal: true
+              authot:
+                state: success
+                progression: 100
     Meta:
       type: object
       required:
@@ -506,34 +504,36 @@ components:
             scriptUrl: url3
             srtUrl: srtUrl
             jwTrackId: id_track_es
-    ScriptBodyRequestPut:
+    Error:
       type: object
       properties:
-        structure:
-          $ref: '#/components/schemas/ScriptStructure'
-        locales:
-          $ref: '#/components/schemas/ScriptLocales'
-        videoId:
+        id:
           type: string
-          description: id of the video
-        repository:
+        code:
           type: string
-          description: repository of the video
-      example:
-        locales:
-          en:
-            scriptUrl: string
-            srtUrl: string
-            jwTrackId: id_track_en
-        structure:
-          states:
-            en:
-              edition: validate
-              published: true
-              orignal: true
-              authot:
-                state: success
-                progression: 100
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    ScriptLocales:
+      type: object
+      properties:
+        scriptUrl:
+          type: string
+          description: Script url on aws s3
+        srtUrl:
+          type: string
+          description: Srt url on aws s3
+        jwTrackId:
+          type: string
+          description: Track key on jw player
   securitySchemes:
     token:
       type: apiKey

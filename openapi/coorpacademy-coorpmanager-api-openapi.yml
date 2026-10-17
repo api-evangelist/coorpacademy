@@ -54,10 +54,10 @@ components:
                   MessageId:
                     type: string
   parameters:
-    RecipientAddress:
-      name: recipientAddress
+    UserId:
+      name: userId
       in: formData
-      description: an address mail
+      description: id from /api/v1/users/me
       required: true
       type: string
     BrandId:
@@ -66,10 +66,10 @@ components:
       description: digital, up, onboarding etc.
       type: string
       required: true
-    UserId:
-      name: userId
+    RecipientAddress:
+      name: recipientAddress
       in: formData
-      description: id from /api/v1/users/me
+      description: an address mail
       required: true
       type: string
   securitySchemes:

@@ -233,26 +233,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    NotificationBodyRequestPut:
-      type: object
-      properties:
-        type:
-          type: string
-          description: type of notification
-        active:
-          type: boolean
-          description: whether the notification is active or not
-        message:
-          type: string
-          description: message of notification
-        link:
-          type: string
-          description: link to be used as CTA of the notification
-      example:
-        type: feature
-        active: true
-        message: New feature subtitles online. Click on button to see the demo!
-        link: https://video.com/feature/new
     Notification:
       type: object
       required:
@@ -282,6 +262,44 @@ components:
         active: true
         message: New feature subtitles online. Click on button to see the demo!
         link: https://video.com/feature/new
+    NotificationBodyRequestPut:
+      type: object
+      properties:
+        type:
+          type: string
+          description: type of notification
+        active:
+          type: boolean
+          description: whether the notification is active or not
+        message:
+          type: string
+          description: message of notification
+        link:
+          type: string
+          description: link to be used as CTA of the notification
+      example:
+        type: feature
+        active: true
+        message: New feature subtitles online. Click on button to see the demo!
+        link: https://video.com/feature/new
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     NotificationBodyRequest:
       type: object
       properties:
@@ -306,24 +324,6 @@ components:
         active: true
         message: New feature subtitles online. Click on button to see the demo!
         link: https://video.com/feature/new
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
   securitySchemes:
     token:
       type: apiKey

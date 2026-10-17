@@ -44,8 +44,8 @@ paths:
       x-swagger-router-controller: progressions
 components:
   responses:
-    BadRequest:
-      description: Bad Request
+    Unauthorized:
+      description: Unauthorized
       content:
         application/json:
           schema:
@@ -56,19 +56,28 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    Action:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+        payload:
+          type: object
     Error:
       type: object
       properties:
@@ -86,15 +95,6 @@ components:
           type: integer
         message:
           type: string
-    Action:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-        payload:
-          type: object
   securitySchemes:
     authentication:
       type: apiKey

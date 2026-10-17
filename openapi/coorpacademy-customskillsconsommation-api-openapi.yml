@@ -172,6 +172,84 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    CustomSkillConsommationPayload:
+      type: object
+      required:
+      - title
+      - description
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        items:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomSkillItems'
+        icon:
+          type: object
+          properties:
+            color:
+              type: string
+            name:
+              type: string
+        locales:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              title:
+                type: string
+              description:
+                type: string
+    ConsommationContentCount:
+      type: object
+      properties:
+        _id:
+          type: string
+          enum:
+          - published
+          - archived
+          - draft
+        count:
+          type: number
+    CustomSkillItems:
+      type: object
+      properties:
+        type:
+          type: string
+        ref:
+          type: string
+    CustomSkillConsommation:
+      type: object
+      required:
+      - ref
+      - repository
+      - version
+      - meta
+      - state
+      - defaultLocale
+      - payload
+      properties:
+        repository:
+          type: string
+        ref:
+          type: string
+        version:
+          type: number
+        state:
+          enum:
+          - published
+          - deleted
+          - archived
+          - draft
+        defaultLocale:
+          type: string
+          example: en
+        meta:
+          $ref: '#/components/schemas/CustomSkillMeta'
+        payload:
+          $ref: '#/components/schemas/CustomSkillConsommationPayload'
     CustomSkillConsommationBodyUpsert:
       type: object
       required:
@@ -217,43 +295,6 @@ components:
           format: int32
         message:
           type: string
-    CustomSkillConsommationPayload:
-      type: object
-      required:
-      - title
-      - description
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        items:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CustomSkillItems'
-        icon:
-          type: object
-          properties:
-            color:
-              type: string
-            name:
-              type: string
-        locales:
-          type: object
-          additionalProperties:
-            type: object
-            properties:
-              title:
-                type: string
-              description:
-                type: string
-    CustomSkillItems:
-      type: object
-      properties:
-        type:
-          type: string
-        ref:
-          type: string
     CustomSkillMeta:
       type: object
       required:
@@ -269,47 +310,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    CustomSkillConsommation:
-      type: object
-      required:
-      - ref
-      - repository
-      - version
-      - meta
-      - state
-      - defaultLocale
-      - payload
-      properties:
-        repository:
-          type: string
-        ref:
-          type: string
-        version:
-          type: number
-        state:
-          enum:
-          - published
-          - deleted
-          - archived
-          - draft
-        defaultLocale:
-          type: string
-          example: en
-        meta:
-          $ref: '#/components/schemas/CustomSkillMeta'
-        payload:
-          $ref: '#/components/schemas/CustomSkillConsommationPayload'
-    ConsommationContentCount:
-      type: object
-      properties:
-        _id:
-          type: string
-          enum:
-          - published
-          - archived
-          - draft
-        count:
-          type: number
   securitySchemes:
     token:
       type: apiKey

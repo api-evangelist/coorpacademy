@@ -58,31 +58,31 @@ paths:
                 - $ref: '#/components/schemas/BrandNotFoundError'
 components:
   schemas:
-    InvalidJWTokenError:
-      description: InvalidJWTokenError
+    ProgressionNotFoundError:
+      description: ProgressionNotFoundError
       type: string
     NotDefinedError:
       description: NotDefinedError
       type: string
-    ProgressionNotFoundError:
-      description: ProgressionNotFoundError
-      type: string
     Success:
       type: string
       description: ''
+    InvalidJWTokenError:
+      description: InvalidJWTokenError
+      type: string
     BrandNotFoundError:
       description: ProgressionNotFoundError
       type: string
   headers:
+    Cache-Control:
+      schema:
+        type: string
+      example: no-cache, no-store, must-revalidate
     Location:
       description: url location to redirect based on exitNodeRef
       schema:
         type: string
       example: https://onboarding.coorpacademy.com/externalContent/externalContentRef/progressionId/end
-    Cache-Control:
-      schema:
-        type: string
-      example: no-cache, no-store, must-revalidate
   securitySchemes:
     token:
       type: apiKey

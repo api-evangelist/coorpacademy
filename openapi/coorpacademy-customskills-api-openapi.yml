@@ -233,6 +233,84 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    CustomSkillItemMap:
+      type: object
+      properties:
+        type:
+          type: string
+          example: type
+        ref:
+          type: string
+          example: ref
+    CustomSkillLocalesMap:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+    CustomSkillIcon:
+      type: object
+      properties:
+        color:
+          type: string
+          example: '#FFFFFF'
+        name:
+          type: string
+          example: white
+    CustomSkillStructureEdition:
+      type: object
+      properties:
+        title:
+          type: string
+          example: title
+        description:
+          type: string
+          example: description
+        defaultLocale:
+          type: string
+          example: en
+        icon:
+          type: object
+          $ref: '#/components/schemas/CustomSkillIcon'
+        items:
+          type: object
+          properties:
+            ref:
+              $ref: '#/components/schemas/CustomSkillItemMap'
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    CustomSkillMeta:
+      type: object
+      required:
+      - modifiedBy
+      properties:
+        modifiedBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
     CustomSkillEdition:
       type: object
       required:
@@ -256,84 +334,6 @@ components:
           type: string
         structure:
           $ref: '#/components/schemas/CustomSkillStructureEdition'
-    CustomSkillItemMap:
-      type: object
-      properties:
-        type:
-          type: string
-          example: type
-        ref:
-          type: string
-          example: ref
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    CustomSkillIcon:
-      type: object
-      properties:
-        color:
-          type: string
-          example: '#FFFFFF'
-        name:
-          type: string
-          example: white
-    CustomSkillLocalesMap:
-      type: object
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-    CustomSkillMeta:
-      type: object
-      required:
-      - modifiedBy
-      properties:
-        modifiedBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-        updatedAt:
-          type: string
-          format: date-time
-    CustomSkillStructureEdition:
-      type: object
-      properties:
-        title:
-          type: string
-          example: title
-        description:
-          type: string
-          example: description
-        defaultLocale:
-          type: string
-          example: en
-        icon:
-          type: object
-          $ref: '#/components/schemas/CustomSkillIcon'
-        items:
-          type: object
-          properties:
-            ref:
-              $ref: '#/components/schemas/CustomSkillItemMap'
   securitySchemes:
     token:
       type: apiKey

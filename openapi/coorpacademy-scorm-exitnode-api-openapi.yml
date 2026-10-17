@@ -32,17 +32,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  schemas:
-    media:
-      type: object
-      properties:
-        mediaUrl:
-          type: string
-        type:
-          type: string
-      example:
-        mediaUrl: //static.coorpacademy.com/content/CoorpAcademy/content-catalogue/cockpit-assessment/raw/teste.pdf
-        type: pdf
   responses:
     ExitNodeSuccess:
       description: Get exitNode
@@ -83,6 +72,17 @@ components:
             example:
               statusCode: 500
               body: internal Error while resolving request
+  schemas:
+    media:
+      type: object
+      properties:
+        mediaUrl:
+          type: string
+        type:
+          type: string
+      example:
+        mediaUrl: //static.coorpacademy.com/content/CoorpAcademy/content-catalogue/cockpit-assessment/raw/teste.pdf
+        type: pdf
   parameters:
     exitNodeRef:
       name: exitNodeRef

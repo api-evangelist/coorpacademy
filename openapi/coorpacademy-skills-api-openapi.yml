@@ -247,38 +247,23 @@ paths:
     - url: /review
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    Meta:
+    SkillStructure:
       type: object
       required:
-      - createdAt
-      - updatedAt
+      - ref
+      - name
       properties:
-        createdAt:
+        ref:
           type: string
-          format: date-time
-          example: '2021-10-11T14:54:52.368Z'
-        updatedAt:
+          description: Object structure
+        type:
           type: string
-          format: date-time
-          example: '2021-10-11T14:54:52.368Z'
+          description: Type object. In this case is skill
+        name:
+          type: string
+          description: Translation key for name
+        meta:
+          $ref: '#/components/schemas/Meta'
     SkillResponse:
       type: object
       required:
@@ -304,25 +289,40 @@ components:
             name: Communicación
           fr:
             name: Communication
-    SkillStructure:
+    Meta:
       type: object
       required:
-      - ref
-      - name
+      - createdAt
+      - updatedAt
       properties:
-        ref:
+        createdAt:
           type: string
-          description: Object structure
-        type:
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
+        updatedAt:
           type: string
-          description: Type object. In this case is skill
-        name:
-          type: string
-          description: Translation key for name
-        meta:
-          $ref: '#/components/schemas/Meta'
+          format: date-time
+          example: '2021-10-11T14:54:52.368Z'
     SkillLocales:
       type: object
+    Error:
+      type: object
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
     SkillBodyRequest:
       type: object
       properties:

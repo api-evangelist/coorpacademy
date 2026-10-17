@@ -29,6 +29,12 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   responses:
+    InternalError:
+      description: InternalError
+      content:
+        '*/*':
+          schema:
+            type: string
     Success:
       description: User created successfully
       content:
@@ -48,12 +54,6 @@ components:
                     type: string
                   MessageId:
                     type: string
-    InternalError:
-      description: InternalError
-      content:
-        '*/*':
-          schema:
-            type: string
   parameters:
     brand:
       name: brand

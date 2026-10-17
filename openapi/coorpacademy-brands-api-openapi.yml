@@ -348,128 +348,6 @@ paths:
       x-swagger-router-controller: brands
 components:
   schemas:
-    UserMappingValue:
-      type: array
-      items:
-        type: string
-    userMappingPayload:
-      type: object
-      properties:
-        uniqueLogin:
-          $ref: '#/components/schemas/UserMappingValue'
-        emails:
-          type: array
-          items:
-            type: object
-            properties:
-              value:
-                $ref: '#/components/schemas/UserMappingValue'
-        name:
-          type: object
-          properties:
-            familyName:
-              $ref: '#/components/schemas/UserMappingValue'
-            givenName:
-              $ref: '#/components/schemas/UserMappingValue'
-        provider:
-          $ref: '#/components/schemas/UserMappingValue'
-        language:
-          $ref: '#/components/schemas/UserMappingValue'
-        providerInfos:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/UserMappingValue'
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserMappingValue'
-        organizations:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                $ref: '#/components/schemas/UserMappingValue'
-              title:
-                $ref: '#/components/schemas/UserMappingValue'
-              branch':
-                $ref: '#/components/schemas/UserMappingValue'
-              businessUnit:
-                $ref: '#/components/schemas/UserMappingValue'
-              workingCountry:
-                $ref: '#/components/schemas/UserMappingValue'
-              workingCity:
-                $ref: '#/components/schemas/UserMappingValue'
-              boutiqueReferent:
-                $ref: '#/components/schemas/UserMappingValue'
-              boutique:
-                $ref: '#/components/schemas/UserMappingValue'
-              address1:
-                $ref: '#/components/schemas/UserMappingValue'
-              address2:
-                $ref: '#/components/schemas/UserMappingValue'
-              zipcode:
-                $ref: '#/components/schemas/UserMappingValue'
-              region:
-                $ref: '#/components/schemas/UserMappingValue'
-              role:
-                $ref: '#/components/schemas/UserMappingValue'
-              contractType:
-                $ref: '#/components/schemas/UserMappingValue'
-              grade:
-                $ref: '#/components/schemas/UserMappingValue'
-              entity:
-                $ref: '#/components/schemas/UserMappingValue'
-              lmsId:
-                $ref: '#/components/schemas/UserMappingValue'
-              extendedField1:
-                $ref: '#/components/schemas/UserMappingValue'
-              extendedField2:
-                $ref: '#/components/schemas/UserMappingValue'
-              extendedField3:
-                $ref: '#/components/schemas/UserMappingValue'
-    Brand:
-      type: object
-      properties:
-        alias:
-          type: string
-          description: Unique name of the brand accross all etcd
-        host:
-          type: string
-          description: Web site host
-        payload:
-          type: object
-          $ref: '#/components/schemas/BrandPayload'
-    Slider:
-      type: object
-      properties:
-        start:
-          type: object
-          $ref: '#/components/schemas/Slide'
-        resume:
-          type: object
-          $ref: '#/components/schemas/Slide'
-        battle:
-          type: object
-          $ref: '#/components/schemas/Slide'
-    SSOPayload:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        connectEnabled:
-          type: boolean
-        enableDefaultRoute:
-          type: boolean
-        type:
-          type: string
-          enum:
-          - saml
-          - oidc
-        saml2:
-          $ref: '#/components/schemas/SAMLPayload'
-        oidc:
-          $ref: '#/components/schemas/OIDCPayload'
     SAMLPayload:
       type: object
       properties:
@@ -506,41 +384,69 @@ components:
           type: string
         userMapping:
           $ref: '#/components/schemas/userMappingPayload'
-    Boolean:
+    SSOPayload:
       type: object
       properties:
-        value:
+        enabled:
           type: boolean
-    Error:
-      type: object
-      properties:
-        success:
+        connectEnabled:
           type: boolean
-        id:
+        enableDefaultRoute:
+          type: boolean
+        type:
           type: string
-        status:
-          type: integer
-          format: int32
-        message:
-          type: string
-    NewBrand:
+          enum:
+          - saml
+          - oidc
+        saml2:
+          $ref: '#/components/schemas/SAMLPayload'
+        oidc:
+          $ref: '#/components/schemas/OIDCPayload'
+    OIDCPayload:
       type: object
       properties:
-        hostname:
+        auth:
+          type: object
+          properties:
+            authorizationURL:
+              type: string
+            clientID:
+              type: string
+            clientSecret:
+              type: string
+            issuer:
+              type: string
+            scope:
+              type: string
+            tokenURL:
+              type: string
+            userInfoURL:
+              type: string
+            responseMode:
+              type: string
+            nonce:
+              type: boolean
+            skipUserProfile:
+              type: boolean
+            authorizationParams:
+              type: object
+              properties:
+                resource:
+                  type: string
+        userMapping:
+          $ref: '#/components/schemas/userMappingPayload'
+    Slide:
+      type: object
+      properties:
+        image:
           type: string
-          pattern: ^[a-z][a-z0-9-]{0,39}[a-z0-9]$
-          description: Web site host
-          x-example: up
-        skin:
+          description: Image url to be used as background for the slide
+        align:
           type: string
-          description: Brand name used for skinning
-          x-example: digital
-      required:
-      - hostname
-    Brands:
-      type: array
-      items:
-        $ref: '#/components/schemas/Brand'
+          description: 'Text align on the slide. It should be one of these 3 values: ''left'', ''middle'', ''right'''
+        style:
+          type: string
+          description: 'Color style for text on the slide. It should be one of these 2 values: ''light'', ''dark'''
     BrandPayload:
       type: object
       properties:
@@ -1067,6 +973,30 @@ components:
       type: array
       items:
         type: string
+    Brand:
+      type: object
+      properties:
+        alias:
+          type: string
+          description: Unique name of the brand accross all etcd
+        host:
+          type: string
+          description: Web site host
+        payload:
+          type: object
+          $ref: '#/components/schemas/BrandPayload'
+    Slider:
+      type: object
+      properties:
+        start:
+          type: object
+          $ref: '#/components/schemas/Slide'
+        resume:
+          type: object
+          $ref: '#/components/schemas/Slide'
+        battle:
+          type: object
+          $ref: '#/components/schemas/Slide'
     ImportPayload:
       type: object
       properties:
@@ -1075,51 +1005,121 @@ components:
           properties:
             template:
               type: string
-    Slide:
+    UserMappingValue:
+      type: array
+      items:
+        type: string
+    Boolean:
       type: object
       properties:
-        image:
-          type: string
-          description: Image url to be used as background for the slide
-        align:
-          type: string
-          description: 'Text align on the slide. It should be one of these 3 values: ''left'', ''middle'', ''right'''
-        style:
-          type: string
-          description: 'Color style for text on the slide. It should be one of these 2 values: ''light'', ''dark'''
-    OIDCPayload:
+        value:
+          type: boolean
+    Brands:
+      type: array
+      items:
+        $ref: '#/components/schemas/Brand'
+    userMappingPayload:
       type: object
       properties:
-        auth:
+        uniqueLogin:
+          $ref: '#/components/schemas/UserMappingValue'
+        emails:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                $ref: '#/components/schemas/UserMappingValue'
+        name:
           type: object
           properties:
-            authorizationURL:
-              type: string
-            clientID:
-              type: string
-            clientSecret:
-              type: string
-            issuer:
-              type: string
-            scope:
-              type: string
-            tokenURL:
-              type: string
-            userInfoURL:
-              type: string
-            responseMode:
-              type: string
-            nonce:
-              type: boolean
-            skipUserProfile:
-              type: boolean
-            authorizationParams:
-              type: object
-              properties:
-                resource:
-                  type: string
-        userMapping:
-          $ref: '#/components/schemas/userMappingPayload'
+            familyName:
+              $ref: '#/components/schemas/UserMappingValue'
+            givenName:
+              $ref: '#/components/schemas/UserMappingValue'
+        provider:
+          $ref: '#/components/schemas/UserMappingValue'
+        language:
+          $ref: '#/components/schemas/UserMappingValue'
+        providerInfos:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/UserMappingValue'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserMappingValue'
+        organizations:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                $ref: '#/components/schemas/UserMappingValue'
+              title:
+                $ref: '#/components/schemas/UserMappingValue'
+              branch':
+                $ref: '#/components/schemas/UserMappingValue'
+              businessUnit:
+                $ref: '#/components/schemas/UserMappingValue'
+              workingCountry:
+                $ref: '#/components/schemas/UserMappingValue'
+              workingCity:
+                $ref: '#/components/schemas/UserMappingValue'
+              boutiqueReferent:
+                $ref: '#/components/schemas/UserMappingValue'
+              boutique:
+                $ref: '#/components/schemas/UserMappingValue'
+              address1:
+                $ref: '#/components/schemas/UserMappingValue'
+              address2:
+                $ref: '#/components/schemas/UserMappingValue'
+              zipcode:
+                $ref: '#/components/schemas/UserMappingValue'
+              region:
+                $ref: '#/components/schemas/UserMappingValue'
+              role:
+                $ref: '#/components/schemas/UserMappingValue'
+              contractType:
+                $ref: '#/components/schemas/UserMappingValue'
+              grade:
+                $ref: '#/components/schemas/UserMappingValue'
+              entity:
+                $ref: '#/components/schemas/UserMappingValue'
+              lmsId:
+                $ref: '#/components/schemas/UserMappingValue'
+              extendedField1:
+                $ref: '#/components/schemas/UserMappingValue'
+              extendedField2:
+                $ref: '#/components/schemas/UserMappingValue'
+              extendedField3:
+                $ref: '#/components/schemas/UserMappingValue'
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+        id:
+          type: string
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
+    NewBrand:
+      type: object
+      properties:
+        hostname:
+          type: string
+          pattern: ^[a-z][a-z0-9-]{0,39}[a-z0-9]$
+          description: Web site host
+          x-example: up
+        skin:
+          type: string
+          description: Brand name used for skinning
+          x-example: digital
+      required:
+      - hostname
   securitySchemes:
     authentication:
       type: apiKey

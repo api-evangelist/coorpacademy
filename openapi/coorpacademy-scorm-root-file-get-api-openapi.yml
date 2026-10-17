@@ -53,27 +53,27 @@ paths:
                 - $ref: '#/components/schemas/InvalidFileError'
                 - $ref: '#/components/schemas/NotFoundError'
 components:
-  schemas:
-    InvalidFileError:
-      description: InvalidFileError
-      type: string
-      example: Invalid scorm file $scormFile
-    ScormFileError:
-      description: ScormFileError
-      type: string
-      example: Unable to get presigned upload URL from S3
-    GetScormRootFileSuccess:
-      type: string
-      description: ''
-    NotFoundError:
-      description: NotFoundError
-      type: string
-      example: Could not find this scorm file $scormFile
   headers:
     Location:
       schema:
         type: string
       example: /scorm/valid-scorm.zip/index_lms.html
+  schemas:
+    NotFoundError:
+      description: NotFoundError
+      type: string
+      example: Could not find this scorm file $scormFile
+    GetScormRootFileSuccess:
+      type: string
+      description: ''
+    ScormFileError:
+      description: ScormFileError
+      type: string
+      example: Unable to get presigned upload URL from S3
+    InvalidFileError:
+      description: InvalidFileError
+      type: string
+      example: Invalid scorm file $scormFile
   securitySchemes:
     Authorization:
       type: apiKey

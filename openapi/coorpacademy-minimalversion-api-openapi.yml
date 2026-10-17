@@ -57,6 +57,12 @@ paths:
       x-operation-id-source: derived
 components:
   responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: string
     Forbidden:
       description: Forbidden
       content:
@@ -65,12 +71,6 @@ components:
             type: string
     Success:
       description: Version successfully set or retrieved
-      content:
-        application/json:
-          schema:
-            type: string
-    InternalError:
-      description: InternalError
       content:
         application/json:
           schema:

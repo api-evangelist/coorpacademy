@@ -42,61 +42,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  responses:
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
-    MarkResourceAsViewedSuccess:
-      description: Mark Resource As Viewed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/progression'
   schemas:
-    payloadMarkResourceAsViewed:
-      type: object
-      properties:
-        content:
-          type: object
-          properties:
-            ref:
-              type: string
-              example: cha_er3dfTs
-            type:
-              type: string
-              example: chapter
-        resource:
-          $ref: '#/components/schemas/resource'
-    resource:
-      type: object
-      properties:
-        ref:
-          type: string
-          example: med_art3f5P
-        type:
-          type: string
-          example: pdf
-    EngineOptions:
-      description: Content information related to the progression engine option
-      type: object
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
     content:
       type: object
       properties:
@@ -225,6 +171,20 @@ components:
               format: date-time
             enrolmentId:
               type: string
+    payloadMarkResourceAsViewed:
+      type: object
+      properties:
+        content:
+          type: object
+          properties:
+            ref:
+              type: string
+              example: cha_er3dfTs
+            type:
+              type: string
+              example: chapter
+        resource:
+          $ref: '#/components/schemas/resource'
     progressionStateVariables:
       type: object
       properties:
@@ -243,6 +203,46 @@ components:
         - type: string
         - type: number
         - type: boolean
+    resource:
+      type: object
+      properties:
+        ref:
+          type: string
+          example: med_art3f5P
+        type:
+          type: string
+          example: pdf
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    MarkResourceAsViewedSuccess:
+      description: Mark Resource As Viewed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/progression'
   securitySchemes:
     Authorization:
       type: apiKey

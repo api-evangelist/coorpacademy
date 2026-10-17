@@ -80,12 +80,12 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   responses:
-    PostProgressionSuccess:
-      description: POST progression
+    AnswerSuccess:
+      description: POST answer
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/progression'
+            $ref: '#/components/schemas/answer'
     InternalError:
       description: InternalError
       content:
@@ -100,47 +100,13 @@ components:
             example:
               statusCode: 500
               body: internal Error while resolving request
-    AnswerSuccess:
-      description: POST answer
+    PostProgressionSuccess:
+      description: POST progression
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/answer'
+            $ref: '#/components/schemas/progression'
   schemas:
-    answer:
-      type: object
-      properties:
-        correctAnswer:
-          type: array
-          items:
-            type: string
-        corrections:
-          type: array
-          items:
-            type: object
-            properties:
-              answer:
-                type: string
-              isCorrect:
-                type: boolean
-      example:
-        correctAnswer:
-        - Pure players
-        - Click and mortar
-        - Sites de ventes privées et de bons plans
-        corrections:
-        - answer: Pure players
-          isCorrect: true
-    EngineOptions:
-      description: Content information related to the progression engine option
-      type: object
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
     content:
       type: object
       properties:
@@ -287,6 +253,40 @@ components:
         - type: string
         - type: number
         - type: boolean
+    answer:
+      type: object
+      properties:
+        correctAnswer:
+          type: array
+          items:
+            type: string
+        corrections:
+          type: array
+          items:
+            type: object
+            properties:
+              answer:
+                type: string
+              isCorrect:
+                type: boolean
+      example:
+        correctAnswer:
+        - Pure players
+        - Click and mortar
+        - Sites de ventes privées et de bons plans
+        corrections:
+        - answer: Pure players
+          isCorrect: true
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
   securitySchemes:
     Authorization:
       type: apiKey

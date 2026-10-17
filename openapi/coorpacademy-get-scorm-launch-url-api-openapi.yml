@@ -45,16 +45,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
-  schemas:
-    launchURLBody:
-      type: object
-      properties:
-        enrolmentId:
-          type: number
-        learnerId:
-          type: number
-        loId:
-          type: number
   responses:
     InternalError:
       description: InternalError
@@ -100,6 +90,16 @@ components:
             example:
               statusCode: 404
               body: Given Learning Object not found or not bound to the enrolmentId/progressionId
+  schemas:
+    launchURLBody:
+      type: object
+      properties:
+        enrolmentId:
+          type: number
+        learnerId:
+          type: number
+        loId:
+          type: number
   securitySchemes:
     Authorization:
       type: apiKey

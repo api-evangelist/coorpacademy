@@ -32,6 +32,35 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 components:
+  parameters:
+    slideRef:
+      name: slideRef
+      in: path
+      description: id of the slide
+      required: true
+      schema:
+        type: string
+  responses:
+    InternalError:
+      description: InternalError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              statusCode:
+                type: number
+              body:
+                type: string
+            example:
+              statusCode: 500
+              body: internal Error while resolving request
+    SlideSuccess:
+      description: Get slide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/slide'
   schemas:
     slide:
       type: object
@@ -201,35 +230,6 @@ components:
           type: array
           items:
             type: string
-  responses:
-    SlideSuccess:
-      description: Get slide
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/slide'
-    InternalError:
-      description: InternalError
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              statusCode:
-                type: number
-              body:
-                type: string
-            example:
-              statusCode: 500
-              body: internal Error while resolving request
-  parameters:
-    slideRef:
-      name: slideRef
-      in: path
-      description: id of the slide
-      required: true
-      schema:
-        type: string
   securitySchemes:
     Authorization:
       type: apiKey

@@ -617,24 +617,58 @@ paths:
     servers:
     - url: https://progression.coorpacademy.com/api
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Content:
+    AnalyticsSlideCount:
       type: object
-      additionalProperties: false
       required:
       - ref
-      - type
-      description: Content information related to the progression
+      - best
+      - total
+      - nbAttempts
       properties:
         ref:
           type: string
-          description: Content ref
-        type:
+        best:
+          type: integer
+        total:
+          type: integer
+        nbAttempts:
+          type: integer
+    Engine:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
           type: string
-          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
         version:
           type: string
-          description: Version of the given content
+          description: Engine version
     AnalyticsSlide:
       type: object
       additionalProperties: false
@@ -645,23 +679,6 @@ components:
           type: integer
         total:
           type: integer
-    Error:
-      type: object
-      properties:
-        id:
-          type: string
-        code:
-          type: string
-        errors:
-          type: array
-          items:
-            type: object
-        success:
-          type: boolean
-        status:
-          type: integer
-        message:
-          type: string
     AnalyticsProgression:
       type: object
       additionalProperties: false
@@ -710,69 +727,40 @@ components:
         updatedAt:
           type: string
           format: date-time
-    AnalyticsSlideCount:
+    Error:
       type: object
-      required:
-      - ref
-      - best
-      - total
-      - nbAttempts
       properties:
-        ref:
+        id:
           type: string
-        best:
+        code:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+        success:
+          type: boolean
+        status:
           type: integer
-        total:
-          type: integer
-        nbAttempts:
-          type: integer
-    Engine:
+        message:
+          type: string
+    Content:
       type: object
       additionalProperties: false
-      description: Content information related to the used progression engine
       required:
       - ref
+      - type
+      description: Content information related to the progression
       properties:
         ref:
           type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
+          description: Content ref
+        type:
+          type: string
+          description: 'Content type: chapter, level, discipline, resource (video, pdf)'
         version:
           type: string
-          description: Engine version
-    UsersStarsReviewBySkill:
-      type: object
-      additionalProperties: false
-      required:
-      - content
-      - stars
-      properties:
-        content:
-          type: string
-          description: a ref to the Skill
-        stars:
-          type: integer
-          description: Number of stars earned by the User on that review
-    Engine_2:
-      type: object
-      additionalProperties: false
-      description: Content information related to the used progression engine
-      required:
-      - ref
-      properties:
-        ref:
-          type: string
-          description: Engine ref
-          enum:
-          - microlearning
-          - learner
-          - external
-          - review
-        version:
-          type: string
-          description: Engine version
+          description: Version of the given content
     AnalyticsSlideCount_2:
       type: object
       required:
@@ -792,6 +780,37 @@ components:
           type: integer
         nbDone:
           type: integer
+    Engine_2:
+      type: object
+      additionalProperties: false
+      description: Content information related to the used progression engine
+      required:
+      - ref
+      properties:
+        ref:
+          type: string
+          description: Engine ref
+          enum:
+          - microlearning
+          - learner
+          - external
+          - review
+        version:
+          type: string
+          description: Engine version
+    UsersStarsReviewBySkill:
+      type: object
+      additionalProperties: false
+      required:
+      - content
+      - stars
+      properties:
+        content:
+          type: string
+          description: a ref to the Skill
+        stars:
+          type: integer
+          description: Number of stars earned by the User on that review
     CurrentProgression:
       type: object
       additionalProperties: false
@@ -845,25 +864,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-  responses:
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     authentication:
       type: apiKey

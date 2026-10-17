@@ -66,27 +66,6 @@ components:
                   - extraLifeRefused
                 payload:
                   $ref: '#/components/schemas/extralifePayload'
-    EngineOptions:
-      description: Content information related to the progression engine option
-      type: object
-      properties:
-        livesDisabled:
-          type: boolean
-        shuffleChoices:
-          type: boolean
-        lives:
-          type: integer
-    extralifePayload:
-      type: object
-      properties:
-        content:
-          $ref: '#/components/schemas/content'
-        nextContent:
-          $ref: '#/components/schemas/content'
-        instructions:
-          type: array
-          items:
-            $ref: '#/components/schemas/instruction'
     content:
       type: object
       properties:
@@ -96,6 +75,21 @@ components:
           type: string
         version:
           type: string
+    instruction:
+      type: object
+      properties:
+        field:
+          type: string
+        type:
+          type: string
+          enum:
+          - add
+          - set
+        value:
+          oneOf:
+          - type: string
+          - type: number
+          - type: boolean
     progression:
       type: object
       properties:
@@ -215,21 +209,17 @@ components:
               format: date-time
             enrolmentId:
               type: string
-    instruction:
+    extralifePayload:
       type: object
       properties:
-        field:
-          type: string
-        type:
-          type: string
-          enum:
-          - add
-          - set
-        value:
-          oneOf:
-          - type: string
-          - type: number
-          - type: boolean
+        content:
+          $ref: '#/components/schemas/content'
+        nextContent:
+          $ref: '#/components/schemas/content'
+        instructions:
+          type: array
+          items:
+            $ref: '#/components/schemas/instruction'
     progressionStateVariables:
       type: object
       properties:
@@ -248,6 +238,16 @@ components:
         - type: string
         - type: number
         - type: boolean
+    EngineOptions:
+      description: Content information related to the progression engine option
+      type: object
+      properties:
+        livesDisabled:
+          type: boolean
+        shuffleChoices:
+          type: boolean
+        lives:
+          type: integer
   responses:
     InternalError:
       description: InternalError
