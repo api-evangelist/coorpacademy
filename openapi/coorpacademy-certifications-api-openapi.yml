@@ -525,3 +525,9 @@ components:
       type: apiKey
       name: authorization
       in: header
+x-provenance:
+  method: harvested
+  publisher: Coorpacademy
+  source: https://content.coorpacademy.com/api-docs
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
